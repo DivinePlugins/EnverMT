@@ -1,0 +1,76 @@
+﻿using System;
+using Divine.Entity.Entities.Abilities;
+using Divine.Entity.Entities.Units;
+using Divine.Entity.Entities.Units.Heroes;
+using Divine.Extensions;
+using Divine.Numerics;
+
+namespace Tinker.AbilitiesAndItems
+{
+    internal class Base
+    {
+		private Ability Ability;
+		public Base()
+		{
+		}
+		public Base(Ability ability)
+		{
+			this.Ability = ability;
+		}
+		public void Update(Ability ability)
+		{
+			this.Ability = ability;
+		}
+		public Ability GetAbility()
+		{
+			return this.Ability;
+		}
+
+		public virtual bool CanBeCasted()
+		{
+			if (this.Ability == null)
+			{				
+				return false;
+			}
+			if (this.Ability.Cooldown > 0f)
+			{
+				
+				return false;
+			}
+			Hero hero = this.Ability.Owner as Hero;
+
+			if (hero == null) return false;
+
+			if (((Hero)this.Ability.Owner).Mana < (float)this.Ability.ManaCost) return false;
+			
+
+			if (!hero.IsAlive) return false;
+
+
+			if (UnitExtensions.IsMuted(hero)) return false;
+
+			if (UnitExtensions.IsSilenced(hero)) return false;
+
+			if (UnitExtensions.IsStunned(hero)) return false;
+
+			return true;
+		}
+
+		public virtual bool Cast(Vector3 position, bool queue = false, bool bypass = false)
+		{			
+			if (this.Ability == null) return false;			
+			return this.Ability.Cast(position, queue, bypass);
+		}
+		public virtual bool Cast(Unit unit, bool queue = false, bool bypass = false)
+		{
+			if (this.Ability == null || !unit.IsVisible || !unit.IsAlive) return false;			
+			return this.Ability.Cast(unit, queue, bypass);
+		}
+
+		public virtual bool Cast(bool queue = false, bool bypass = false)
+		{			
+			if (this.Ability == null) return false;			
+			return this.Ability.Cast(queue, bypass);
+		}
+	}
+}
