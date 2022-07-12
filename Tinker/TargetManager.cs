@@ -4,6 +4,8 @@ using Divine.Update;
 using Divine.Entity.Entities.Units.Heroes;
 using System;
 using System.Linq;
+using Divine.Game;
+using Divine.Numerics;
 
 namespace Tinker
 {
@@ -11,8 +13,8 @@ namespace Tinker
     {
         static public Hero CurrentTarget { get; set; }
         private Context Context;
-        private static int targerSearchBaseRadius = 700;
-        private static int targerSearchAdditionalRadius = 0;
+        private int targerSearchBaseRadius = 700;
+        private int targerSearchAdditionalRadius;
 
         public TargetManager(Context context)
         {
@@ -30,34 +32,40 @@ namespace Tinker
             {
                 UpdateManager.DestroyIngameUpdate(TargetUpdater);
             }
-        }      
-
-        private Hero GetNearestEnemyToLocalHero()
+        }                  
+        private Hero GetNearestEnemy(Vector3 startPosition, int targerSearchRadius)
         {
             Hero hero;
-            hero = EntityManager.GetEntities<Hero>().Where(x => x.IsEnemy(EntityManager.LocalHero) && x.Distance2D(EntityManager.LocalHero) 
-                                                            < (targerSearchBaseRadius + targerSearchAdditionalRadius))
-                                           .OrderBy(x => x.Distance2D(EntityManager.LocalHero)).FirstOrDefault();            
+            hero = EntityManager.GetEntities<Hero>().Where(x => x.IsEnemy(EntityManager.LocalHero) &&
+                                                                x.Distance2D(startPosition) < targerSearchRadius
+                                                            )
+                                           .OrderBy(x => x.Distance2D(startPosition)).FirstOrDefault();
             if (hero != null) return hero;
-            return null;            
+            return null;
         }
         private void TargetUpdater()
         {
-            this.calculateAdditionalTargerSearchRadius();
-            CurrentTarget = GetNearestEnemyToLocalHero();             
-        }
+            if (Context.PluginMenu.ComboTargetSelectorMode == "Nearest to Hero")
+            {   
+                CurrentTarget = GetNearestEnemy(EntityManager.LocalHero.Position, this.targerSearchBaseRadius + this.calculateAdditionalTargerSearchRadius());
+            }
 
-        private void calculateAdditionalTargerSearchRadius()
-        {
-            targerSearchAdditionalRadius = 0;
-            if (Context.Combo.items.lens.CanBeCasted() || Context.Combo.items.octarine.CanBeCasted()) targerSearchAdditionalRadius += 200;
-            if (EntityManager.LocalHero.HasAnyModifiers("modifier_item_ultimate_scepter", "modifier_item_ultimate_scepter_consumed", "modifier_wisp_tether_scepter")) targerSearchAdditionalRadius += 200;            
+            if (Context.PluginMenu.ComboTargetSelectorMode == "In radius of Cursor")
+            {   
+                CurrentTarget = GetNearestEnemy(GameManager.MousePosition, Context.PluginMenu.ComboTargetSelectorRadius);
+            }
         }
+        private int calculateAdditionalTargerSearchRadius()
+        {
+            this.targerSearchAdditionalRadius = 0;
+            if (Context.Combo.items.lens.CanBeCasted() || Context.Combo.items.octarine.CanBeCasted()) this.targerSearchAdditionalRadius += 200;
+            if (EntityManager.LocalHero.HasAnyModifiers("modifier_item_ultimate_scepter", "modifier_item_ultimate_scepter_consumed", "modifier_wisp_tether_scepter")) this.targerSearchAdditionalRadius += 200;            
+            return this.targerSearchAdditionalRadius;
+    }
         public void Dispose()
         {
             Context.PluginMenu.ComboKey.ValueChanged -= ComboKey_ValueChanged;
-            UpdateManager.DestroyIngameUpdate(TargetUpdater);
-            //todo
+            UpdateManager.DestroyIngameUpdate(TargetUpdater);            
         }
     }
 }
