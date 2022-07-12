@@ -1,6 +1,8 @@
 ﻿using Divine.Entity;
 using Divine.Service;
 using Divine.Entity.Entities.Units.Heroes.Components;
+using System;
+using Divine.Game;
 
 namespace Tinker
 {

@@ -6,6 +6,7 @@ using Divine.Extensions;
 using Tinker.AbilitiesAndItems;
 using Divine.Entity;
 using Divine.Game;
+using Divine.Entity.Entities.Abilities.Components;
 
 namespace Tinker
 {
@@ -43,11 +44,10 @@ namespace Tinker
             }
         }
         private void UpdateManager_IngameUpdate()
-        {            
-            if (!this.LocalHero.IsAlive)
-            {
-                return;
-            }
+        {
+            if (this.sleeper.Sleeping) return;
+            if (!this.LocalHero.IsAlive) return;
+            
 
             this.items.Update();
             this.abilities.Update();
@@ -62,36 +62,34 @@ namespace Tinker
             {
                 if (executeRearm()) return; // simply blink/rearm if there are no enemy                                
                 return;
-            }
-            if (sleeper.Sleeping) return;
+            }            
             if (executeCombo()) return; // use Combo on enemy before blink
             if (executeBlink()) return;
             if (executeCombo()) return; // in case, if enemy around after blink, Combo should be used on enemy
             if (executeRearm()) return;
         }
         private bool executeBlink()
-        {            
-            if (!this.sleeper.Sleeping && this.items.blink.CanBeCasted())
-            {
-                this.items.blink.Cast(GameManager.MousePosition, false, false);
-                this.sleeper.Sleep(this.items.blink.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);
-                this.comboState = true;
-            
-                return true;
-            }            
-            return false;
+        {
+            // 
+            if (!Context.PluginMenu.ComboItemsToggler.GetValue(AbilityId.item_blink)) return false;
+            if (!this.items.blink.CanBeCasted()) return false;
+
+            this.items.blink.Cast(GameManager.MousePosition, false, false);
+            this.sleeper.Sleep(this.items.blink.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);
+            this.comboState = true;            
+            return true;
         }
 
         private bool executeRearm()
-        {            
-            if (!this.sleeper.Sleeping && this.comboState && this.abilities.rearm.CanBeCasted())
-            {
-                this.abilities.rearm.Cast(false, false);                
-                this.sleeper.Sleep(this.abilities.rearm.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);
-                this.comboState = false;
-                return true;
-            }
-            return false;
+        {
+            if (!Context.PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_rearm)) return false;
+            if (!this.comboState) return false;
+            if (!this.abilities.rearm.CanBeCasted()) return false;
+
+            this.abilities.rearm.Cast(false, false);
+            this.sleeper.Sleep(this.abilities.rearm.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);
+            this.comboState = false;
+            return true;
         }
 
         private bool executeCombo()
@@ -112,104 +110,95 @@ namespace Tinker
 
         private bool castDefensiveMatrix()
         {
-            if (!this.sleeper.Sleeping && !UnitExtensions.HasModifier(this.LocalHero, "modifier_tinker_defense_matrix") && this.abilities.defenseMatrix.CanBeCasted())
-            {
-                this.abilities.defenseMatrix.Cast(this.LocalHero, false, false);
-                this.comboState = true;
-                this.sleeper.Sleep(this.abilities.defenseMatrix.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);                
-                return true;
-            }
-            return false;
+            if (!Context.PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_defense_matrix)) return false;
+            if (UnitExtensions.HasModifier(this.LocalHero, "modifier_tinker_defense_matrix")) return false;
+            if (!this.abilities.defenseMatrix.CanBeCasted()) return false;
+            
+            this.abilities.defenseMatrix.Cast(this.LocalHero, false, false);
+            this.comboState = true;
+            this.sleeper.Sleep(this.abilities.defenseMatrix.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);            
+            return true;
         }
         private bool castGuardianGreaves()
         {
-            if (!this.sleeper.Sleeping && this.items.guardianGreaves.CanBeCasted())
-            {
-                this.items.guardianGreaves.Cast(false, false);
-                this.comboState = true;
-                this.sleeper.Sleep(this.items.guardianGreaves.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);                
-                return true;
-            }
-            return false;
+            if (!Context.PluginMenu.ComboItemsToggler.GetValue(AbilityId.item_guardian_greaves)) return false;
+            if (!this.items.guardianGreaves.CanBeCasted()) return false;
+
+            this.items.guardianGreaves.Cast(false, false);
+            this.comboState = true;
+            this.sleeper.Sleep(this.items.guardianGreaves.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);
+            return true;
         }
         private bool castShivasGuard()
         {
-            if (!this.sleeper.Sleeping && this.items.shivasGuard.CanBeCasted())
-            {
-                this.items.shivasGuard.Cast(false, false);
-                this.comboState = true;
-                this.sleeper.Sleep(this.items.shivasGuard.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);
-                return true;
-            }
-            return false;
+            if (!Context.PluginMenu.ComboItemsToggler.GetValue(AbilityId.item_shivas_guard)) return false;
+            if (!this.items.shivasGuard.CanBeCasted()) return false;
+            
+            this.items.shivasGuard.Cast(false, false);
+            this.comboState = true;
+            this.sleeper.Sleep(this.items.shivasGuard.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);
+            return true;
         }
         private bool castBloodstone()
         {
-            if (!this.sleeper.Sleeping && !UnitExtensions.HasModifier(this.LocalHero, "modifier_item_bloodstone_drained") && this.items.bloodStone.CanBeCasted())
-            {
-                this.items.bloodStone.Cast(false, false);
-                this.comboState = true;
-                this.sleeper.Sleep(this.items.bloodStone.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);
-                return true;
-            }
-            return false;
+            if (!Context.PluginMenu.ComboItemsToggler.GetValue(AbilityId.item_bloodstone)) return false;
+            if (UnitExtensions.HasModifier(this.LocalHero, "modifier_item_bloodstone_drained")) return false;
+            if (!this.items.bloodStone.CanBeCasted()) return false;
+
+            this.items.bloodStone.Cast(false, false);
+            this.comboState = true;
+            this.sleeper.Sleep(this.items.bloodStone.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);
+            return true;
         }
         private bool castScytheOfVyse()
         {
-            if (!this.sleeper.Sleeping && this.items.scytheOfVyse.CanBeCasted())
-            {
-                this.items.scytheOfVyse.Cast(this.target, false, false);
-                this.comboState = true;
-                this.sleeper.Sleep(this.items.scytheOfVyse.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);
-                return true;
-            }
-            return false;
+            if (!Context.PluginMenu.ComboItemsToggler.GetValue(AbilityId.item_sheepstick)) return false;
+            if (!this.items.scytheOfVyse.CanBeCasted()) return false;
+
+            this.items.scytheOfVyse.Cast(this.target, false, false);
+            this.comboState = true;
+            this.sleeper.Sleep(this.items.scytheOfVyse.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);
+            return true;
         }
         private bool castEtheralBlade()
         {
-            if (!this.sleeper.Sleeping && this.items.etherealBlade.CanBeCasted())
-            {
-                this.items.etherealBlade.Cast(this.target, false, false);
-                this.comboState = true;
-                this.sleeper.Sleep(this.items.etherealBlade.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);
-                return true;
-            }
-            return false;
+            if (!Context.PluginMenu.ComboItemsToggler.GetValue(AbilityId.item_ethereal_blade)) return false;
+            if (!this.items.etherealBlade.CanBeCasted()) return false;
+
+            this.items.etherealBlade.Cast(this.target, false, false);
+            this.comboState = true;
+            this.sleeper.Sleep(this.items.etherealBlade.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);
+            return true;
         }
         private bool castDagon()
         {
-            if (!this.sleeper.Sleeping && this.items.dagon.CanBeCasted())
-            {
-                this.items.dagon.Cast(this.target, false, false);
-                this.comboState = true;
-                this.sleeper.Sleep(this.items.dagon.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);
-                return true;
-            }
-            return false;
+            if (!Context.PluginMenu.ComboItemsToggler.GetValue(AbilityId.item_dagon)) return false;
+            if (!this.items.dagon.CanBeCasted()) return false;
+            
+            this.items.dagon.Cast(this.target, false, false);
+            this.comboState = true;
+            this.sleeper.Sleep(this.items.dagon.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);
+            return true;
         }
         private bool castHeatSeekingMissile()
         {
-            if (!this.sleeper.Sleeping && this.abilities.heatSeekingMissile.CanBeCasted())
-            {
-                this.abilities.heatSeekingMissile.Cast(false, false);
-                this.comboState = true;
-                this.sleeper.Sleep(this.abilities.heatSeekingMissile.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);
-                return true;
-            }
-            return false;
+            if (!Context.PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_heat_seeking_missile)) return false;
+            if (!this.abilities.heatSeekingMissile.CanBeCasted()) return false;
+
+            this.abilities.heatSeekingMissile.Cast(false, false);
+            this.comboState = true;
+            this.sleeper.Sleep(this.abilities.heatSeekingMissile.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);
+            return true;
         }
         private bool castLaser()
         {
-            if (!this.sleeper.Sleeping && this.abilities.laser.CanBeCasted())
-            {
-                this.abilities.laser.Cast(this.target, false, false);
-                this.comboState = true;
-                this.sleeper.Sleep(this.abilities.laser.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);
-                return true;
-            }
-            return false;
+            if (!Context.PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_laser)) return false;
+            if (!this.abilities.laser.CanBeCasted()) return false;
+            
+            this.abilities.laser.Cast(this.target, false, false);
+            this.comboState = true;
+            //this.sleeper.Sleep(this.abilities.laser.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);
+            return true;
         }
-
-
     }
 }
