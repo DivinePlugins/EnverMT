@@ -86,7 +86,6 @@ namespace Tinker
             if (executeLinkenSphereBreaking()) return true;
 
             if (c.castWarpGrenade()) return true;
-            if (c.castLaser()) return true;
 
             if (c.castSoulRing()) return true;
             if (c.castGuardianGreaves()) return true;
@@ -110,7 +109,9 @@ namespace Tinker
             
             if (c.castEtheralBlade()) return true;
             if (c.castDagon()) return true;
-            if (c.castScytheOfVyse()) return true;            
+            if (c.castScytheOfVyse()) return true;
+
+            if (c.castLaser()) return true;
 
             if (c.castBlink()) return true;
             if (c.castRearm()) return true;          
@@ -127,7 +128,6 @@ namespace Tinker
 
             if (Context.PluginMenu.ComboLinkenBreakerMode == "First what can be used (not Hex)")
             {
-                if (c.castLaser()) return true;
                 if (c.castEtheralBlade()) return true;
                 if (c.castDagon()) return true;
                 if (c.castOrchid()) return true;
