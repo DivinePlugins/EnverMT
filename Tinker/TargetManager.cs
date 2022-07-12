@@ -57,10 +57,9 @@ namespace Tinker
         }
         private int calculateAdditionalTargerSearchRadius()
         {
-            this.targerSearchAdditionalRadius = 0;
+            this.targerSearchAdditionalRadius = (int)EntityManager.LocalHero.BonusCastRange;            
             
-            if (Context.CastItemsAndAbilities.items.lens.CanBeCasted() || Context.CastItemsAndAbilities.items.octarine.CanBeCasted()) this.targerSearchAdditionalRadius += 200;            
-            if (UnitExtensions.HasAghanimsScepter(EntityManager.LocalHero)) this.targerSearchAdditionalRadius += 200;
+            if (EntityManager.LocalHero.HasAghanimsScepter()) this.targerSearchAdditionalRadius += 200;
             return this.targerSearchAdditionalRadius;
     }
         public void Dispose()
