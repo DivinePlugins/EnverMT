@@ -59,8 +59,8 @@ namespace Tinker
         {
             this.targerSearchAdditionalRadius = 0;
             
-            if (Context.CastItemsAndAbilities.items.lens.CanBeCasted() || Context.CastItemsAndAbilities.items.octarine.CanBeCasted()) this.targerSearchAdditionalRadius += 200;
-            if (EntityManager.LocalHero.HasAnyModifiers("modifier_item_ultimate_scepter", "modifier_item_ultimate_scepter_consumed", "modifier_wisp_tether_scepter")) this.targerSearchAdditionalRadius += 200;            
+            if (Context.CastItemsAndAbilities.items.lens.CanBeCasted() || Context.CastItemsAndAbilities.items.octarine.CanBeCasted()) this.targerSearchAdditionalRadius += 200;            
+            if (UnitExtensions.HasAghanimsScepter(EntityManager.LocalHero)) this.targerSearchAdditionalRadius += 200;
             return this.targerSearchAdditionalRadius;
     }
         public void Dispose()

@@ -42,14 +42,12 @@ namespace Tinker
             }
         }
         private void UpdateManager_IngameUpdate()
-        {          
+        {            
             if (!this.LocalHero.IsAlive) return;
             if (CastItemsAndAbilities.sleeper.Sleeping) return;
 
             CastItemsAndAbilities c = Context.CastItemsAndAbilities;
-            c.updateItemsAndAbilities();            
-            
-            if (TargetManager.CurrentTarget != null) if (executeCombo()) return;
+            c.updateItemsAndAbilities();   
 
             if (TargetManager.CurrentTarget == null)
             {
@@ -64,7 +62,22 @@ namespace Tinker
                 }
                     
             }
+
+            if (TargetManager.CurrentTarget != null && (!TargetManager.CurrentTarget.IsAlive || TargetManager.CurrentTarget.IsMagicImmune()))
+            {
+                if (c.castDefensiveMatrix()) return;
+                if (c.castBlink()) return;
+                if (c.castSoulRing()) return;
+                if (c.castGuardianGreaves()) return;
+                if (c.castRearm()) return;
+            }
+
+            if (TargetManager.CurrentTarget == null) return;
+            if (!TargetManager.CurrentTarget.IsAlive) return;
+            if (TargetManager.CurrentTarget.IsMagicImmune()) return;
             
+            if (executeCombo()) return;
+
         }
 
         private bool executeCombo()
@@ -72,9 +85,7 @@ namespace Tinker
             CastItemsAndAbilities c = Context.CastItemsAndAbilities;
             if (executeLinkenSphereBreaking()) return true;
 
-            if (antiGangWithWarp()) return true;
-
-            if (c.castLaser()) return true;
+            if (c.castWarpGrenade()) return true;
 
             if (c.castSoulRing()) return true;
             if (c.castGuardianGreaves()) return true;
@@ -98,7 +109,9 @@ namespace Tinker
             
             if (c.castEtheralBlade()) return true;
             if (c.castDagon()) return true;
-            if (c.castScytheOfVyse()) return true;            
+            if (c.castScytheOfVyse()) return true;
+
+            if (c.castLaser()) return true;
 
             if (c.castBlink()) return true;
             if (c.castRearm()) return true;          
@@ -111,7 +124,8 @@ namespace Tinker
         {
             CastItemsAndAbilities c = Context.CastItemsAndAbilities;            
             if (TargetManager.CurrentTarget == null) return false;
-            if (!TargetManager.CurrentTarget.HasAnyModifiers("modifier_item_sphere_target", "modifier_item_sphere")) return false;            
+            if (!UnitExtensions.IsLinkensProtected(TargetManager.CurrentTarget)) return false;            
+
             if (Context.PluginMenu.ComboLinkenBreakerMode == "First what can be used (not Hex)")
             {
                 if (c.castEtheralBlade()) return true;
@@ -126,15 +140,5 @@ namespace Tinker
             
             return false;            
         }    
-        
-        private bool antiGangWithWarp()
-        {
-            if (TargetManager.CurrentTarget == null) return false;
-            if (LocalHero.Distance2D(TargetManager.CurrentTarget) <= 250)
-            {                
-                if (Context.CastItemsAndAbilities.castWarpGrenade()) return true;
-            }                
-            return false;            
-        }
     }
 }

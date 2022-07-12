@@ -100,9 +100,10 @@ namespace Tinker
         }
         public bool castWarpGrenade()
         {
-            item = abilities.warpGrenade;
-            if (!Context.PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_warp_grenade)) return false;
-            if (!item.CanBeCasted()) return false;
+            item = abilities.warpGrenade;            
+            if (!Context.PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_warp_grenade)) return false;            
+            if (!LocalHero.IsInRange(TargetManager.CurrentTarget, Context.PluginMenu.ComboWarpGrenadeUseRadius)) return false;            
+            if (!item.CanBeCasted()) return false;            
 
             item.Cast(target, false, false);
             setSleeper();
