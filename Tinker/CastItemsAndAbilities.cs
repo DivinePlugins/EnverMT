@@ -196,9 +196,30 @@ namespace Tinker
             setSleeper();
             return true;
         }
+        public bool castGlimmerCape()
+        {
+            item = items.glimmerCape;
+            if (!Context.PluginMenu.ComboItemsToggler.GetValue(AbilityId.item_glimmer_cape)) return false;
+            if (!item.CanBeCasted()) return false;
+
+            item.Cast(LocalHero, false, false);
+            setSleeper();
+            return true;
+        }
         #endregion
 
         #region TargetCastItems
+        public bool castBloodthorn()
+        {
+            item = items.bloodthorn;
+            if (!Context.PluginMenu.ComboItemsToggler.GetValue(AbilityId.item_bloodthorn)) return false;
+
+            if (!item.CanBeCasted()) return false;
+
+            item.Cast(target, false, false);
+            setSleeper();
+            return true;
+        }
         public bool castEtheralBlade()
         {
             item = items.etherealBlade;
@@ -223,6 +244,28 @@ namespace Tinker
         {
             item = items.orchid;
             if (!Context.PluginMenu.ComboItemsToggler.GetValue(AbilityId.item_orchid)) return false;
+
+            if (!item.CanBeCasted()) return false;
+
+            item.Cast(target, false, false);
+            setSleeper();
+            return true;
+        }
+        public bool castNullifier()
+        {
+            item = items.nullifier;
+            if (!Context.PluginMenu.ComboItemsToggler.GetValue(AbilityId.item_nullifier)) return false;
+
+            if (!item.CanBeCasted()) return false;
+
+            item.Cast(target, false, false);
+            setSleeper();
+            return true;
+        }
+        public bool castRodOfAtos()
+        {
+            item = items.rodOfAtos;
+            if (!Context.PluginMenu.ComboItemsToggler.GetValue(AbilityId.item_rod_of_atos)) return false;
 
             if (!item.CanBeCasted()) return false;
 

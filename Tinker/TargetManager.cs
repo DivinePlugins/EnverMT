@@ -43,7 +43,7 @@ namespace Tinker
             if (hero != null) return hero;
             return null;
         }
-        private void TargetUpdater()
+        public void TargetUpdater()
         {
             if (Context.PluginMenu.ComboTargetSelectorMode == "Nearest to Hero")
             {   

@@ -15,7 +15,8 @@ namespace Tinker
         public readonly MenuSelector ComboTargetSelectorMode;
         public readonly MenuSlider ComboTargetSelectorRadius;
         public readonly MenuItemToggler ComboItemsToggler;
-        public readonly MenuAbilityToggler ComboAbilitiesToggler;        
+        public readonly MenuAbilityToggler ComboAbilitiesToggler;
+        public readonly MenuSlider ComboWarpGrenadeUseRadius;
         public readonly MenuSelector ComboBlinkMode;
         public readonly MenuSlider ComboBlinkModeRadius;
         public readonly MenuSelector ComboLinkenBreakerMode;
@@ -29,15 +30,17 @@ namespace Tinker
                 .SetTooltip("V0.6 BETA");
 
             PluginStatus = RootMenu.CreateSwitcher("On/Off");
-            ComboKey = RootMenu.CreateHoldKey("Combo Key", Key.None).SetTooltip("Hold this key to use Combo");
-            Menu menu = RootMenu.CreateMenu("Combo").SetAbilityImage(AbilityId.tinker_laser,MenuAbilityImageType.Default);
             
+            Menu menu = RootMenu.CreateMenu("Combo").SetAbilityImage(AbilityId.tinker_laser,MenuAbilityImageType.Default);
+            ComboKey = menu.CreateHoldKey("Combo Key", Key.None).SetTooltip("Hold this key to use Combo");
+
             this.ComboTargetSelectorMode = menu.CreateSelector("Target Selector Mode", Data.Menu.TargetSelectorModes);
             this.ComboTargetSelectorRadius = menu.CreateSlider("Radius", 600, 100, 1000).SetTooltip("Search enemy in radius of");
             
             this.ComboItemsToggler = menu.CreateItemToggler("Items", Data.Menu.ComboItems, false, true).SetTooltip("Items which will be used in Combo");
             this.ComboAbilitiesToggler = menu.CreateAbilityToggler("Abilities", Data.Menu.ComboAbilities, false).SetTooltip("Warp grenade will be used, only if enemy very close to Hero");
-            
+            this.ComboWarpGrenadeUseRadius = menu.CreateSlider("Warp Grenade use distanace", 200, 100, 600).SetTooltip("Warp grenade will be used, if Enemy closer than this dintance");
+
             this.ComboBlinkMode = menu.CreateSelector("Blink Mode", Data.Menu.ComboBlinkModes).SetAbilityImage(AbilityId.item_blink, MenuAbilityImageType.Default).SetTooltip("Recommended to use {to Cursor}");
             this.ComboBlinkModeRadius = menu.CreateSlider("Safe Blink radius", 600, 100, 1000).SetTooltip("Radius of safe zone");
             
@@ -61,8 +64,7 @@ namespace Tinker
                 this.ComboTargetSelectorRadius.IsHidden = true;
                 return;
             }
-        }
-
+        }        
         private void ComboBlinkMode_ValueChanged(MenuSelector selector, SelectorEventArgs e)
         {            
             if (e.NewValue == "In radius")

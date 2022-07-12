@@ -28,31 +28,20 @@ namespace Tinker.AbilitiesAndItems
 
 		public virtual bool CanBeCasted()
 		{
-			if (this.Ability == null)
-			{
-				Console.WriteLine("this ability is null");
-				return false;
-			}
-			if (this.Ability.Cooldown > 0f)
-			{
-				
-				return false;
-			}
+			if (this.Ability == null) return false;			
+			if (this.Ability.Cooldown > 0f) return false;
+			if (this.Ability.Level == 0) return false;
+
 			Hero hero = this.Ability.Owner as Hero;
 
 			if (hero == null) return false;
+			if (!hero.IsAlive) return false;
+			
+			if (UnitExtensions.IsMuted(hero)) return false;
+			if (UnitExtensions.IsSilenced(hero)) return false;
+			if (UnitExtensions.IsStunned(hero)) return false;
 
 			if (((Hero)this.Ability.Owner).Mana < (float)this.Ability.ManaCost) return false;
-			
-
-			if (!hero.IsAlive) return false;
-
-
-			if (UnitExtensions.IsMuted(hero)) return false;
-
-			if (UnitExtensions.IsSilenced(hero)) return false;
-
-			if (UnitExtensions.IsStunned(hero)) return false;
 
 			return true;
 		}
