@@ -16,17 +16,17 @@ namespace Tinker
         #region Variables       
         private Context Context;
         private Hero LocalHero = EntityManager.LocalHero;
-        private Hero target;        
+        private Hero target;
         #endregion
 
 
         public Combo(Context context)
         {
             Context = context;
-            Context.PluginMenu.ComboKey.ValueChanged += ComboKey_ValueChanged;            
+            Context.PluginMenu.ComboKey.ValueChanged += ComboKey_ValueChanged;
         }
         public void Dispose()
-        {            
+        {
             Context.PluginMenu.ComboKey.ValueChanged -= ComboKey_ValueChanged;
             UpdateManager.IngameUpdate -= UpdateManager_IngameUpdate;
         }
@@ -42,12 +42,12 @@ namespace Tinker
             }
         }
         private void UpdateManager_IngameUpdate()
-        {            
+        {
             if (!this.LocalHero.IsAlive) return;
             if (CastItemsAndAbilities.sleeper.Sleeping) return;
 
             CastItemsAndAbilities c = Context.CastItemsAndAbilities;
-            c.updateItemsAndAbilities();   
+            c.updateItemsAndAbilities();
 
             if (TargetManager.CurrentTarget == null)
             {
@@ -57,24 +57,24 @@ namespace Tinker
                 if (TargetManager.CurrentTarget == null)
                 {
                     if (c.castSoulRing()) return;
-                    if (c.castGuardianGreaves()) return;                    
+                    if (c.castGuardianGreaves()) return;
                     if (c.castRearm()) return;
                 }
-                    
             }
-
-            if (TargetManager.CurrentTarget != null && (!TargetManager.CurrentTarget.IsAlive || TargetManager.CurrentTarget.IsMagicImmune()))
-            {
-                if (c.castDefensiveMatrix()) return;
-                if (c.castBlink()) return;
-                if (c.castSoulRing()) return;
-                if (c.castGuardianGreaves()) return;
-                if (c.castRearm()) return;
-            }
-
+            
             if (TargetManager.CurrentTarget == null) return;
-            if (!TargetManager.CurrentTarget.IsAlive) return;
-            if (TargetManager.CurrentTarget.IsMagicImmune()) return;
+            if (!TargetManager.CurrentTarget.IsVisible) {
+                if (executeBlinkMove()) return;
+            }
+            
+            if (!TargetManager.CurrentTarget.IsAlive)
+            {
+                if (executeBlinkMove()) return;
+            }
+            if (TargetManager.CurrentTarget.IsMagicImmune())
+            {
+                if (executeBlinkMove()) return;
+            }
             
             if (executeCombo()) return;
 
@@ -117,6 +117,17 @@ namespace Tinker
 
             if (c.castBlink()) return true;
             if (c.castRearm()) return true;          
+            return false;
+        }
+
+        private bool executeBlinkMove()
+        {
+            CastItemsAndAbilities c = Context.CastItemsAndAbilities;
+            if (c.castDefensiveMatrix()) return true;
+            if (c.castBlink()) return true;
+            if (c.castSoulRing()) return true;
+            if (c.castGuardianGreaves()) return true;
+            if (c.castRearm()) return true;
             return false;
         }
 
