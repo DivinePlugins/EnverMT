@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31815.197
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tinker", "Tinker.csproj", "{B2005C7C-5CF2-4612-AB30-8F82832D09A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tinker", "Tinker/Tinker.csproj", "{B2005C7C-5CF2-4612-AB30-8F82832D09A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
