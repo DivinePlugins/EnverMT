@@ -1,13 +1,8 @@
 ﻿using System;
 using Divine.Entity.Entities.Units.Heroes;
 using Divine.Update;
-using Divine.Helpers;
 using Divine.Extensions;
-using Tinker.AbilitiesAndItems;
 using Divine.Entity;
-using Divine.Game;
-using Divine.Entity.Entities.Abilities.Components;
-
 
 namespace Tinker
 {
@@ -62,19 +57,7 @@ namespace Tinker
                 }
             }
             
-            if (TargetManager.CurrentTarget == null) return;
-            if (!TargetManager.CurrentTarget.IsVisible) {
-                if (executeBlinkMove()) return;
-            }
-            
-            if (!TargetManager.CurrentTarget.IsAlive)
-            {
-                if (executeBlinkMove()) return;
-            }
-            if (TargetManager.CurrentTarget.IsMagicImmune())
-            {
-                if (executeBlinkMove()) return;
-            }
+            if (TargetManager.CurrentTarget == null) return;            
             
             if (executeCombo()) return;
 

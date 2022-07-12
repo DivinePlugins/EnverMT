@@ -71,7 +71,7 @@ namespace Tinker
         {
             item = abilities.laser;                ;
             if (!Context.PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_laser)) return false;
-            if (!item.CanBeCasted()) return false;
+            if (!item.CanBeCasted(target)) return false;
 
             item.Cast(target, false, false);
             setSleeper();            
@@ -103,7 +103,7 @@ namespace Tinker
             item = abilities.warpGrenade;            
             if (!Context.PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_warp_grenade)) return false;            
             if (!LocalHero.IsInRange(TargetManager.CurrentTarget, Context.PluginMenu.ComboWarpGrenadeUseRadius)) return false;            
-            if (!item.CanBeCasted()) return false;            
+            if (!item.CanBeCasted(target)) return false;            
 
             item.Cast(target, false, false);
             setSleeper();
@@ -191,7 +191,7 @@ namespace Tinker
         {
             item = items.lotusOrb;
             if (!Context.PluginMenu.ComboItemsToggler.GetValue(AbilityId.item_lotus_orb)) return false;
-            if (!item.CanBeCasted()) return false;
+            if (!item.CanBeCasted(LocalHero)) return false;
 
             item.Cast(LocalHero, false, false);
             setSleeper();
@@ -201,7 +201,7 @@ namespace Tinker
         {
             item = items.glimmerCape;
             if (!Context.PluginMenu.ComboItemsToggler.GetValue(AbilityId.item_glimmer_cape)) return false;
-            if (!item.CanBeCasted()) return false;
+            if (!item.CanBeCasted(LocalHero)) return false;
 
             item.Cast(LocalHero, false, false);
             setSleeper();
@@ -215,7 +215,7 @@ namespace Tinker
             item = items.bloodthorn;
             if (!Context.PluginMenu.ComboItemsToggler.GetValue(AbilityId.item_bloodthorn)) return false;
 
-            if (!item.CanBeCasted()) return false;
+            if (!item.CanBeCasted(target)) return false;
 
             item.Cast(target, false, false);
             setSleeper();
@@ -225,7 +225,7 @@ namespace Tinker
         {
             item = items.etherealBlade;
             if (!Context.PluginMenu.ComboItemsToggler.GetValue(AbilityId.item_ethereal_blade)) return false;
-            if (!item.CanBeCasted()) return false;
+            if (!item.CanBeCasted(target)) return false;
 
             item.Cast(target, false, false);
             setSleeper();
@@ -235,7 +235,7 @@ namespace Tinker
         {
             item = items.dagon;
             if (!Context.PluginMenu.ComboItemsToggler.GetValue(AbilityId.item_dagon)) return false;
-            if (!item.CanBeCasted()) return false;
+            if (!item.CanBeCasted(target)) return false;
 
             item.Cast(target, false, false);
             setSleeper();
@@ -246,7 +246,7 @@ namespace Tinker
             item = items.orchid;
             if (!Context.PluginMenu.ComboItemsToggler.GetValue(AbilityId.item_orchid)) return false;
 
-            if (!item.CanBeCasted()) return false;
+            if (!item.CanBeCasted(target)) return false;
 
             item.Cast(target, false, false);
             setSleeper();
@@ -257,7 +257,7 @@ namespace Tinker
             item = items.nullifier;
             if (!Context.PluginMenu.ComboItemsToggler.GetValue(AbilityId.item_nullifier)) return false;
 
-            if (!item.CanBeCasted()) return false;
+            if (!item.CanBeCasted(target)) return false;
 
             item.Cast(target, false, false);
             setSleeper();
@@ -268,7 +268,7 @@ namespace Tinker
             item = items.rodOfAtos;
             if (!Context.PluginMenu.ComboItemsToggler.GetValue(AbilityId.item_rod_of_atos)) return false;
 
-            if (!item.CanBeCasted()) return false;
+            if (!item.CanBeCasted(target)) return false;
 
             item.Cast(target, false, false);
             setSleeper();
@@ -278,7 +278,7 @@ namespace Tinker
         {
             item = items.scytheOfVyse;
             if (!Context.PluginMenu.ComboItemsToggler.GetValue(AbilityId.item_sheepstick)) return false;
-            if (!item.CanBeCasted()) return false;
+            if (!item.CanBeCasted(target)) return false;
 
             item.Cast(target, false, false);
             setSleeper();
@@ -288,7 +288,7 @@ namespace Tinker
         {
             item = items.veilOfDiscord;
             if (!Context.PluginMenu.ComboItemsToggler.GetValue(AbilityId.item_veil_of_discord)) return false;
-            if (!item.CanBeCasted()) return false;
+            if (!item.CanBeCasted(target)) return false;
 
             item.Cast(target, false, false);
             setSleeper();

@@ -4,6 +4,9 @@ using Divine.Entity.Entities.Units;
 using Divine.Entity.Entities.Units.Heroes;
 using Divine.Extensions;
 using Divine.Numerics;
+using Divine.Entity;
+
+
 
 namespace Tinker.AbilitiesAndItems
 {
@@ -46,6 +49,18 @@ namespace Tinker.AbilitiesAndItems
 			return true;
 		}
 
+		public virtual bool CanBeCasted(Unit unit)
+		{
+			if (!this.CanBeCasted()) return false;
+
+			if (unit == null) return false;			
+			if (!unit.IsVisible) return false;
+			if (!unit.IsAlive) return false;
+			if (unit.IsMagicImmune()) return false;
+
+			return true;
+		}
+
 		public virtual bool Cast(Vector3 position, bool queue = false, bool bypass = false)
 		{			
 			if (this.Ability == null) return false;			
@@ -53,8 +68,8 @@ namespace Tinker.AbilitiesAndItems
 		}
 		public virtual bool Cast(Unit unit, bool queue = false, bool bypass = false)
 		{
-			if (unit == null) return false; 
-			if (this.Ability == null || !unit.IsVisible || !unit.IsAlive) return false;			
+			
+			
 			return this.Ability.Cast(unit, queue, bypass);
 		}
 

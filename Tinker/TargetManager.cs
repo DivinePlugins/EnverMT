@@ -26,7 +26,7 @@ namespace Tinker
         {
             if (e.Value)
             {
-                UpdateManager.CreateIngameUpdate(100, TargetUpdater);
+                UpdateManager.CreateIngameUpdate(10, TargetUpdater);
             }
             else
             {
