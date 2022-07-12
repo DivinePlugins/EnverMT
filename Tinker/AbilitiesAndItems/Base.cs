@@ -29,7 +29,8 @@ namespace Tinker.AbilitiesAndItems
 		public virtual bool CanBeCasted()
 		{
 			if (this.Ability == null)
-			{				
+			{
+				Console.WriteLine("this ability is null");
 				return false;
 			}
 			if (this.Ability.Cooldown > 0f)

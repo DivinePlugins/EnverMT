@@ -58,7 +58,8 @@ namespace Tinker
         private int calculateAdditionalTargerSearchRadius()
         {
             this.targerSearchAdditionalRadius = 0;
-            if (Context.Combo.items.lens.CanBeCasted() || Context.Combo.items.octarine.CanBeCasted()) this.targerSearchAdditionalRadius += 200;
+            
+            if (Context.CastItemsAndAbilities.items.lens.CanBeCasted() || Context.CastItemsAndAbilities.items.octarine.CanBeCasted()) this.targerSearchAdditionalRadius += 200;
             if (EntityManager.LocalHero.HasAnyModifiers("modifier_item_ultimate_scepter", "modifier_item_ultimate_scepter_consumed", "modifier_wisp_tether_scepter")) this.targerSearchAdditionalRadius += 200;            
             return this.targerSearchAdditionalRadius;
     }
