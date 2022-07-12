@@ -69,12 +69,16 @@ namespace Tinker
             if (executeRearm()) return;
         }
         private bool executeBlink()
-        {
-            // 
+        {            
             if (!Context.PluginMenu.ComboItemsToggler.GetValue(AbilityId.item_blink)) return false;
             if (!this.items.blink.CanBeCasted()) return false;
 
-            this.items.blink.Cast(GameManager.MousePosition, false, false);
+            if (Context.PluginMenu.ComboBlinkMode== "To cursor") 
+                this.items.blink.Cast(GameManager.MousePosition, false, false);
+
+            if (Context.PluginMenu.ComboBlinkMode == "In radius") 
+                this.items.blink.Cast(Vector3Extensions.Extend(this.target.Position, GameManager.MousePosition, Context.PluginMenu.ComboTargetSelectorRadius), false, false); 
+
             this.sleeper.Sleep(this.items.blink.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);
             this.comboState = true;            
             return true;

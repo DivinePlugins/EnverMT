@@ -31,7 +31,7 @@ namespace Tinker
             ComboKey = RootMenu.CreateHoldKey("Combo Key", Key.None).SetTooltip("Hold this key to use Combo");
             Menu menu = RootMenu.CreateMenu("Combo").SetAbilityImage(AbilityId.tinker_laser,MenuAbilityImageType.Default);
             this.ComboTargetSelectorMode = menu.CreateSelector("Target Selector Mode", Data.Menu.TargetSelectorModes);
-            this.ComboTargetSelectorRadius = menu.CreateSlider("Radius", 200, 100, 1000);
+            this.ComboTargetSelectorRadius = menu.CreateSlider("Radius", 600, 100, 1000);
             this.ComboItemsToggler = menu.CreateItemToggler("Items", Data.Menu.ComboItems, false, true).SetTooltip("Items which will be used in Combo");
             this.ComboAbilitiesToggler = menu.CreateAbilityToggler("Abilities", Data.Menu.ComboAbilities, false).SetTooltip("Warp grenade will be used, only if enemy very close to Hero");
             this.ComboBlinkMode = menu.CreateSelector("Blink Mode", Data.Menu.ComboBlinkModes).SetAbilityImage(AbilityId.item_blink, MenuAbilityImageType.Default)

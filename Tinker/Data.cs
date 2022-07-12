@@ -54,8 +54,7 @@ namespace Tinker
 
 			public static readonly string[] LinkenBreakerModes = new string[]
 			{				
-				"First what can be used (not Hex)",
-				"Cheapest",
+				"First what can be used (not Hex)",				
 				"Laser"
 			};
 		}		
