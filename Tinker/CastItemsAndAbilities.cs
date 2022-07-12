@@ -59,7 +59,7 @@ namespace Tinker
 
             if (Context.PluginMenu.ComboBlinkMode == "In radius")
             {
-                if (target != null) item.Cast(Vector3Extensions.Extend(target.Position, GameManager.MousePosition, Context.PluginMenu.ComboTargetSelectorRadius), false, false);
+                if (target != null) item.Cast(Vector3Extensions.Extend(target.Position, GameManager.MousePosition, Context.PluginMenu.ComboBlinkModeRadius), false, false);
                 if (target == null) item.Cast(GameManager.MousePosition, false, false);
             }
             setSleeper();

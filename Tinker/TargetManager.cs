@@ -13,7 +13,7 @@ namespace Tinker
     {
         static public Hero CurrentTarget { get; set; }
         private Context Context;
-        private int targerSearchBaseRadius = 700;
+        private int targerSearchBaseRadius = 600;
         private int targerSearchAdditionalRadius;
 
         public TargetManager(Context context)
@@ -26,7 +26,7 @@ namespace Tinker
         {
             if (e.Value)
             {
-                UpdateManager.CreateIngameUpdate(10, TargetUpdater);
+                UpdateManager.CreateIngameUpdate(100, TargetUpdater);
             }
             else
             {
