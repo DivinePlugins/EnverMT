@@ -83,6 +83,8 @@ namespace Tinker
         private bool executeCombo()
         {
             CastItemsAndAbilities c = Context.CastItemsAndAbilities;
+            if (c.castDefensiveMatrix()) return true;
+
             if (executeLinkenSphereBreaking()) return true;
 
             if (c.castWarpGrenade()) return true;
@@ -133,7 +135,8 @@ namespace Tinker
                 if (c.castOrchid()) return true;
                 if (c.castBloodthorn()) return true;
                 if (c.castRodOfAtos()) return true;
-                if (c.castNullifier()) return true;                
+                if (c.castNullifier()) return true;
+                if (c.castLaser()) return true;
             }
             
             if (Context.PluginMenu.ComboLinkenBreakerMode == "Laser") if (c.castLaser()) return true;
