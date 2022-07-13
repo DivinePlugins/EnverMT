@@ -73,18 +73,26 @@ namespace Tinker
         {
             item = abilities.laser;                ;
             if (!Context.PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_laser)) return false;
-            if (Context.PluginMenu.ComboSmartLaser) if (smartLaser()) return true;
 
-            if (!item.CanBeCasted(target)) return false;            
-            
+            if (Context.PluginMenu.ComboSmartLaser) 
+            {
+                Unit unitNearestToTarget = Context.TargetManager.GetNearestEnemyUnitToEnemyTarget(TargetManager.CurrentTarget.Position, 250);
+                if (unitNearestToTarget!=null)
+                {
+                    if (UnitExtensions.IsReflectingAbilities(TargetManager.CurrentTarget)) if (smartLaser(unitNearestToTarget)) return true;
+                    if (Context.TargetManager.GetFarestEnemyHeroInRadius(unitNearestToTarget.Position, 700) == TargetManager.CurrentTarget &&
+                    EntityManager.LocalHero.HasAghanimsScepter()
+                    ) if (smartLaser(unitNearestToTarget)) return true;
+                }
+            }             
+            if (!item.CanBeCasted(target)) return false;
             item.Cast(target, false, false);
-            setSleeper();                        
+            setSleeper();
             return true;
+                        
         }
-        private bool smartLaser()
-        {
-            if (!UnitExtensions.IsReflectingAbilities(TargetManager.CurrentTarget)) return false;
-            Unit unitNearestToTarget = Context.TargetManager.GetNearestEnemyUnitToEnemyTarget(TargetManager.CurrentTarget.Position, 250); 
+        private bool smartLaser(Unit unitNearestToTarget)
+        {            
             if (!item.CanBeCasted(unitNearestToTarget)) return false;
 
             item.Cast(unitNearestToTarget, false, false);

@@ -85,6 +85,22 @@ namespace Tinker
             return null;
         }
 
+        public Hero GetFarestEnemyHeroInRadius(Vector3 startPosition, int targerSearchRadius)
+        {
+            Hero hero;
+            hero = EntityManager.GetEntities<Hero>().Where(x => x.IsEnemy(EntityManager.LocalHero) &&
+                                                                x.Distance2D(startPosition) < targerSearchRadius &&
+                                                                x.IsAlive &&
+                                                                x.IsVisible &&
+                                                                !x.IsMagicImmune() &&
+                                                                !x.IsInvulnerable() &&
+                                                                !x.IsIllusion
+                                                            )
+                                           .OrderByDescending(x => x.Distance2D(startPosition)).FirstOrDefault();
+            if (hero != null) return hero;
+            return null;
+        }
+
         public Unit GetNearestEnemyUnitToEnemyTarget(Vector3 startPosition, int targerSearchRadius)
         {            
             Unit unit = EntityManager.GetEntities<Unit>().Where(x => x.IsEnemy(EntityManager.LocalHero) &&

@@ -50,8 +50,7 @@ namespace Tinker
                 if (c.castBlink()) return;
                 if (c.castSoulRing()) return;
                 if (c.castGuardianGreaves()) return;
-                if (c.castRearm()) return;
-                
+                if (c.castRearm()) return;                
             }
             
             if (TargetManager.CurrentTarget == null) return;            
