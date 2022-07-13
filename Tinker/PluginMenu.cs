@@ -50,7 +50,7 @@ namespace Tinker
             
             this.ComboLinkenBreakerMode = menu.CreateSelector("Linken`s Breaker Mode", Data.Menu.LinkenBreakerModes).SetAbilityImage(AbilityId.item_sphere, MenuAbilityImageType.Default);
 
-            this.ComboDrawLineToTarget = menu.CreateSwitcher("Draw line to Target",false);
+            this.ComboDrawLineToTarget = menu.CreateSwitcher("Draw line to Target");
             this.ComboLockTarget = menu.CreateSwitcher("Lock Target during Combo").SetTooltip("Target locked while Combo key holds");
 
             this.ComboTargetSelectorMode.ValueChanged += new MenuSelector.SelectorEventHandler(this.ComboTargetSelectorMode_ValueChanged);
