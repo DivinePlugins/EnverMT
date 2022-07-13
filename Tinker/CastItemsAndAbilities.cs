@@ -1,12 +1,13 @@
 ﻿using System;
 using Divine.Entity.Entities.Units.Heroes;
-using Divine.Update;
 using Divine.Helpers;
 using Divine.Extensions;
-using Tinker.AbilitiesAndItems;
 using Divine.Entity;
 using Divine.Game;
 using Divine.Entity.Entities.Abilities.Components;
+using Divine.Entity.Entities.Units.Heroes.Components;
+using Divine.Entity.Entities.Units;
+using Tinker.AbilitiesAndItems;
 
 namespace Tinker
 {
@@ -72,12 +73,25 @@ namespace Tinker
         {
             item = abilities.laser;                ;
             if (!Context.PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_laser)) return false;
-            if (!item.CanBeCasted(target)) return false;
+            if (Context.PluginMenu.ComboSmartLaser) if (smartLaser()) return true;
 
+            if (!item.CanBeCasted(target)) return false;            
+            
             item.Cast(target, false, false);
+            setSleeper();                        
+            return true;
+        }
+        private bool smartLaser()
+        {
+            if (!UnitExtensions.IsReflectingAbilities(TargetManager.CurrentTarget)) return false;
+            Unit unitNearestToTarget = Context.TargetManager.GetNearestEnemyUnitToEnemyTarget(TargetManager.CurrentTarget.Position, 250); 
+            if (!item.CanBeCasted(unitNearestToTarget)) return false;
+
+            item.Cast(unitNearestToTarget, false, false);
             setSleeper();            
             return true;
         }
+
         public bool castHeatSeekingMissile()
         {
             item = abilities.heatSeekingMissile;

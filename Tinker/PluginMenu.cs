@@ -17,6 +17,7 @@ namespace Tinker
         public readonly MenuItemToggler ComboItemsToggler;
         public readonly MenuAbilityToggler ComboAbilitiesToggler;
         public readonly MenuSlider ComboWarpGrenadeUseRadius;
+        public readonly MenuSwitcher ComboSmartLaser;
         public readonly MenuSelector ComboBlinkMode;
         public readonly MenuSlider ComboBlinkModeRadius;
         public readonly MenuSelector ComboLinkenBreakerMode;
@@ -40,6 +41,7 @@ namespace Tinker
             this.ComboItemsToggler = menu.CreateItemToggler("Items", Data.Menu.ComboItems, false, true).SetTooltip("Items which will be used in Combo");
             this.ComboAbilitiesToggler = menu.CreateAbilityToggler("Abilities", Data.Menu.ComboAbilities, false).SetTooltip("Warp grenade will be used, only if enemy very close to Hero");
             this.ComboWarpGrenadeUseRadius = menu.CreateSlider("Warp Grenade use distanace", 200, 100, 600).SetTooltip("Warp grenade will be used, if Enemy closer than this dintance");
+            this.ComboSmartLaser = menu.CreateSwitcher("Smart Laser On/Off").SetTooltip("If target has Lotus or Antimage with shied, Laser will be used to possible nearest unit");
 
             this.ComboBlinkMode = menu.CreateSelector("Blink Mode", Data.Menu.ComboBlinkModes).SetAbilityImage(AbilityId.item_blink, MenuAbilityImageType.Default).SetTooltip("Recommended to use {to Cursor}");
             this.ComboBlinkModeRadius = menu.CreateSlider("Safe Blink radius", 600, 100, 1000).SetTooltip("Radius of safe zone");

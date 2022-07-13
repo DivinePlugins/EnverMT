@@ -57,6 +57,7 @@ namespace Tinker.AbilitiesAndItems
 			if (!unit.IsVisible) return false;
 			if (!unit.IsAlive) return false;
 			if (unit.IsMagicImmune()) return false;
+			if (unit.IsInvulnerable()) return false;
 
 			return true;
 		}
