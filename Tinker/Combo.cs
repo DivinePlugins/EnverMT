@@ -54,7 +54,11 @@ namespace Tinker
             }
             
             if (TargetManager.CurrentTarget == null) return;            
-            
+            if (EntityManager.LocalHero.Distance2D(TargetManager.CurrentTarget)>=TargetManager.distanceToTarget)
+            {
+                TargetManager.CurrentTarget = null;
+                return;
+            }
             if (executeCombo()) return;
 
         }

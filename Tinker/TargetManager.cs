@@ -13,6 +13,7 @@ namespace Tinker
     class TargetManager : IDisposable
     {
         static public Hero CurrentTarget { get; set; }
+        static public int distanceToTarget;
         private Context Context;
         private int targerSearchBaseRadius = 600;
         private int targerSearchAdditionalRadius;
@@ -58,9 +59,11 @@ namespace Tinker
 
         public void TargetUpdater()
         {
+            distanceToTarget = this.targerSearchBaseRadius + this.calculateAdditionalTargerSearchRadius();
+
             if (Context.PluginMenu.ComboTargetSelectorMode == "Nearest to Hero")
             {
-                CurrentTarget = GetNearestEnemyHero(EntityManager.LocalHero.Position, this.targerSearchBaseRadius + this.calculateAdditionalTargerSearchRadius());
+                CurrentTarget = GetNearestEnemyHero(EntityManager.LocalHero.Position, distanceToTarget);
             }
 
             if (Context.PluginMenu.ComboTargetSelectorMode == "In radius of Cursor")
