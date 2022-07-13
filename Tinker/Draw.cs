@@ -23,17 +23,16 @@ namespace Tinker
         }
 
         private void onDraw()
-        {                       
-            if (TargetManager.CurrentTarget == null) return;
-            if (!Context.PluginMenu.ComboDrawLineToTarget) return;
-            this.DrawTargetParticle();
+        {
+            if (TargetManager.CurrentTarget != null && Context.PluginMenu.ComboDrawLineToTarget)
+            {
+                ParticleManager.CreateTargetLineParticle("TargetParticle", EntityManager.LocalHero, TargetManager.CurrentTarget.Position, Color.Red);
+            } else
+            {
+                ParticleManager.DestroyParticle("TargetParticle");
+            }
         }
 
-        private void DrawTargetParticle()
-        {
-            RendererManager.DrawLine(RendererManager.WorldToScreen(EntityManager.LocalHero.Position),
-                RendererManager.WorldToScreen(TargetManager.CurrentTarget.Position),Color.Aqua,3f);                        
-        }
 
         public void Dispose ()
         {
