@@ -42,19 +42,16 @@ namespace Tinker
             if (CastItemsAndAbilities.sleeper.Sleeping) return;
 
             CastItemsAndAbilities c = Context.CastItemsAndAbilities;
-            c.updateItemsAndAbilities();
+            c.updateItemsAndAbilities();            
 
             if (TargetManager.CurrentTarget == null)
             {
                 if (c.castDefensiveMatrix()) return;
                 if (c.castBlink()) return;
-                Context.TargetManager.TargetUpdater();
-                if (TargetManager.CurrentTarget == null)
-                {
-                    if (c.castSoulRing()) return;
-                    if (c.castGuardianGreaves()) return;
-                    if (c.castRearm()) return;
-                }
+                if (c.castSoulRing()) return;
+                if (c.castGuardianGreaves()) return;
+                if (c.castRearm()) return;
+                
             }
             
             if (TargetManager.CurrentTarget == null) return;            

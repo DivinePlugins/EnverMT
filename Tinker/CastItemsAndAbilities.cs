@@ -38,6 +38,7 @@ namespace Tinker
         {
             items.Update();
             abilities.Update();
+            Context.TargetManager.TargetUpdater();
             target = TargetManager.CurrentTarget;
         }
 
