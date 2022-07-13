@@ -13,7 +13,7 @@ namespace Tinker
 {
     class CastItemsAndAbilities
     {
-        #region Variaables
+        #region Variables
         public Items items = new Items();
         public Abilities abilities = new Abilities();
         static public Sleeper sleeper = new Sleeper();
@@ -39,7 +39,7 @@ namespace Tinker
         {
             items.Update();
             abilities.Update();
-            Context.TargetManager.TargetUpdater();
+            //Context.TargetManager.TargetUpdater();
             target = TargetManager.CurrentTarget;
         }
 

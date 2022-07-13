@@ -16,22 +16,35 @@ namespace Tinker
         private Context Context;
         private int targerSearchBaseRadius = 600;
         private int targerSearchAdditionalRadius;
+        private bool comboKeyHolding;
 
         public TargetManager(Context context)
         {
             Context = context;
 
             Context.PluginMenu.ComboKey.ValueChanged += ComboKey_ValueChanged;
+            //Context.PluginMenu.PluginStatus.ValueChanged += ComboKey_ValueChanged;
+            UpdateManager.CreateIngameUpdate(Update);
+        }
+        private void Update()
+        {
+            if (Context.PluginMenu.ComboLockTarget && this.comboKeyHolding)
+            {
+                if (TargetManager.CurrentTarget != null) return;
+            }
+            this.TargetUpdater();
         }
         private void ComboKey_ValueChanged(Divine.Menu.Items.MenuHoldKey holdKey, Divine.Menu.EventArgs.HoldKeyEventArgs e)
         {
             if (e.Value)
             {
-                UpdateManager.CreateIngameUpdate(100, TargetUpdater);
+                //UpdateManager.CreateIngameUpdate(100, TargetUpdater);
+                this.comboKeyHolding = true;
             }
             else
             {
-                UpdateManager.DestroyIngameUpdate(TargetUpdater);
+                //UpdateManager.DestroyIngameUpdate(TargetUpdater);
+                this.comboKeyHolding = false;
             }
         }
 
@@ -89,7 +102,7 @@ namespace Tinker
 
         public void Dispose()
         {
-            Context.PluginMenu.ComboKey.ValueChanged -= ComboKey_ValueChanged;
+            //Context.PluginMenu.ComboKey.ValueChanged -= ComboKey_ValueChanged;
             UpdateManager.DestroyIngameUpdate(TargetUpdater);            
         }
     }

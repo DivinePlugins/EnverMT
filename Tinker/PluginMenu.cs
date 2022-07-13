@@ -21,6 +21,8 @@ namespace Tinker
         public readonly MenuSelector ComboBlinkMode;
         public readonly MenuSlider ComboBlinkModeRadius;
         public readonly MenuSelector ComboLinkenBreakerMode;
+        public readonly MenuSwitcher ComboDrawLineToTarget;
+        public readonly MenuSwitcher ComboLockTarget;
 
         private Menu RootMenu;
 
@@ -47,7 +49,10 @@ namespace Tinker
             this.ComboBlinkModeRadius = menu.CreateSlider("Safe Blink radius", 600, 100, 1000).SetTooltip("Radius of safe zone");
             
             this.ComboLinkenBreakerMode = menu.CreateSelector("Linken`s Breaker Mode", Data.Menu.LinkenBreakerModes).SetAbilityImage(AbilityId.item_sphere, MenuAbilityImageType.Default);
-            
+
+            this.ComboDrawLineToTarget = menu.CreateSwitcher("Draw line to Target",false);
+            this.ComboLockTarget = menu.CreateSwitcher("Lock Target during Combo").SetTooltip("Target locked while Combo key holds");
+
             this.ComboTargetSelectorMode.ValueChanged += new MenuSelector.SelectorEventHandler(this.ComboTargetSelectorMode_ValueChanged);
             this.ComboBlinkMode.ValueChanged += new MenuSelector.SelectorEventHandler(this.ComboBlinkMode_ValueChanged);
         }
