@@ -43,6 +43,7 @@ namespace Tinker.AbilitiesAndItems
 			if (UnitExtensions.IsMuted(hero)) return false;
 			if (UnitExtensions.IsSilenced(hero)) return false;
 			if (UnitExtensions.IsStunned(hero)) return false;
+			if (UnitExtensions.IsChanneling(hero)) return false;
 
 			if (((Hero)this.Ability.Owner).Mana < (float)this.Ability.ManaCost) return false;
 
@@ -63,7 +64,8 @@ namespace Tinker.AbilitiesAndItems
 		}
 
 		public virtual bool Cast(Vector3 position, bool queue = false, bool bypass = false)
-		{			
+		{
+			if (!this.CanBeCasted()) return false;
 			if (this.Ability == null) return false;			
 			return this.Ability.Cast(position, queue, bypass);
 		}

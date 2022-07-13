@@ -30,7 +30,7 @@ namespace Tinker
         {
             if (Context.PluginMenu.ComboLockTarget && this.comboKeyHolding)
             {
-                if (TargetManager.CurrentTarget != null) return;
+                if (TargetManager.CurrentTarget != null && this.GetNearestEnemyHero(EntityManager.LocalHero.Position, this.targerSearchBaseRadius + this.calculateAdditionalTargerSearchRadius()) ==null) return;
             }
             this.TargetUpdater();
         }
