@@ -43,6 +43,10 @@ namespace Tinker
         {
             UpdateManager.DestroyIngameUpdate(Update);
         }
+        private void log()
+        {
+            Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " target found: " + Context.TargetManager.currentTarget);
+        }
         private void Update()
         {
             this.targetSearchDistance = this.targerSearchBaseRadius + this.calculateAdditionalTargerSearchRadius();
@@ -50,9 +54,11 @@ namespace Tinker
             if (Context.PluginMenu.ComboLockTarget
                 && Context.Combo.comboKeyHolding
                 && this.currentTarget != null
-                && this.currentTarget.Distance2D(EntityManager.LocalHero) < targetSearchDistance) return;             
-            
+                && this.currentTarget.Distance2D(EntityManager.LocalHero) < targetSearchDistance) return;
+
+            if (this.currentTarget == null && this.getTarget(targetSearchDistance) != null) log();
             this.currentTarget = this.getTarget(targetSearchDistance);
+
             
 
             if (this.currentTarget == null)

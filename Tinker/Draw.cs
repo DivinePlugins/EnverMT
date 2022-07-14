@@ -8,7 +8,7 @@ namespace Tinker
 {
     internal class Draw
     {
-        private Context Context;
+        private readonly Context Context;
         private Unit _target;
         private Unit _localHero;
         public Draw(Context context)

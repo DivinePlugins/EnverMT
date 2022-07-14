@@ -4,9 +4,6 @@ using Divine.Entity.Entities.Units;
 using Divine.Entity.Entities.Units.Heroes;
 using Divine.Extensions;
 using Divine.Numerics;
-using Divine.Entity;
-
-
 
 namespace Tinker.AbilitiesAndItems
 {

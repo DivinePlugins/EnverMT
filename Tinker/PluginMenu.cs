@@ -24,7 +24,7 @@ namespace Tinker
         public readonly MenuSwitcher ComboDrawLineToTarget;
         public readonly MenuSwitcher ComboLockTarget;
 
-        private Menu RootMenu;
+        private readonly Menu RootMenu;
 
         public PluginMenu()
         {

@@ -10,9 +10,8 @@ namespace Tinker
     {
         #region Variables       
         public bool comboKeyHolding;
-        private Context Context;
-        private Hero _localHero = EntityManager.LocalHero;
-        private Hero _target;
+        private readonly Context Context;
+        private Hero _localHero = EntityManager.LocalHero;        
         #endregion
 
 
@@ -43,7 +42,7 @@ namespace Tinker
         private void UpdateManager_IngameUpdate()
         {
             if (!this._localHero.IsAlive) return;
-            if (Context.CastItemsAndAbilities.sleeper.Sleeping) return;
+            if (CastItemsAndAbilities.sleeper.Sleeping) return;
 
             CastItemsAndAbilities c = Context.CastItemsAndAbilities;                     
 

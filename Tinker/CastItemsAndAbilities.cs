@@ -16,7 +16,7 @@ namespace Tinker
         #region Variables
         public Items items = new Items();
         public Abilities abilities = new Abilities();
-        public Sleeper sleeper = new Sleeper();
+        static public Sleeper sleeper = new Sleeper();
 
         private Base item;
         private Context Context;                
@@ -27,6 +27,11 @@ namespace Tinker
         {
             Context = context;
             Context.PluginMenu.PluginStatus.ValueChanged += CastItemsAndAbilities_ValueChanged;
+        }
+
+        private void log(Base abil)
+        {
+            Console.WriteLine(abil + " used: " + DateTime.UtcNow.ToString("HH:mm:ss.fff") + " on target: "+Context.TargetManager.currentTarget);
         }
               
         private void CastItemsAndAbilities_ValueChanged(Divine.Menu.Items.MenuSwitcher switcher, Divine.Menu.EventArgs.SwitcherEventArgs e)
@@ -73,8 +78,11 @@ namespace Tinker
                 if (Context.TargetManager.currentTarget != null) this.item.Cast(Vector3Extensions.Extend(Context.TargetManager.currentTarget.Position, GameManager.MousePosition, Context.PluginMenu.ComboBlinkModeRadius), false, false);
                 if (Context.TargetManager.currentTarget == null) this.item.Cast(GameManager.MousePosition, false, false);
             }
-            sleeper.Sleep(item.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);
+            //
+            if (Context.TargetManager.currentTarget != null) sleeper.Sleep(item.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);
+            if (Context.TargetManager.currentTarget == null) sleeper.Sleep(item.GetAbility().CastPoint * 1000f + 350f + GameManager.AvgPing);
             comboState = true;
+            this.log(this.item);
             return true;
         }
 
@@ -97,6 +105,7 @@ namespace Tinker
             }             
             if (!this.item.CanBeCasted(Context.TargetManager.currentTarget)) return false;
             this.item.Cast(Context.TargetManager.currentTarget, false, false);
+            this.log(this.item);
             setSleeper();
             return true;                        
         }
@@ -105,6 +114,7 @@ namespace Tinker
             if (!this.item.CanBeCasted(unitNearestToTarget)) return false;
 
             this.item.Cast(unitNearestToTarget, false, false);
+            this.log(this.item);
             setSleeper();            
             return true;
         }
@@ -149,6 +159,7 @@ namespace Tinker
             if (!this.item.CanBeCasted()) return false;
 
             this.item.Cast(false, false);
+            this.log(this.item);
             comboState = false;
             return true;
         }
