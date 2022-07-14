@@ -31,6 +31,7 @@ namespace Tinker
 
         private void log(Base abil)
         {
+            return;
             Console.WriteLine(abil + " used: " + DateTime.UtcNow.ToString("HH:mm:ss.fff") + " on target: "+Context.TargetManager.currentTarget);
         }
               

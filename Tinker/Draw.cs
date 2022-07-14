@@ -25,6 +25,7 @@ namespace Tinker
             else
             {
                 RendererManager.Draw -= onDraw;
+                ParticleManager.DestroyParticle("TargetParticle");
             }
         }
 

@@ -45,6 +45,7 @@ namespace Tinker
         }
         private void log()
         {
+            return;
             Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " target found: " + Context.TargetManager.currentTarget);
         }
         private void Update()
