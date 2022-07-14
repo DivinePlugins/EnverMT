@@ -44,8 +44,7 @@ namespace Tinker
             UpdateManager.DestroyIngameUpdate(Update);
         }
         private void log()
-        {
-            return;
+        {            
             Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " target found: " + Context.TargetManager.currentTarget);
         }
         private void Update()
@@ -57,7 +56,10 @@ namespace Tinker
                 && this.currentTarget != null
                 && this.currentTarget.Distance2D(EntityManager.LocalHero) < targetSearchDistance) return;
 
-            if (this.currentTarget == null && this.getTarget(targetSearchDistance) != null) log();
+            if (this.currentTarget == null && this.getTarget(targetSearchDistance) != null)
+            {
+                CastItemsAndAbilities.sleeper.Reset();
+            }            
             this.currentTarget = this.getTarget(targetSearchDistance);
 
             

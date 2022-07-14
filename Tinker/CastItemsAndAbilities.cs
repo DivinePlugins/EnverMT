@@ -8,6 +8,8 @@ using Divine.Entity.Entities.Abilities.Components;
 using Divine.Entity.Entities.Units;
 using Tinker.AbilitiesAndItems;
 using Divine.Update;
+using System.Numerics;
+using System.Linq;
 
 namespace Tinker
 {
@@ -21,6 +23,7 @@ namespace Tinker
         private Base item;
         private Context Context;                
         private bool comboState = false;
+        private float sleepTime;
         #endregion
 
         public CastItemsAndAbilities(Context context)
@@ -39,7 +42,7 @@ namespace Tinker
         {
             if (e.Value)
             {
-                UpdateManager.CreateIngameUpdate(500, updateItemsAndAbilities);
+                UpdateManager.CreateIngameUpdate(50, updateItemsAndAbilities);
             }
             else
             {
@@ -60,7 +63,11 @@ namespace Tinker
 
         private void setSleeper()
         {
-            sleeper.Sleep(this.item.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);
+            sleeper.Sleep((float)this.item.GetAbility().CastPoint * 1000f + (float)80f + (float)GameManager.AvgPing);
+            sleepTime = (float)this.item.GetAbility().CastPoint * 1000f + (float)80f + (float)GameManager.AvgPing;
+            Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - sleeper Set: " + sleepTime);
+            Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - sleeper Set CastPoint: " + this.item.GetAbility().CastPoint);
+            Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - sleeper Set AvgPing: " + GameManager.AvgPing);
             comboState = true;
         }
 
@@ -78,14 +85,19 @@ namespace Tinker
             {
                 if (Context.TargetManager.currentTarget != null) this.item.Cast(Vector3Extensions.Extend(Context.TargetManager.currentTarget.Position, GameManager.MousePosition, Context.PluginMenu.ComboBlinkModeRadius), false, false);
                 if (Context.TargetManager.currentTarget == null) this.item.Cast(GameManager.MousePosition, false, false);
+            }           
+
+            if (Context.TargetManager.currentTarget != null)
+            {
+                sleeper.Sleep(item.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);
+            } else
+            {
+                sleeper.Sleep(item.GetAbility().CastPoint * 1000f + 400f + GameManager.AvgPing);
             }
-            //
-            if (Context.TargetManager.currentTarget != null) sleeper.Sleep(item.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);
-            if (Context.TargetManager.currentTarget == null) sleeper.Sleep(item.GetAbility().CastPoint * 1000f + 350f + GameManager.AvgPing);
+            
             comboState = true;
-            this.log(this.item);
             return true;
-        }
+        }       
 
         #region Abilities
         public bool castLaser()
@@ -131,14 +143,15 @@ namespace Tinker
             return true;
         }
         public bool castDefensiveMatrix()
-        {
+        {            
             this.item = abilities.defenseMatrix;
-            if (!Context.PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_defense_matrix)) return false;
-            if (UnitExtensions.HasModifier(EntityManager.LocalHero, "modifier_tinker_defense_matrix")) return false;
+            if (!Context.PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_defense_matrix)) return false;            
+            if (UnitExtensions.HasModifier(EntityManager.LocalHero, "modifier_tinker_defense_matrix")) return false;            
             if (!this.item.CanBeCasted()) return false;
+            
 
-            this.item.Cast(EntityManager.LocalHero, false, false);
-            setSleeper();
+            this.item.Cast(EntityManager.LocalHero, false, false);            
+            setSleeper();            
             return true;
         }
         public bool castWarpGrenade()
@@ -154,6 +167,7 @@ namespace Tinker
         }
         public bool castRearm()
         {
+            if (CastItemsAndAbilities.sleeper.Sleeping) return false;
             this.item = abilities.rearm;
             if (!Context.PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_rearm)) return false;
             if (!comboState) return false;

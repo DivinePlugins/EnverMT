@@ -31,7 +31,7 @@ namespace Tinker
             if (e.Value)
             {
                 UpdateManager.IngameUpdate += UpdateManager_IngameUpdate;
-                this.comboKeyHolding = true;
+                this.comboKeyHolding = true;                
             }
             else
             {
@@ -41,29 +41,26 @@ namespace Tinker
         }
         private void UpdateManager_IngameUpdate()
         {
-            if (!this._localHero.IsAlive) return;
             if (CastItemsAndAbilities.sleeper.Sleeping) return;
-
-            CastItemsAndAbilities c = Context.CastItemsAndAbilities;                     
-
+            if (Context.TargetManager.currentTarget != null && this._localHero.IsAlive)
+            {
+                if (executeCombo()) return;
+            }
+            
+            CastItemsAndAbilities c = Context.CastItemsAndAbilities;
             if (Context.TargetManager.currentTarget == null)
             {
                 if (c.castDefensiveMatrix()) return;
                 if (c.castBlink()) return;
                 if (c.castSoulRing()) return;
                 if (c.castGuardianGreaves()) return;
-                if (c.castRearm()) return;                
-            }
-            
-            if (Context.TargetManager.currentTarget == null) return;            
-            
-            if (executeCombo()) return;
-
+                if (c.castRearm()) return;
+            }            
         }
 
         private bool executeCombo()
         {
-            CastItemsAndAbilities c = Context.CastItemsAndAbilities;
+            CastItemsAndAbilities c = Context.CastItemsAndAbilities;            
             if (c.castDefensiveMatrix()) return true;
 
             if (executeLinkenSphereBreaking()) return true;
