@@ -42,7 +42,7 @@ namespace Tinker
         {
             if (e.Value)
             {
-                UpdateManager.CreateIngameUpdate(50, updateItemsAndAbilities);
+                UpdateManager.CreateIngameUpdate(1000, updateItemsAndAbilities);
             }
             else
             {
@@ -57,8 +57,18 @@ namespace Tinker
 
         public void updateItemsAndAbilities()
         {
-            this.items.Update();
-            this.abilities.Update();            
+            try
+            {
+                this.items.Update();
+                this.abilities.Update();
+            }
+                catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+            }
+
+            
         }
 
         private void setSleeper()

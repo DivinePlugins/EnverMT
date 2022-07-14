@@ -102,7 +102,15 @@ namespace Tinker
             {
                 return this.currentTarget = GetNearestEnemyHero(GameManager.MousePosition, Context.PluginMenu.ComboTargetSelectorRadius);
             }
-            return null;
+
+            if (Context.PluginMenu.ComboTargetSelectorMode == "First In radius of Cursor, then nearest to Hero")
+            {
+                Hero h;
+                h = this.currentTarget = GetNearestEnemyHero(GameManager.MousePosition, Context.PluginMenu.ComboTargetSelectorRadius);
+                if (h != null) return h;
+                return h = this.currentTarget = GetNearestEnemyHero(EntityManager.LocalHero.Position, radius);
+            }
+            return null;  
         }
         private Hero GetNearestEnemyHero(Vector3 startPosition, int targerSearchRadius)
         {

@@ -79,6 +79,12 @@ namespace Tinker
                 this.ComboTargetSelectorRadius.IsHidden = true;
                 return;
             }
+            if (e.NewValue == "First In radius of Cursor, then nearest to Hero")
+            {
+                this.ComboTargetSelectorMode.SetTooltip("");
+                this.ComboTargetSelectorRadius.IsHidden = false;
+                return;
+            }
         }        
         private void ComboBlinkMode_ValueChanged(MenuSelector selector, SelectorEventArgs e)
         {            
