@@ -65,9 +65,9 @@ namespace Tinker
         {
             sleeper.Sleep((float)this.item.GetAbility().CastPoint * 1000f + (float)80f + (float)GameManager.AvgPing);
             sleepTime = (float)this.item.GetAbility().CastPoint * 1000f + (float)80f + (float)GameManager.AvgPing;
-            Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - sleeper Set: " + sleepTime);
-            Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - sleeper Set CastPoint: " + this.item.GetAbility().CastPoint);
-            Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - sleeper Set AvgPing: " + GameManager.AvgPing);
+            //Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - sleeper Set: " + sleepTime);
+            //Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - sleeper Set CastPoint: " + this.item.GetAbility().CastPoint);
+            //Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - sleeper Set AvgPing: " + GameManager.AvgPing);
             comboState = true;
         }
 

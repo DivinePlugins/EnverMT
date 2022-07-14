@@ -43,7 +43,7 @@ namespace Tinker.AbilitiesAndItems
 			if (UnitExtensions.IsChanneling(hero)) return false;
 
 			if (((Hero)this.Ability.Owner).Mana < (float)this.Ability.ManaCost) return false;
-			Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - Item can be casted: " + this.Ability);
+			//Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - Item can be casted: " + this.Ability);
 			return true;
 		}
 
@@ -62,20 +62,20 @@ namespace Tinker.AbilitiesAndItems
 
 		public virtual bool Cast(Vector3 position, bool queue = false, bool bypass = false)
 		{
-			Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - Item casted (V3,f,f): " + this.Ability);			
+			//Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - Item casted (V3,f,f): " + this.Ability);			
 			if (this.Ability == null) return false;			
 			return this.Ability.Cast(position, queue, bypass);
 		}
 		public virtual bool Cast(Unit unit, bool queue = false, bool bypass = false)
 		{
-			Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - Item casted (U,f,f): " + this.Ability);
+			//Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - Item casted (U,f,f): " + this.Ability);
 			if (this.Ability == null) return false;
 			return this.Ability.Cast(unit, queue, bypass);
 		}
 
 		public virtual bool Cast(bool queue = false, bool bypass = false)
 		{
-			Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - Item casted (f,f): " + this.Ability);
+			//Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - Item casted (f,f): " + this.Ability);
 			if (this.Ability == null) return false;			
 			return this.Ability.Cast(queue, bypass);
 		}
