@@ -1,43 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Divine.Renderer;
+﻿using Divine.Renderer;
 using Divine.Entity;
 using Divine.Numerics;
-using Divine.Particle.Particles;
 using Divine.Particle;
-using Divine.Update;
-using Divine.Entity.Entities.Units.Heroes;
+using Divine.Entity.Entities.Units;
 
 namespace Tinker
 {
     internal class Draw
     {
-        private Context Context;        
+        private Context Context;
+        private Unit _target;
+        private Unit _localHero;
         public Draw(Context context)
         {
-            Context = context;          
-            RendererManager.Draw += onDraw;
+            Context = context;                      
+            Context.PluginMenu.ComboDrawLineToTarget.ValueChanged += ComboDrawLineToTarget_ValueChanged;
+        }
+        private void ComboDrawLineToTarget_ValueChanged(Divine.Menu.Items.MenuSwitcher switcher, Divine.Menu.EventArgs.SwitcherEventArgs e)
+        {
+            if (e.Value)
+            {
+                RendererManager.Draw += onDraw;
+            }
+            else
+            {
+                RendererManager.Draw -= onDraw;
+            }
         }
 
         private void onDraw()
         {
-            if (TargetManager.CurrentTarget != null && Context.PluginMenu.ComboDrawLineToTarget)
+            this._target = Context.TargetManager.currentTarget;
+            this._localHero = EntityManager.LocalHero;
+            
+            if (this._target != null)
             {
-                ParticleManager.CreateTargetLineParticle("TargetParticle", EntityManager.LocalHero, TargetManager.CurrentTarget.Position, Color.Red);
+                ParticleManager.CreateTargetLineParticle("TargetParticle", this._localHero, this._target.Position, Color.Red);
             } else
             {
                 ParticleManager.DestroyParticle("TargetParticle");
             }
         }
 
-
         public void Dispose ()
         {
-            RendererManager.Draw -= this.onDraw;
-            UpdateManager.DestroyIngameUpdate(this.onDraw);
+            RendererManager.Draw -= onDraw;
         }
     }
 }

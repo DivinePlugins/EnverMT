@@ -30,7 +30,7 @@ namespace Tinker
         {
             RootMenu = MenuManager.CreateRootMenu("Tinker")
                 .SetHeroImage(HeroId.npc_dota_hero_tinker)
-                .SetTooltip("V1.0.3 BETA");
+                .SetTooltip("V1.0.5 BETA");
 
             PluginStatus = RootMenu.CreateSwitcher("On/Off");
             

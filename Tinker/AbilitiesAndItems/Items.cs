@@ -14,8 +14,7 @@ namespace Tinker.AbilitiesAndItems
     internal class Items
     {
         #region Variables
-        private Hero localHero;
-        private readonly Sleeper UpdateSleeper = new Sleeper();
+        private Hero localHero;        
         public readonly Items.Blink blink;
         public readonly Items.Bloodthorn bloodthorn;
         public readonly Items.BloodStone bloodStone;
@@ -80,13 +79,9 @@ namespace Tinker.AbilitiesAndItems
             veilOfDiscord = new Items.VeilOfDiscord();
         }
         public void Update()
-        {
-            if (this.UpdateSleeper.Sleeping) return;
+        {            
             this.localHero = EntityManager.LocalHero;
-            if (this.localHero == null)
-            {
-                return;
-            }
+            if (this.localHero == null) return;           
 
             this.bloodthorn.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_bloodthorn));
             this.bloodStone.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_bloodstone));
@@ -136,8 +131,7 @@ namespace Tinker.AbilitiesAndItems
                 ability2 = inventory2.MainItems.FirstOrDefault((Item x) => LocalizationHelper.LocalizeAbilityName(x.Name) == "Dagon");
             }
             baseAbility2.Update(ability2);
-            #endregion
-            this.UpdateSleeper.Sleep(500f);
+            #endregion            
         }
     }
 }

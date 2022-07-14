@@ -71,8 +71,7 @@ namespace Tinker.AbilitiesAndItems
 		}
 		public virtual bool Cast(Unit unit, bool queue = false, bool bypass = false)
 		{
-			
-			
+			if (this.Ability == null) return false;
 			return this.Ability.Cast(unit, queue, bypass);
 		}
 
