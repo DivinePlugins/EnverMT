@@ -2,7 +2,7 @@
 using Divine.Entity.Entities.Units.Heroes;
 using Divine.Update;
 using Divine.Extensions;
-using Divine.Entity;
+using Divine.Entity; 
 
 namespace Tinker
 {
@@ -42,20 +42,24 @@ namespace Tinker
         private void UpdateManager_IngameUpdate()
         {
             if (CastItemsAndAbilities.sleeper.Sleeping) return;
-            if (Context.TargetManager.currentTarget != null && this._localHero.IsAlive)
+            if (Context.TargetManager.currentTarget != null 
+                && this._localHero.IsAlive
+                && Context.TargetManager.currentTarget.IsAlive
+                && !Context.TargetManager.currentTarget.IsInvulnerable()
+                && Context.TargetManager.currentTarget.IsVisible
+                && !Context.TargetManager.currentTarget.IsMagicImmune()
+                && this._localHero.IsInRange(Context.TargetManager.currentTarget, Context.TargetManager.targetSearchDistance)
+                )
             {
                 if (executeCombo()) return;
             }
             
             CastItemsAndAbilities c = Context.CastItemsAndAbilities;
-            if (Context.TargetManager.currentTarget == null)
-            {
-                if (c.castDefensiveMatrix()) return;
-                if (c.castBlink()) return;
-                if (c.castSoulRing()) return;
-                if (c.castGuardianGreaves()) return;
-                if (c.castRearm()) return;
-            }            
+            if (c.castDefensiveMatrix()) return;
+            if (c.castBlink()) return;
+            if (c.castSoulRing()) return;
+            if (c.castGuardianGreaves()) return;
+            if (c.castRearm()) return;
         }
 
         private bool executeCombo()

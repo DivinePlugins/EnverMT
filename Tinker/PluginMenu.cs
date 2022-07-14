@@ -18,8 +18,13 @@ namespace Tinker
         public readonly MenuAbilityToggler ComboAbilitiesToggler;
         public readonly MenuSlider ComboWarpGrenadeUseRadius;
         public readonly MenuSwitcher ComboSmartLaser;
+
         public readonly MenuSelector ComboBlinkMode;
         public readonly MenuSlider ComboBlinkModeRadius;
+
+        public readonly MenuSwitcher ComboAutoShiva;
+        public readonly MenuSlider ComboAutoShivaRadius;
+
         public readonly MenuSelector ComboLinkenBreakerMode;
         public readonly MenuSwitcher ComboDrawLineToTarget;
         public readonly MenuSwitcher ComboLockTarget;
@@ -34,7 +39,7 @@ namespace Tinker
 
             PluginStatus = RootMenu.CreateSwitcher("On/Off");
             
-            Menu menu = RootMenu.CreateMenu("Combo").SetAbilityImage(AbilityId.tinker_laser,MenuAbilityImageType.Default);
+            Menu menu = RootMenu.CreateMenu("Combo").SetAbilityImage(AbilityId.tinker_rearm,MenuAbilityImageType.Default);
             ComboKey = menu.CreateHoldKey("Combo Key", Key.None).SetTooltip("Hold this key to use Combo");
 
             this.ComboTargetSelectorMode = menu.CreateSelector("Target Selector Mode", Data.Menu.TargetSelectorModes);
@@ -42,8 +47,8 @@ namespace Tinker
             
             this.ComboItemsToggler = menu.CreateItemToggler("Items", Data.Menu.ComboItems, false, true).SetTooltip("Items which will be used in Combo");
             this.ComboAbilitiesToggler = menu.CreateAbilityToggler("Abilities", Data.Menu.ComboAbilities, false).SetTooltip("Warp grenade will be used, only if enemy very close to Hero");
-            this.ComboWarpGrenadeUseRadius = menu.CreateSlider("Warp Grenade use distanace", 200, 100, 600).SetTooltip("Warp grenade will be used, if Enemy closer than this distance");
-            this.ComboSmartLaser = menu.CreateSwitcher("Smart Laser On/Off").SetTooltip("If target has Lotus or Antimage with shied, Laser will try to use on possible nearest unit");
+            this.ComboWarpGrenadeUseRadius = menu.CreateSlider("Warp Grenade use distanace", 200, 100, 600).SetAbilityImage(AbilityId.tinker_warp_grenade, MenuAbilityImageType.Default).SetTooltip("Warp grenade will be used, if Enemy closer than this distance");
+            this.ComboSmartLaser = menu.CreateSwitcher("Smart Laser On/Off").SetAbilityImage(AbilityId.tinker_laser, MenuAbilityImageType.Default).SetTooltip("If target has Lotus or Antimage with shied, Laser will try to use on possible nearest unit");
 
             this.ComboBlinkMode = menu.CreateSelector("Blink Mode", Data.Menu.ComboBlinkModes).SetAbilityImage(AbilityId.item_blink, MenuAbilityImageType.Default).SetTooltip("Recommended to use {to Cursor}");
             this.ComboBlinkModeRadius = menu.CreateSlider("Safe Blink radius", 600, 100, 1000).SetTooltip("Radius of safe zone");
@@ -52,6 +57,9 @@ namespace Tinker
 
             this.ComboDrawLineToTarget = menu.CreateSwitcher("Draw line to Target");
             this.ComboLockTarget = menu.CreateSwitcher("Lock Target during Combo").SetTooltip("Target locked while Combo key holds");
+
+            this.ComboAutoShiva = menu.CreateSwitcher("Auto Shiva").SetAbilityImage(AbilityId.item_shivas_guard, MenuAbilityImageType.Default);
+            this.ComboAutoShivaRadius = menu.CreateSlider("Distance to Enemy for activating Auto Shiva", 900, 300, 2000);
 
             this.ComboTargetSelectorMode.ValueChanged += new MenuSelector.SelectorEventHandler(this.ComboTargetSelectorMode_ValueChanged);
             this.ComboBlinkMode.ValueChanged += new MenuSelector.SelectorEventHandler(this.ComboBlinkMode_ValueChanged);

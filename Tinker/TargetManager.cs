@@ -19,7 +19,7 @@ namespace Tinker
         
         
         private Context Context;
-        private int targerSearchBaseRadius = 600;
+        private int targerSearchBaseRadius = 650;
         private int targerSearchAdditionalRadius = 0;        
 
         public TargetManager(Context context)
@@ -54,6 +54,10 @@ namespace Tinker
             if (Context.PluginMenu.ComboLockTarget
                 && Context.Combo.comboKeyHolding
                 && this.currentTarget != null
+                && this.currentTarget.IsAlive
+                && !this.currentTarget.IsInvulnerable()
+                && this.currentTarget.IsVisible
+                && !this.currentTarget.IsMagicImmune()
                 && this.currentTarget.Distance2D(EntityManager.LocalHero) < targetSearchDistance) return;
 
             if (this.currentTarget == null && this.getTarget(targetSearchDistance) != null)
