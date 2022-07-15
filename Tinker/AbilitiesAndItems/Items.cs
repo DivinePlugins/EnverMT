@@ -11,7 +11,7 @@ using Divine.Entity.Entities.Abilities.Components;
 
 namespace Tinker.AbilitiesAndItems
 {
-    internal class Items
+    internal class Items : Base
     {
         #region Variables
         private Hero localHero;        

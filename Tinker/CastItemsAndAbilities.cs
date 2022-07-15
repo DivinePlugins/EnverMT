@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Divine.Entity.Entities.Units.Heroes;
 using Divine.Helpers;
 using Divine.Extensions;
@@ -10,6 +11,7 @@ using Tinker.AbilitiesAndItems;
 using Divine.Update;
 using System.Numerics;
 using System.Linq;
+using Divine.Entity.Entities.Abilities;
 
 namespace Tinker
 {
@@ -24,6 +26,7 @@ namespace Tinker
         private Context Context;                
         private bool comboState = false;
         private float sleepTime;
+        private Dictionary<Base, bool> UsedAbils = new Dictionary<Base, bool>();
         #endregion
 
         public CastItemsAndAbilities(Context context)
@@ -73,12 +76,14 @@ namespace Tinker
 
         private void setSleeper()
         {
-            sleeper.Sleep((float)this.item.GetAbility().CastPoint * 1000f + (float)80f + (float)GameManager.AvgPing);
+            sleeper.Sleep(this.item.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);
             sleepTime = (float)this.item.GetAbility().CastPoint * 1000f + (float)80f + (float)GameManager.AvgPing;
             //Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - sleeper Set: " + sleepTime);
             //Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - sleeper Set CastPoint: " + this.item.GetAbility().CastPoint);
             //Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - sleeper Set AvgPing: " + GameManager.AvgPing);
             comboState = true;
+            if (!this.UsedAbils.ContainsKey(this.item))
+                this.UsedAbils.Add(this.item, true);
         }
 
         public bool castBlink()
@@ -112,7 +117,9 @@ namespace Tinker
         #region Abilities
         public bool castLaser()
         {
-            this.item = abilities.laser;                ;
+            if (sleeper.Sleeping) return false;            
+            this.item = abilities.laser;       
+            if (this.UsedAbils.ContainsKey(this.item)) return false;
             if (!Context.PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_laser)) return false;
 
             if (Context.PluginMenu.ComboSmartLaser) 
@@ -126,15 +133,19 @@ namespace Tinker
                         if (smartLaser(unitNearestToTarget)) return true;
                 }
             }             
+            
             if (!this.item.CanBeCasted(Context.TargetManager.currentTarget)) return false;
-            this.item.Cast(Context.TargetManager.currentTarget, false, false);
-            this.log(this.item);
+            
+            this.item.Cast(Context.TargetManager.currentTarget, false, false);            
+            
+            
             setSleeper();
             return true;                        
         }
         private bool smartLaser(Unit unitNearestToTarget)
         {            
             if (!this.item.CanBeCasted(unitNearestToTarget)) return false;
+            if (this.UsedAbils.ContainsKey(this.item)) return false;
 
             this.item.Cast(unitNearestToTarget, false, false);
             this.log(this.item);
@@ -143,8 +154,9 @@ namespace Tinker
         }
 
         public bool castHeatSeekingMissile()
-        {
-            this.item = this.abilities.heatSeekingMissile;            
+        {            
+            this.item = this.abilities.heatSeekingMissile;
+            if (this.UsedAbils.ContainsKey(this.item)) return false;
             if (!Context.PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_heat_seeking_missile)) return false;
             if (!this.item.CanBeCasted()) return false;
 
@@ -155,6 +167,7 @@ namespace Tinker
         public bool castDefensiveMatrix()
         {            
             this.item = abilities.defenseMatrix;
+            if (this.UsedAbils.ContainsKey(this.item)) return false;
             if (!Context.PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_defense_matrix)) return false;            
             if (UnitExtensions.HasModifier(EntityManager.LocalHero, "modifier_tinker_defense_matrix")) return false;            
             if (!this.item.CanBeCasted()) return false;
@@ -165,8 +178,9 @@ namespace Tinker
             return true;
         }
         public bool castWarpGrenade()
-        {
-            this.item = abilities.warpGrenade;            
+        {            
+            this.item = abilities.warpGrenade;
+            if (this.UsedAbils.ContainsKey(this.item)) return false;
             if (!Context.PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_warp_grenade)) return false;            
             if (!EntityManager.LocalHero.IsInRange(Context.TargetManager.currentTarget, Context.PluginMenu.ComboWarpGrenadeUseRadius)) return false;            
             if (!this.item.CanBeCasted(Context.TargetManager.currentTarget)) return false;            
@@ -186,6 +200,7 @@ namespace Tinker
             this.item.Cast(false, false);
             this.log(this.item);
             comboState = false;
+            this.UsedAbils.Clear();
             return true;
         }
         #endregion

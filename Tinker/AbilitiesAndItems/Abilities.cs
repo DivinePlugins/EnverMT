@@ -4,31 +4,22 @@ using Divine.Extensions;
 
 namespace Tinker.AbilitiesAndItems
 {
-    internal class Abilities
+    internal class Abilities : Base
     {
-		public readonly Abilities.DefenseMatrix defenseMatrix;
-		public readonly Abilities.HeatSeekingMissile heatSeekingMissile;
-		public readonly Abilities.KeenConveyance keenConveyance;
-		public readonly Abilities.Laser laser;
-		public readonly Abilities.MarchOfTheMachines marchOfTheMachines;
-		public readonly Abilities.WarpGrenade warpGrenade;
-		public readonly Abilities.Rearm rearm;
-		internal class DefenseMatrix : Base { }
-		internal class HeatSeekingMissile : Base { }
-		internal class KeenConveyance : Base { }
-		internal class Laser : Base { }
-		internal class MarchOfTheMachines : Base { }
-		internal class WarpGrenade : Base { }
-		internal class Rearm : Base { }
+		public readonly Base defenseMatrix;
+		public readonly Base heatSeekingMissile;
+		public readonly Base keenConveyance;
+		public readonly Base laser;		
+		public readonly Base warpGrenade;
+		public readonly Base rearm;		
 		public Abilities()
 		{
-			this.defenseMatrix = new Abilities.DefenseMatrix();
-			this.heatSeekingMissile = new Abilities.HeatSeekingMissile();
-			this.keenConveyance = new Abilities.KeenConveyance();
-			this.laser = new Abilities.Laser();
-			this.marchOfTheMachines = new Abilities.MarchOfTheMachines();
-			this.warpGrenade = new Abilities.WarpGrenade();
-			this.rearm = new Abilities.Rearm();
+			this.defenseMatrix = new Base();
+			this.heatSeekingMissile = new Base();
+			this.keenConveyance = new Base();
+			this.laser = new Base();			
+			this.warpGrenade = new Base();
+			this.rearm = new Base();
 		}
 		public void Update()
 		{			
@@ -37,10 +28,9 @@ namespace Tinker.AbilitiesAndItems
 			this.defenseMatrix.Update(UnitExtensions.GetAbilityById(localHero, Divine.Entity.Entities.Abilities.Components.AbilityId.tinker_defense_matrix));
 			this.heatSeekingMissile.Update(UnitExtensions.GetAbilityById(localHero, Divine.Entity.Entities.Abilities.Components.AbilityId.tinker_heat_seeking_missile));
 			this.keenConveyance.Update(UnitExtensions.GetAbilityById(localHero, Divine.Entity.Entities.Abilities.Components.AbilityId.tinker_keen_teleport));
-			this.laser.Update(UnitExtensions.GetAbilityById(localHero, Divine.Entity.Entities.Abilities.Components.AbilityId.tinker_laser));
-			this.marchOfTheMachines.Update(UnitExtensions.GetAbilityById(localHero, Divine.Entity.Entities.Abilities.Components.AbilityId.tinker_march_of_the_machines));
+			this.laser.Update(UnitExtensions.GetAbilityById(localHero, Divine.Entity.Entities.Abilities.Components.AbilityId.tinker_laser));			
 			this.warpGrenade.Update(UnitExtensions.GetAbilityById(localHero, Divine.Entity.Entities.Abilities.Components.AbilityId.tinker_warp_grenade));
-			this.rearm.Update(UnitExtensions.GetAbilityById(localHero, Divine.Entity.Entities.Abilities.Components.AbilityId.tinker_rearm));
+			this.rearm.Update(UnitExtensions.GetAbilityById(localHero, Divine.Entity.Entities.Abilities.Components.AbilityId.tinker_rearm));			
 		}				
 	}
 }
