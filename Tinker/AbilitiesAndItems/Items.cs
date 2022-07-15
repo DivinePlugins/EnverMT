@@ -129,32 +129,50 @@ namespace Tinker.AbilitiesAndItems
             if (isInInventory(AbilityId.item_veil_of_discord)) { this.veilOfDiscord.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_veil_of_discord)); }
             else { this.veilOfDiscord.UpdateItemToNull(); }
 
-            if (isInInventory(AbilityId.item_arcane_blink)) { this.blink.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_arcane_blink)); }
-            else { this.blink.UpdateItemToNull(); }
 
-            if (isInInventory(AbilityId.item_swift_blink)) { this.blink.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_swift_blink)); }
-            else { this.blink.UpdateItemToNull(); }
 
-            if (isInInventory(AbilityId.item_overwhelming_blink)) { this.blink.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_overwhelming_blink)); }
-            else { this.blink.UpdateItemToNull(); }
+            if (isInInventory(AbilityId.item_arcane_blink))
+            {
+                this.blink.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_arcane_blink));
+            } else if (isInInventory(AbilityId.item_swift_blink))
+            {
+                this.blink.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_swift_blink));
+            } else if (isInInventory(AbilityId.item_overwhelming_blink))
+            {
+                this.blink.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_overwhelming_blink));
+            }
+            else if (isInInventory(AbilityId.item_blink))
+            {
+                this.blink.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_blink));
+            }
+            else
+            {
+                this.blink.UpdateItemToNull();
+            }
 
-            if (isInInventory(AbilityId.item_blink)) { this.blink.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_blink)); }
-            else { this.blink.UpdateItemToNull(); }
 
-            if (isInInventory(AbilityId.item_dagon_5)) { this.dagon.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_dagon_5)); }
-            else { this.dagon.UpdateItemToNull(); }
-
-            if (isInInventory(AbilityId.item_dagon_4)) { this.dagon.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_dagon_4)); }
-            else { this.dagon.UpdateItemToNull(); }
-
-            if (isInInventory(AbilityId.item_dagon_3)) { this.dagon.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_dagon_3)); }
-            else { this.dagon.UpdateItemToNull(); }
-
-            if (isInInventory(AbilityId.item_dagon_2)) { this.dagon.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_dagon_2)); }
-            else { this.dagon.UpdateItemToNull(); }
-
-            if (isInInventory(AbilityId.item_dagon)) { this.dagon.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_dagon)); }
-            else { this.dagon.UpdateItemToNull(); }
+            if (isInInventory(AbilityId.item_dagon_5))
+            {
+                this.dagon.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_dagon_5));
+            } else if (isInInventory(AbilityId.item_dagon_4))
+            {
+                this.dagon.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_dagon_4));
+            }
+            else if (isInInventory(AbilityId.item_dagon_3))
+            {
+                this.dagon.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_dagon_3));
+            }
+            else if (isInInventory(AbilityId.item_dagon_2))
+            {
+                this.dagon.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_dagon_2));
+            }
+            else if (isInInventory(AbilityId.item_dagon))
+            {
+                this.dagon.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_dagon));
+            } else
+            {
+                this.dagon.UpdateItemToNull();
+            }
         }
 
         private bool isInInventory(AbilityId abilityId)
