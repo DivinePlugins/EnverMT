@@ -173,8 +173,11 @@ namespace Tinker
             if (!this.item.CanBeCasted()) return false;
             
 
-            this.item.Cast(EntityManager.LocalHero, false, false);            
-            setSleeper();            
+            this.item.Cast(EntityManager.LocalHero, false, false);
+            sleeper.Sleep(this.item.GetAbility().CastPoint * 1000f + 80f + GameManager.AvgPing);                        
+            if (!this.UsedAbils.ContainsKey(this.item))
+                this.UsedAbils.Add(this.item, true);
+
             return true;
         }
         public bool castWarpGrenade()
