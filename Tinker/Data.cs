@@ -43,9 +43,9 @@ namespace Tinker
 
 			public static readonly string[] TargetSelectorModes = new string[]
 			{
-				"Nearest to Hero",
-				"In radius of Cursor",
 				"First In radius of Cursor, then nearest to Hero",
+				"Nearest to Hero",
+				"In radius of Cursor",				
 			};
 
 			public static readonly string[] ComboBlinkModes = new string[]

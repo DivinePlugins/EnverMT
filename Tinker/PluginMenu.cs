@@ -58,8 +58,8 @@ namespace Tinker
             this.ComboDrawLineToTarget = menu.CreateSwitcher("Draw line to Target");
             this.ComboLockTarget = menu.CreateSwitcher("Lock Target during Combo").SetTooltip("Target locked while Combo key holds");
 
-            this.ComboAutoShiva = menu.CreateSwitcher("Auto Shiva").SetAbilityImage(AbilityId.item_shivas_guard, MenuAbilityImageType.Default);
-            this.ComboAutoShivaRadius = menu.CreateSlider("Distance to Enemy for activating Auto Shiva", 900, 300, 2000);
+            //this.ComboAutoShiva = menu.CreateSwitcher("Auto Shiva").SetAbilityImage(AbilityId.item_shivas_guard, MenuAbilityImageType.Default);
+            //this.ComboAutoShivaRadius = menu.CreateSlider("Distance to Enemy for activating Auto Shiva", 900, 300, 2000);
 
             this.ComboTargetSelectorMode.ValueChanged += new MenuSelector.SelectorEventHandler(this.ComboTargetSelectorMode_ValueChanged);
             this.ComboBlinkMode.ValueChanged += new MenuSelector.SelectorEventHandler(this.ComboBlinkMode_ValueChanged);
