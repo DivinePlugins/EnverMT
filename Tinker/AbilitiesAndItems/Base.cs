@@ -3,6 +3,7 @@ using Divine.Entity.Entities.Abilities;
 using Divine.Entity.Entities.Units;
 using Divine.Entity.Entities.Units.Heroes;
 using Divine.Extensions;
+using Divine.Entity;
 using Divine.Numerics;
 
 namespace Tinker.AbilitiesAndItems
@@ -18,8 +19,12 @@ namespace Tinker.AbilitiesAndItems
 			this.Ability = ability;
 		}
 		public void Update(Ability ability)
-		{
+		{			
 			this.Ability = ability;
+		}
+		public void UpdateItemToNull()
+		{			
+			this.Ability = null;
 		}
 		public Ability GetAbility()
 		{
@@ -28,7 +33,7 @@ namespace Tinker.AbilitiesAndItems
 
 		public virtual bool CanBeCasted()
 		{	
-			if (this.Ability == null) return false;			
+			if (this.Ability == null) return false;						
 			if (this.Ability.Cooldown > 0f) return false;
 			if (this.Ability.Level == 0) return false;
 

@@ -81,57 +81,89 @@ namespace Tinker.AbilitiesAndItems
         public void Update()
         {            
             this.localHero = EntityManager.LocalHero;
-            if (this.localHero == null) return;           
+            if (this.localHero == null) return;
 
-            this.bloodthorn.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_bloodthorn));
-            this.bloodStone.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_bloodstone));
-            this.eternalShroud.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_eternal_shroud));
-            this.etherealBlade.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_ethereal_blade));
-            this.ghostScepter.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_ghost));
-            this.glimmerCape.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_glimmer_cape));
-            this.guardianGreaves.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_guardian_greaves));
-            this.lens.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_aether_lens));
-            this.lotusOrb.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_lotus_orb));
-            this.nullifier.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_nullifier));
-            this.octarine.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_octarine_core));
-            this.orchid.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_orchid));
-            this.rodOfAtos.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_rod_of_atos));
-            this.scytheOfVyse.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_sheepstick));
-            this.shivasGuard.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_shivas_guard));
-            this.soulRing.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_soul_ring));
-            this.veilOfDiscord.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_veil_of_discord));
-            #region BlinkUpdate
 
-            Inventory inventory = localHero.Inventory;
-            Ability ability;
-            if (inventory == null)
+            if (isInInventory(AbilityId.item_bloodthorn)) {this.bloodthorn.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_bloodthorn));}
+            else {this.bloodthorn.UpdateItemToNull();}
+
+            if (isInInventory(AbilityId.item_eternal_shroud)) { this.eternalShroud.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_eternal_shroud)); }
+            else { this.eternalShroud.UpdateItemToNull(); }
+
+            if (isInInventory(AbilityId.item_ethereal_blade)) { this.etherealBlade.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_ethereal_blade)); }
+            else { this.etherealBlade.UpdateItemToNull(); }
+            
+            if (isInInventory(AbilityId.item_glimmer_cape)) { this.glimmerCape.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_glimmer_cape)); }
+            else { this.glimmerCape.UpdateItemToNull(); }
+
+            if (isInInventory(AbilityId.item_guardian_greaves)) { this.guardianGreaves.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_guardian_greaves)); }
+            else { this.guardianGreaves.UpdateItemToNull(); }
+
+            if (isInInventory(AbilityId.item_aether_lens)) { this.lens.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_aether_lens)); }
+            else { this.lens.UpdateItemToNull(); }
+
+            if (isInInventory(AbilityId.item_lotus_orb)) { this.lotusOrb.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_lotus_orb)); }
+            else { this.lotusOrb.UpdateItemToNull(); }
+
+            if (isInInventory(AbilityId.item_nullifier)) { this.nullifier.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_nullifier)); }
+            else { this.nullifier.UpdateItemToNull(); }
+            
+            if (isInInventory(AbilityId.item_octarine_core)) { this.octarine.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_octarine_core)); }
+            else { this.octarine.UpdateItemToNull(); }
+
+            if (isInInventory(AbilityId.item_orchid)) { this.orchid.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_orchid)); }
+            else { this.orchid.UpdateItemToNull(); }
+
+            if (isInInventory(AbilityId.item_rod_of_atos)) { this.rodOfAtos.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_rod_of_atos)); }
+            else { this.rodOfAtos.UpdateItemToNull(); }
+
+            if (isInInventory(AbilityId.item_sheepstick)) { this.scytheOfVyse.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_sheepstick)); }
+            else { this.scytheOfVyse.UpdateItemToNull(); }
+
+            if (isInInventory(AbilityId.item_shivas_guard)) { this.shivasGuard.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_shivas_guard)); }
+            else { this.shivasGuard.UpdateItemToNull(); }
+
+            if (isInInventory(AbilityId.item_soul_ring)) { this.soulRing.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_soul_ring)); }
+            else { this.soulRing.UpdateItemToNull(); }
+
+            if (isInInventory(AbilityId.item_veil_of_discord)) { this.veilOfDiscord.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_veil_of_discord)); }
+            else { this.veilOfDiscord.UpdateItemToNull(); }
+
+            if (isInInventory(AbilityId.item_arcane_blink)) { this.blink.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_arcane_blink)); }
+            else { this.blink.UpdateItemToNull(); }
+
+            if (isInInventory(AbilityId.item_swift_blink)) { this.blink.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_swift_blink)); }
+            else { this.blink.UpdateItemToNull(); }
+
+            if (isInInventory(AbilityId.item_overwhelming_blink)) { this.blink.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_overwhelming_blink)); }
+            else { this.blink.UpdateItemToNull(); }
+
+            if (isInInventory(AbilityId.item_blink)) { this.blink.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_blink)); }
+            else { this.blink.UpdateItemToNull(); }
+
+            if (isInInventory(AbilityId.item_dagon_5)) { this.dagon.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_dagon_5)); }
+            else { this.dagon.UpdateItemToNull(); }
+
+            if (isInInventory(AbilityId.item_dagon_4)) { this.dagon.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_dagon_4)); }
+            else { this.dagon.UpdateItemToNull(); }
+
+            if (isInInventory(AbilityId.item_dagon_3)) { this.dagon.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_dagon_3)); }
+            else { this.dagon.UpdateItemToNull(); }
+
+            if (isInInventory(AbilityId.item_dagon_2)) { this.dagon.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_dagon_2)); }
+            else { this.dagon.UpdateItemToNull(); }
+
+            if (isInInventory(AbilityId.item_dagon)) { this.dagon.Update(UnitExtensions.GetItemById(localHero, AbilityId.item_dagon)); }
+            else { this.dagon.UpdateItemToNull(); }
+        }
+
+        private bool isInInventory(AbilityId abilityId)
+        {
+            foreach (var i in this.localHero.Inventory.MainItems)
             {
-                ability = null;
+                if (i.Id == abilityId) return true;
             }
-            else
-            {
-                ability = inventory.MainItems.FirstOrDefault((Item x) =>
-                    x.Id == AbilityId.item_blink
-                    || x.Id == AbilityId.item_overwhelming_blink
-                    || x.Id == AbilityId.item_swift_blink
-                    || x.Id == AbilityId.item_arcane_blink);
-            }
-            this.blink.Update(ability);
-            #endregion
-            #region DagonUpdate
-            Base baseAbility2 = this.dagon;
-            Inventory inventory2 = localHero.Inventory;
-            Ability ability2;
-            if (inventory2 == null)
-            {
-                ability2 = null;
-            }
-            else
-            {
-                ability2 = inventory2.MainItems.FirstOrDefault((Item x) => LocalizationHelper.LocalizeAbilityName(x.Name) == "Dagon");
-            }
-            baseAbility2.Update(ability2);
-            #endregion            
+            return false;
         }
     }
 }
