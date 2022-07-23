@@ -55,6 +55,7 @@ namespace Tinker
             }
             
             CastItemsAndAbilities c = Context.CastItemsAndAbilities;
+            if (Context.TargetManager.targetForRocket!=null) if (c.castHeatSeekingMissile()) return;
             if (c.castDefensiveMatrix()) return;
             if (c.castBlink()) return;
             if (c.castSoulRing()) return;

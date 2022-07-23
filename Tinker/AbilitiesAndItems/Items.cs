@@ -179,7 +179,7 @@ namespace Tinker.AbilitiesAndItems
         {
             foreach (var i in this.localHero.Inventory.MainItems)
             {
-                if (i.Id == abilityId) return true;
+                if (i.Id == abilityId) return true;                
             }
             return false;
         }

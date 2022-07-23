@@ -15,12 +15,14 @@ namespace Tinker
         public Hero currentTarget { get; private set; }
         public Unit nearestEnemyUnitFromTarget { get; private set; }
         public Hero farestEnemyHeroFromTarget { get; private set; }
+        public Hero targetForRocket { get; private set; }
         public int targetSearchDistance { get; private set; }
         
         
         private Context Context;
         private int targerSearchBaseRadius = 650;
-        private int targerSearchAdditionalRadius = 0;        
+        private int targerSearchAdditionalRadius = 0;
+        private int rocketFlyDistance = 2500;
 
         public TargetManager(Context context)
         {
@@ -50,6 +52,7 @@ namespace Tinker
         private void Update()
         {
             this.targetSearchDistance = this.targerSearchBaseRadius + this.calculateAdditionalTargerSearchRadius();
+            this.targetForRocket = this.GetNearestEnemyHero(EntityManager.LocalHero.Position, rocketFlyDistance);
 
             if (Context.PluginMenu.ComboLockTarget
                 && Context.Combo.comboKeyHolding
