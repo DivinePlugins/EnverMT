@@ -33,7 +33,7 @@ namespace Emt_Tinker
 
         public PluginMenu()
         {
-            RootMenu = MenuManager.CreateRootMenu("Emt_Tinker")
+            RootMenu = MenuManager.CreateRootMenu("Emt.Tinker")
                 .SetHeroImage(HeroId.npc_dota_hero_tinker)
                 .SetTooltip("V1.0.7 BETA");
 
