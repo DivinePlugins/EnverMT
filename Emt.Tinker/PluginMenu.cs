@@ -14,7 +14,16 @@ namespace Emt_Tinker
         public readonly MenuHoldKey ComboKey;
         public readonly MenuSelector ComboTargetSelectorMode;
         public readonly MenuSlider ComboTargetSelectorRadius;
-        public readonly MenuItemToggler ComboItemsToggler;
+        
+        public readonly MenuItemToggler ComboBlinkCastItems;
+        public readonly MenuItemToggler ComboSelfCastItems;
+        public readonly MenuItemToggler ComboNoTargetCastItems;
+        public readonly MenuItemToggler ComboTargetCastItems;
+        public readonly MenuItemToggler ComboDagonCastItems;
+        
+
+
+
         public readonly MenuAbilityToggler ComboAbilitiesToggler;
         public readonly MenuSlider ComboWarpGrenadeUseRadius;
         public readonly MenuSwitcher ComboSmartLaser;
@@ -35,7 +44,7 @@ namespace Emt_Tinker
         {
             RootMenu = MenuManager.CreateRootMenu("Emt.Tinker")
                 .SetHeroImage(HeroId.npc_dota_hero_tinker)
-                .SetTooltip("V1.0.7 BETA");
+                .SetTooltip("V1.0.8 BETA");
 
             PluginStatus = RootMenu.CreateSwitcher("On/Off");
             
@@ -44,9 +53,16 @@ namespace Emt_Tinker
 
             this.ComboTargetSelectorMode = menu.CreateSelector("Target Selector Mode", Data.Menu.TargetSelectorModes);
             this.ComboTargetSelectorRadius = menu.CreateSlider("Radius", 600, 100, 1000).SetTooltip("Search enemy in radius of");
-            
-            this.ComboItemsToggler = menu.CreateItemToggler("Items", Data.Menu.ComboItems, false, true).SetTooltip("Items which will be used in Combo");
-            this.ComboAbilitiesToggler = menu.CreateAbilityToggler("Abilities", Data.Menu.ComboAbilities, false).SetTooltip("Warp grenade will be used, only if enemy very close to Hero");
+
+            Menu menuItems = menu.CreateMenu("Items").SetAbilityImage(AbilityId.tinker_rearm, MenuAbilityImageType.Default);
+
+            this.ComboBlinkCastItems = menuItems.CreateItemToggler("Blink types", Data.Menu.ComboVectorCastItems, true, true);
+            this.ComboSelfCastItems = menuItems.CreateItemToggler("Cast on self items", Data.Menu.ComboSelfCastItems, true, true);
+            this.ComboNoTargetCastItems = menuItems.CreateItemToggler("No Target items", Data.Menu.ComboNoTargetItems, true, true);
+            this.ComboTargetCastItems = menuItems.CreateItemToggler("Target items", Data.Menu.ComboTargetItems, true, true);
+            this.ComboDagonCastItems = menuItems.CreateItemToggler("Dagon", Data.Menu.ComboTargetItemsDagons, true, true);
+
+            this.ComboAbilitiesToggler = menu.CreateAbilityToggler("Abilities", Data.Menu.ComboAbilities, true).SetTooltip("Warp grenade will be used, only if enemy very close to Hero");
             this.ComboWarpGrenadeUseRadius = menu.CreateSlider("Warp Grenade use distanace", 200, 100, 600).SetAbilityImage(AbilityId.tinker_warp_grenade, MenuAbilityImageType.Default).SetTooltip("Warp grenade will be used, if Enemy closer than this distance");
             this.ComboSmartLaser = menu.CreateSwitcher("Smart Laser On/Off").SetAbilityImage(AbilityId.tinker_laser, MenuAbilityImageType.Default).SetTooltip("If target has Lotus or Antimage with shied, Laser will try to use on possible nearest unit");
 

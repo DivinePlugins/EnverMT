@@ -53,7 +53,7 @@ namespace Emt_Tinker
             {
                 if (executeCombo()) return;
             }
-            
+            /*
             CastItemsAndAbilities c = Context.CastItemsAndAbilities;
             if (Context.TargetManager.targetForRocket!=null) if (c.castHeatSeekingMissile()) return;
             if (c.castDefensiveMatrix()) return;
@@ -61,11 +61,13 @@ namespace Emt_Tinker
             if (c.castSoulRing()) return;
             if (c.castGuardianGreaves()) return;
             if (c.castRearm()) return;
+            */
         }
 
         private bool executeCombo()
         {
-            CastItemsAndAbilities c = Context.CastItemsAndAbilities;            
+            CastItemsAndAbilities c = Context.CastItemsAndAbilities;
+            /*
             if (c.castDefensiveMatrix()) return true;
 
             if (executeLinkenSphereBreaking()) return true;
@@ -99,7 +101,8 @@ namespace Emt_Tinker
             if (c.castLaser()) return true;
 
             if (c.castBlink()) return true;
-            if (c.castRearm()) return true;          
+            if (c.castRearm()) return true;      
+            */
             return false;
         }
 
@@ -111,6 +114,7 @@ namespace Emt_Tinker
 
             if (Context.PluginMenu.ComboLinkenBreakerMode == "First what can be used (not Hex)")
             {
+                /*
                 if (c.castEtheralBlade()) return true;
                 if (c.castDagon()) return true;
                 if (c.castOrchid()) return true;
@@ -118,9 +122,10 @@ namespace Emt_Tinker
                 if (c.castRodOfAtos()) return true;
                 if (c.castNullifier()) return true;
                 if (c.castLaser()) return true;
+                */
             }
             
-            if (Context.PluginMenu.ComboLinkenBreakerMode == "Laser") if (c.castLaser()) return true;
+            //if (Context.PluginMenu.ComboLinkenBreakerMode == "Laser") if (c.castLaser()) return true;
             
             return false;            
         }    

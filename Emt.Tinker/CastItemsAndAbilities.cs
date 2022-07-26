@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Divine.Entity.Entities.Units.Heroes;
 using Divine.Helpers;
 using Divine.Extensions;
 using Divine.Entity;
@@ -9,9 +8,6 @@ using Divine.Entity.Entities.Abilities.Components;
 using Divine.Entity.Entities.Units;
 using Emt_Tinker.AbilitiesAndItems;
 using Divine.Update;
-using System.Numerics;
-using System.Linq;
-using Divine.Entity.Entities.Abilities;
 
 namespace Emt_Tinker
 {
@@ -85,7 +81,7 @@ namespace Emt_Tinker
             if (!this.UsedAbils.ContainsKey(this.item))
                 this.UsedAbils.Add(this.item, true);
         }
-
+        /*
         public bool castBlink()
         {            
             this.item = this.items.blink;
@@ -381,5 +377,6 @@ namespace Emt_Tinker
             return true;
         }
         #endregion
+        */
     }
 }

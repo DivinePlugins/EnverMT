@@ -1,4 +1,6 @@
-﻿namespace Emt_Tinker
+﻿using Emt_Tinker.Managers;
+
+namespace Emt_Tinker
 {
     class Context
     {   
@@ -7,6 +9,7 @@
         public Combo Combo { get; set; }
         public Draw draw { get; set; }
         public CastItemsAndAbilities CastItemsAndAbilities;
+        public Emt_Tinker.Managers.AbilityManager abilityManager;
         public Context()
         {
             PluginMenu = new PluginMenu();
@@ -24,6 +27,7 @@
                 Combo = new Combo(this);
                 CastItemsAndAbilities = new CastItemsAndAbilities(this);
                 draw = new Draw(this);
+                abilityManager = new Emt_Tinker.Managers.AbilityManager(this);
             }
             else
             {   
@@ -31,6 +35,7 @@
                 Combo.Dispose();
                 CastItemsAndAbilities.Dispose();
                 draw.Dispose();
+                abilityManager.Dispose();
             }
         }
     }
