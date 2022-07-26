@@ -4,7 +4,7 @@ using Divine.Numerics;
 using Divine.Particle;
 using Divine.Entity.Entities.Units;
 
-namespace Tinker
+namespace Emt_Tinker
 {
     internal class Draw
     {

@@ -6,7 +6,7 @@ using Divine.Entity.Entities.Abilities.Components;
 using Divine.Menu.EventArgs;
 
 
-namespace Tinker
+namespace Emt_Tinker
 {
     internal class PluginMenu
     {
@@ -33,7 +33,7 @@ namespace Tinker
 
         public PluginMenu()
         {
-            RootMenu = MenuManager.CreateRootMenu("Tinker")
+            RootMenu = MenuManager.CreateRootMenu("Emt_Tinker")
                 .SetHeroImage(HeroId.npc_dota_hero_tinker)
                 .SetTooltip("V1.0.7 BETA");
 

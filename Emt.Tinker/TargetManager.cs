@@ -8,7 +8,7 @@ using Divine.Game;
 using Divine.Numerics;
 using Divine.Entity.Entities.Units;
 
-namespace Tinker
+namespace Emt_Tinker
 {
     class TargetManager : IDisposable
     {

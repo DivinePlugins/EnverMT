@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Divine.Entity.Entities.Abilities.Components;
 
-namespace Tinker
+namespace Emt_Tinker
 {
     internal class Data
     {

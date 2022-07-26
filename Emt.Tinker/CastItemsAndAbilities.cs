@@ -7,13 +7,13 @@ using Divine.Entity;
 using Divine.Game;
 using Divine.Entity.Entities.Abilities.Components;
 using Divine.Entity.Entities.Units;
-using Tinker.AbilitiesAndItems;
+using Emt_Tinker.AbilitiesAndItems;
 using Divine.Update;
 using System.Numerics;
 using System.Linq;
 using Divine.Entity.Entities.Abilities;
 
-namespace Tinker
+namespace Emt_Tinker
 {
     class CastItemsAndAbilities
     {

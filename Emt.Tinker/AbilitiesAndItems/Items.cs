@@ -9,7 +9,7 @@ using Divine.Extensions;
 using Divine.Helpers;
 using Divine.Entity.Entities.Abilities.Components;
 
-namespace Tinker.AbilitiesAndItems
+namespace Emt_Tinker.AbilitiesAndItems
 {
     internal class Items : Base
     {

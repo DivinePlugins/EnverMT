@@ -4,7 +4,7 @@ using Divine.Update;
 using Divine.Extensions;
 using Divine.Entity; 
 
-namespace Tinker
+namespace Emt_Tinker
 {
     class Combo : IDisposable
     {

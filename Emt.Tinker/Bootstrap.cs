@@ -4,7 +4,7 @@ using Divine.Entity.Entities.Units.Heroes.Components;
 using System;
 using Divine.Game;
 
-namespace Tinker
+namespace Emt_Tinker
 {
     public class Bootstrap : Bootstrapper
     {

@@ -6,7 +6,7 @@ using Divine.Extensions;
 using Divine.Entity;
 using Divine.Numerics;
 
-namespace Tinker.AbilitiesAndItems
+namespace Emt_Tinker.AbilitiesAndItems
 {
     internal class Base
     {

@@ -2,7 +2,7 @@
 using Divine.Entity.Entities.Units.Heroes;
 using Divine.Extensions;
 
-namespace Tinker.AbilitiesAndItems
+namespace Emt_Tinker.AbilitiesAndItems
 {
     internal class Abilities : Base
     {
