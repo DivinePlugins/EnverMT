@@ -71,6 +71,8 @@ namespace Emt_Tinker
             CastItemsAndAbilities c = Context.CastItemsAndAbilities;
             if (c.castDefensiveMatrix()) return true;
 
+            if (executeLinkenSphereBreaking()) return true;
+
             if (c.castNoTargetCastItems()) return true;
             if (c.castSelfCastItems()) return true;
             if (c.castTargetCastItems()) return true;
@@ -81,43 +83,7 @@ namespace Emt_Tinker
             if (c.castLaser()) return true;
             if (c.castBlink()) return true;
             if (c.castRearm()) return true;
-
-            /*
-            
-
-            if (executeLinkenSphereBreaking()) return true;
-
-            
-
-            if (c.castSoulRing()) return true;
-            if (c.castGuardianGreaves()) return true;
-
-            
-
-            if (c.castShivasGuard()) return true;
-            if (c.castBloodstone()) return true;
-            if (c.castEternalShroud()) return true;
-
-            if (c.castLotusOrb()) return true;
-            if (c.castGhostScepter()) return true;
-            if (c.castGlimmerCape()) return true;
-
-            if (c.castVeilOfDiscord()) return true;
-            if (c.castNullifier()) return true;
-            if (c.castRodOfAtos()) return true;
-
-            if (c.castOrchid()) return true;
-            if (c.castBloodthorn()) return true;
-            
-            if (c.castEtheralBlade()) return true;
-            if (c.castDagon()) return true;
-            if (c.castScytheOfVyse()) return true;
-
-            if (c.castLaser()) return true;
-
-            if (c.castBlink()) return true;
-            if (c.castRearm()) return true;      
-            */
+           
             return false;
         }
 
@@ -128,19 +94,13 @@ namespace Emt_Tinker
             if (!UnitExtensions.IsLinkensProtected(Context.TargetManager.currentTarget)) return false;            
 
             if (Context.PluginMenu.ComboLinkenBreakerMode == "First what can be used (not Hex)")
-            {
-                /*
-                if (c.castEtheralBlade()) return true;
-                if (c.castDagon()) return true;
-                if (c.castOrchid()) return true;
-                if (c.castBloodthorn()) return true;
-                if (c.castRodOfAtos()) return true;
-                if (c.castNullifier()) return true;
+            {                
+                if (c.castTargetDagonCastItems()) return true;
                 if (c.castLaser()) return true;
-                */
+                if (c.castTargetCastItems()) return true;
             }
             
-            //if (Context.PluginMenu.ComboLinkenBreakerMode == "Laser") if (c.castLaser()) return true;
+            if (Context.PluginMenu.ComboLinkenBreakerMode == "Laser") if (c.castLaser()) return true;
             
             return false;            
         }    

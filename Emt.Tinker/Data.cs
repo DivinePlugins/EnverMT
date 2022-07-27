@@ -27,14 +27,14 @@ namespace Emt_Tinker
                 {AbilityId.item_eternal_shroud,true},
             };
             public static readonly Dictionary<AbilityId, bool> ComboTargetItems = new Dictionary<AbilityId, bool>
-            {
-                {AbilityId.item_sheepstick,true},
+            {                
                 {AbilityId.item_ethereal_blade,true},
                 {AbilityId.item_veil_of_discord,true},
                 {AbilityId.item_orchid,true},
                 {AbilityId.item_bloodthorn,true},
                 {AbilityId.item_rod_of_atos,true},
-                {AbilityId.item_nullifier,true}
+                {AbilityId.item_nullifier,true},
+                {AbilityId.item_sheepstick,true},
             };
 
             public static readonly Dictionary<AbilityId, bool> ComboTargetItemsDagons = new Dictionary<AbilityId, bool> {
