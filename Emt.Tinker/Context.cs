@@ -15,7 +15,7 @@ namespace Emt_Tinker
             PluginMenu = new PluginMenu();
 
             PluginMenu.PluginStatus.ValueChanged += PluginStatus_ValueChanged;
-        }
+        } 
 
         public void Dispose() { }
 
@@ -33,7 +33,7 @@ namespace Emt_Tinker
             {   
                 TargetManager.Dispose();                
                 Combo.Dispose();
-                CastItemsAndAbilities.Dispose();
+                CastItemsAndAbilities = null;
                 draw.Dispose();
                 abilityManager.Dispose();
             }

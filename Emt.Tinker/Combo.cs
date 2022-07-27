@@ -2,7 +2,8 @@
 using Divine.Entity.Entities.Units.Heroes;
 using Divine.Update;
 using Divine.Extensions;
-using Divine.Entity; 
+using Divine.Entity;
+using Divine.Entity.Entities.Abilities.Components;
 
 namespace Emt_Tinker
 {
@@ -41,7 +42,8 @@ namespace Emt_Tinker
         }
         private void UpdateManager_IngameUpdate()
         {
-            if (CastItemsAndAbilities.sleeper.Sleeping) return;
+            if (CastItemsAndAbilities.sleeper.Sleeping) return;           
+
             if (Context.TargetManager.currentTarget != null 
                 && this._localHero.IsAlive
                 && Context.TargetManager.currentTarget.IsAlive
@@ -53,31 +55,44 @@ namespace Emt_Tinker
             {
                 if (executeCombo()) return;
             }
-            /*
+            
             CastItemsAndAbilities c = Context.CastItemsAndAbilities;
             if (Context.TargetManager.targetForRocket!=null) if (c.castHeatSeekingMissile()) return;
             if (c.castDefensiveMatrix()) return;
-            if (c.castBlink()) return;
-            if (c.castSoulRing()) return;
-            if (c.castGuardianGreaves()) return;
+            if (c.castNoTargetCastItems()) return;
+            if (c.castBlink()) return;            
             if (c.castRearm()) return;
-            */
+            
         }
 
         private bool executeCombo()
         {
+
             CastItemsAndAbilities c = Context.CastItemsAndAbilities;
-            /*
             if (c.castDefensiveMatrix()) return true;
+
+            if (c.castNoTargetCastItems()) return true;
+            if (c.castSelfCastItems()) return true;
+            if (c.castTargetCastItems()) return true;
+            if (c.castTargetDagonCastItems()) return true;
+
+            if (c.castWarpGrenade()) return true;
+            if (c.castHeatSeekingMissile()) return true;
+            if (c.castLaser()) return true;
+            if (c.castBlink()) return true;
+            if (c.castRearm()) return true;
+
+            /*
+            
 
             if (executeLinkenSphereBreaking()) return true;
 
-            if (c.castWarpGrenade()) return true;
+            
 
             if (c.castSoulRing()) return true;
             if (c.castGuardianGreaves()) return true;
 
-            if (c.castHeatSeekingMissile()) return true;
+            
 
             if (c.castShivasGuard()) return true;
             if (c.castBloodstone()) return true;

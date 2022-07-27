@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using Divine.Update;
 using Divine.Entity.Entities.Abilities.Components;
-using Divine.Entity.Entities.Abilities;
 using Divine.Entity;
 using Divine.Extensions;
 using Divine.Entity.Entities.Units;
 using Divine.Numerics;
+using Divine.Entity.Entities.Abilities.Items.Components;
 
 namespace Emt_Tinker.Managers
 {
     internal class AbilityManager : IDisposable
     {
-        private Divine.Entity.Entities.Abilities.Ability ability;
+        public Divine.Entity.Entities.Abilities.Ability ability { get; private set; }
+        public AbilityId abilityId { get; private set; }        
         private Context Context;        
-        private Dictionary<AbilityId, EnumAbilityTypes> abilityDictionary = new Dictionary<AbilityId, EnumAbilityTypes>();
+        public Dictionary<AbilityId, EnumAbilityTypes> abilityDictionary = new Dictionary<AbilityId, EnumAbilityTypes>();
         public enum EnumAbilityTypes
         {
             VectorCast = 0,
@@ -45,12 +46,13 @@ namespace Emt_Tinker.Managers
         }
         private void Update()
         {
-            this.updateAbilitiesHashSet();
+            this.updateAbilitiesHashSet();            
         }
         private void updateAbilitiesHashSet()
         {
+            
             //ComboAbilities
-            Console.WriteLine($"===============");
+            
             foreach (var item in Emt_Tinker.Data.Menu.ComboAbilities)
             {   
                 if (item.Value == true && !this.abilityDictionary.ContainsKey(item.Key))
@@ -86,53 +88,64 @@ namespace Emt_Tinker.Managers
                     }                    
                 }                    
                 if (item.Value == false && this.abilityDictionary.ContainsKey(item.Key)) this.abilityDictionary.Remove(item.Key);                
-                Console.WriteLine($"Ability ID = {item} and Priority = {Context.PluginMenu.ComboAbilitiesToggler.GetPriority(item.Key)}");
+                //Console.WriteLine($"Ability ID = {item} and Priority = {Context.PluginMenu.ComboAbilitiesToggler.GetPriority(item.Key)}");
             }
-
+            
             foreach (var item in Emt_Tinker.Data.Menu.ComboVectorCastItems)
-            {                
-                if (item.Value == true && !this.abilityDictionary.ContainsKey(item.Key)) this.abilityDictionary.Add(item.Key, EnumAbilityTypes.VectorCast);
+            {   
+                if (item.Value == true && !this.abilityDictionary.ContainsKey(item.Key) && this.IsItemInInventory(item.Key)) this.abilityDictionary.Add(item.Key, EnumAbilityTypes.VectorCast);
                 if (item.Value == false && this.abilityDictionary.ContainsKey(item.Key)) this.abilityDictionary.Remove(item.Key);
             }
             foreach (var item in Emt_Tinker.Data.Menu.ComboSelfCastItems)
             {
-                if (item.Value == true && !this.abilityDictionary.ContainsKey(item.Key)) this.abilityDictionary.Add(item.Key, EnumAbilityTypes.SelftCast);
+                if (item.Value == true && !this.abilityDictionary.ContainsKey(item.Key) && this.IsItemInInventory(item.Key)) this.abilityDictionary.Add(item.Key, EnumAbilityTypes.SelftCast);
                 if (item.Value == false && this.abilityDictionary.ContainsKey(item.Key)) this.abilityDictionary.Remove(item.Key);
             }
             foreach (var item in Emt_Tinker.Data.Menu.ComboNoTargetItems)
             {
-                if (item.Value == true && !this.abilityDictionary.ContainsKey(item.Key)) this.abilityDictionary.Add(item.Key, EnumAbilityTypes.NoTarget);
+                if (item.Value == true && !this.abilityDictionary.ContainsKey(item.Key) && this.IsItemInInventory(item.Key)) this.abilityDictionary.Add(item.Key, EnumAbilityTypes.NoTarget);
                 if (item.Value == false && this.abilityDictionary.ContainsKey(item.Key)) this.abilityDictionary.Remove(item.Key);
             }
             foreach (var item in Emt_Tinker.Data.Menu.ComboTargetItems)
             {
-                if (item.Value == true && !this.abilityDictionary.ContainsKey(item.Key)) this.abilityDictionary.Add(item.Key, EnumAbilityTypes.Target);
+                if (item.Value == true && !this.abilityDictionary.ContainsKey(item.Key) && this.IsItemInInventory(item.Key)) this.abilityDictionary.Add(item.Key, EnumAbilityTypes.Target);
                 if (item.Value == false && this.abilityDictionary.ContainsKey(item.Key)) this.abilityDictionary.Remove(item.Key);
             }
             foreach (var item in Emt_Tinker.Data.Menu.ComboTargetItemsDagons)
             {
-                if (item.Value == true && !this.abilityDictionary.ContainsKey(item.Key)) this.abilityDictionary.Add(item.Key, EnumAbilityTypes.Target);
+                if (item.Value == true && !this.abilityDictionary.ContainsKey(item.Key) && this.IsItemInInventory(item.Key)) this.abilityDictionary.Add(item.Key, EnumAbilityTypes.Target);
                 if (item.Value == false && this.abilityDictionary.ContainsKey(item.Key)) this.abilityDictionary.Remove(item.Key);
+            }            
+        }     
+        public bool IsItemInInventory(AbilityId abilityId)
+        {            
+            var itemsInInventory = EntityManager.LocalHero.Inventory.GetItems(ItemSlot.MainSlot1, ItemSlot.MainSlot6);              
+            foreach (var i in itemsInInventory)
+            {
+                if (abilityId == i.Id) return true;                
             }
+            return false;
         }
-        public Dictionary<AbilityId, EnumAbilityTypes> GetAbilityHashSet()
-        {
-            return this.abilityDictionary;
-        }
-        private class Ability
-        {
-            AbilityId abilityId;
-            EnumAbilityTypes abilityType;
-        }
+              
         public void SetAbility(AbilityId abilityId)
+        {            
+            this.ability = UnitExtensions.GetAbilityById(EntityManager.LocalHero, abilityId);                        
+            this.abilityId = abilityId;
+        }
+
+        public void SetItem(AbilityId abilityId)
         {
-            this.ability = UnitExtensions.GetAbilityById(EntityManager.LocalHero, abilityId);
+            this.ability = UnitExtensions.GetItemById(EntityManager.LocalHero, abilityId);            
+            this.abilityId = abilityId;
         }
         public virtual bool CanBeCasted()
-        {               
+        {
+            if (!this.abilityDictionary.ContainsKey(this.abilityId)) return false;
+            
+            if (this.ability == null) return false;            
             if (this.ability.Cooldown > 0f) return false;            
             if (this.ability.Level == 0) return false;
-
+            
             if (EntityManager.LocalHero == null) return false;
             if (!EntityManager.LocalHero.IsAlive) return false;
 
@@ -156,23 +169,17 @@ namespace Emt_Tinker.Managers
             return true;
         }
 
-        public virtual bool Cast(Vector3 position, bool queue = false, bool bypass = false)
-        {
-            if (this.ability == null) return false;
+        public bool Cast(Vector3 position, bool queue = false, bool bypass = false)
+        {   
             return this.ability.Cast(position, queue, bypass);
         }
-        public virtual bool Cast(Unit unit, bool queue = false, bool bypass = false)
-        {
-            if (this.ability == null) return false;
-            if (this.ability.Cooldown != 0) return false;
-            if (this.ability.Level == 0) return false;
-
+        public bool Cast(Unit unit, bool queue = false, bool bypass = false)
+        {            
             return this.ability.Cast(unit, queue, bypass);
         }
 
-        public virtual bool Cast(bool queue = false, bool bypass = false)
-        {
-            if (this.ability == null) return false;
+        public bool Cast(bool queue = false, bool bypass = false)
+        {         
             return this.ability.Cast(queue, bypass);
         }
     }
