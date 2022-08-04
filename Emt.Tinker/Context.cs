@@ -6,7 +6,7 @@ namespace Emt_Tinker
     {   
         public PluginMenu PluginMenu { get; set; }
         public TargetManager TargetManager { get; set; }           
-        public Combo Combo { get; set; }
+        public Combo Combo { get; set; }        
         public Draw draw { get; set; }
         public CastItemsAndAbilities CastItemsAndAbilities;
         public Emt_Tinker.Managers.AbilityManager abilityManager;
@@ -24,7 +24,7 @@ namespace Emt_Tinker
             if (e.Value)
             {                        
                 TargetManager = new TargetManager(this);                             
-                Combo = new Combo(this);
+                Combo = new Combo(this);                
                 CastItemsAndAbilities = new CastItemsAndAbilities(this);
                 draw = new Draw(this);
                 abilityManager = new Emt_Tinker.Managers.AbilityManager(this);
@@ -32,7 +32,7 @@ namespace Emt_Tinker
             else
             {   
                 TargetManager.Dispose();                
-                Combo.Dispose();
+                Combo.Dispose();                
                 CastItemsAndAbilities = null;
                 draw.Dispose();
                 abilityManager.Dispose();

@@ -6,10 +6,6 @@ using Divine.Entity;
 using Divine.Game;
 using Divine.Entity.Entities.Abilities.Components;
 using Divine.Entity.Entities.Units;
-using Divine.Update;
-using Divine.Entity.Entities.Abilities;
-using Divine.Entity.Entities.Abilities.Items.Components;
-
 
 namespace Emt_Tinker
 {
@@ -18,13 +14,9 @@ namespace Emt_Tinker
         #region Variables
         
         static public Sleeper sleeper = new Sleeper();
-
-        private Ability ability;
-        
-        private Context Context;                
-        private bool comboState = false;
-        private float sleepTime;
-        private Dictionary<AbilityId, bool> UsedAbils = new Dictionary<AbilityId, bool>();
+        static public Sleeper rearmSleeper = new Sleeper();
+        private Context Context;                        
+        private float sleepTime;        
         #endregion
 
         public CastItemsAndAbilities(Context context)
@@ -35,14 +27,21 @@ namespace Emt_Tinker
 
         private void setSleeper()
         {   
-            sleeper.Sleep(Context.abilityManager.ability.CastPoint * 1000f + 80f + GameManager.AvgPing);
-            sleepTime = (float)Context.abilityManager.ability.CastPoint * 1000f + (float)80f + (float)GameManager.AvgPing;
-            //Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - sleeper Set: " + sleepTime);
-            //Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - sleeper Set CastPoint: " + this.item.GetAbility().CastPoint);
-            //Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - sleeper Set AvgPing: " + GameManager.AvgPing);
-            comboState = true;
-            if (!this.UsedAbils.ContainsKey(Context.abilityManager.abilityId))
-                this.UsedAbils.Add(Context.abilityManager.abilityId, true);
+            if (Context.abilityManager.selectedAbilItem == Managers.AbilityManager.EnumAbilityOrItem.Ability)
+            {
+                sleeper.Sleep(Context.abilityManager.ability.CastPoint * 1000f + 80f + GameManager.AvgPing);
+                sleepTime = Context.abilityManager.ability.CastPoint * 1000f + (float)80f + (float)GameManager.AvgPing;
+            } else
+            {
+                sleeper.Sleep(Context.abilityManager.item.CastPoint * 1000f + 80f + GameManager.AvgPing);
+                sleepTime = Context.abilityManager.item.CastPoint * 1000f + (float)80f + (float)GameManager.AvgPing;
+            }
+            
+            //Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - sleeper Set: " + sleepTime);                                    
+        }
+        private void setRearmSleeper()
+        {
+            rearmSleeper.Sleep(Context.abilityManager.item.CastPoint * 1000f + 80f + GameManager.AvgPing + Context.abilityManager.item.ChannelTime*1000f);
         }
         
         public bool castBlink()
@@ -51,9 +50,10 @@ namespace Emt_Tinker
             if (Context.abilityManager.abilityDictionary.ContainsKey(AbilityId.item_swift_blink)) Context.abilityManager.SetItem(AbilityId.item_swift_blink);
             if (Context.abilityManager.abilityDictionary.ContainsKey(AbilityId.item_overwhelming_blink)) Context.abilityManager.SetItem(AbilityId.item_overwhelming_blink);
             if (Context.abilityManager.abilityDictionary.ContainsKey(AbilityId.item_arcane_blink)) Context.abilityManager.SetItem(AbilityId.item_arcane_blink);
-
-            if (!Context.abilityManager.CanBeCasted()) return false;            
             
+            if (!Context.abilityManager.CanBeCasted()) return false;
+            
+
             if (Context.PluginMenu.ComboBlinkMode == "To cursor")
                 Context.abilityManager.Cast(GameManager.MousePosition, false, false);
 
@@ -65,13 +65,11 @@ namespace Emt_Tinker
 
             if (Context.TargetManager.currentTarget != null)
             {
-                sleeper.Sleep(Context.abilityManager.ability.CastPoint * 1000f + 80f + GameManager.AvgPing);
+                this.setSleeper();
             } else
             {
                 sleeper.Sleep(Context.abilityManager.ability.CastPoint * 1000f + 400f + GameManager.AvgPing);
-            }
-            
-            comboState = true;
+            }                        
             return true;
         }       
         
@@ -82,9 +80,9 @@ namespace Emt_Tinker
             if (sleeper.Sleeping) return false;
 
             Context.abilityManager.SetAbility(AbilityId.tinker_laser);
-            if (!Context.abilityManager.CanBeCasted()) return false;
+            if (!Context.abilityManager.CanBeCasted()) return false;            
 
-            if (this.UsedAbils.ContainsKey(Context.abilityManager.abilityId)) return false;
+            
             if (!Context.PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_laser)) return false;
 
             if (Context.PluginMenu.ComboSmartLaser) 
@@ -109,7 +107,7 @@ namespace Emt_Tinker
         private bool smartLaser(Unit unitNearestToTarget)
         {            
             if (!Context.abilityManager.CanBeCasted(unitNearestToTarget)) return false;
-            if (this.UsedAbils.ContainsKey(Context.abilityManager.abilityId)) return false;
+            
 
             Context.abilityManager.Cast(unitNearestToTarget, false, false);            
             setSleeper();            
@@ -119,7 +117,7 @@ namespace Emt_Tinker
         public bool castHeatSeekingMissile()
         {
             Context.abilityManager.SetAbility(AbilityId.tinker_heat_seeking_missile);
-            if (this.UsedAbils.ContainsKey(Context.abilityManager.abilityId)) return false;
+            
             if (!Context.PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_heat_seeking_missile)) return false;
             if (!Context.abilityManager.CanBeCasted()) return false;
 
@@ -131,23 +129,21 @@ namespace Emt_Tinker
         public bool castDefensiveMatrix()
         {
             Context.abilityManager.SetAbility(AbilityId.tinker_defense_matrix);
-            if (this.UsedAbils.ContainsKey(Context.abilityManager.abilityId)) return false;
+            
             if (!Context.PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_defense_matrix)) return false;            
             if (UnitExtensions.HasModifier(EntityManager.LocalHero, "modifier_tinker_defense_matrix")) return false;            
             if (!Context.abilityManager.CanBeCasted()) return false;
 
 
             Context.abilityManager.Cast(EntityManager.LocalHero, false, false);            
-            sleeper.Sleep(Context.abilityManager.ability.CastPoint * 1000f + 80f + GameManager.AvgPing);
-            if (!this.UsedAbils.ContainsKey(Context.abilityManager.abilityId))
-                this.UsedAbils.Add(Context.abilityManager.abilityId, true);
+            sleeper.Sleep(Context.abilityManager.ability.CastPoint * 1000f + 80f + GameManager.AvgPing);            
 
             return true;
         }
         public bool castWarpGrenade()
         {
             Context.abilityManager.SetAbility(AbilityId.tinker_warp_grenade);
-            if (this.UsedAbils.ContainsKey(Context.abilityManager.abilityId)) return false;
+            
             if (!Context.PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_warp_grenade)) return false;            
             if (!EntityManager.LocalHero.IsInRange(Context.TargetManager.currentTarget, Context.PluginMenu.ComboWarpGrenadeUseRadius)) return false;            
             if (!Context.abilityManager.CanBeCasted(Context.TargetManager.currentTarget)) return false;
@@ -161,20 +157,21 @@ namespace Emt_Tinker
         {
             if (CastItemsAndAbilities.sleeper.Sleeping) return false;            
             
-            if (!comboState) return false;
+            if (rearmSleeper.Sleeping) return false;
             
             Context.abilityManager.SetAbility(AbilityId.tinker_rearm);
             if (!Context.abilityManager.CanBeCasted()) return false;
 
-            Context.abilityManager.Cast(false, false);            
-            
-            comboState = false;
-            this.UsedAbils.Clear();
+            if (Context.abilityManager.Cast(false, false))
+            {
+                this.setRearmSleeper();                
+            }            
             return true;
         }
+      
         #endregion
-        
-        
+
+
         public bool castNoTargetCastItems()
         {
             foreach (var item in Data.Menu.ComboNoTargetItems)

@@ -35,13 +35,15 @@ namespace Emt_Tinker
         public readonly MenuSwitcher ComboDrawLineToTarget;
         public readonly MenuSwitcher ComboLockTarget;
 
+        public readonly MenuHoldKey BlinkSpamKey;
+
         private readonly Menu RootMenu;
 
         public PluginMenu()
         {
             RootMenu = MenuManager.CreateRootMenu("Emt.Tinker")
                 .SetHeroImage(HeroId.npc_dota_hero_tinker)
-                .SetTooltip("V1.0.9 BETA");
+                .SetTooltip("V1.0.11 BETA");
 
             PluginStatus = RootMenu.CreateSwitcher("On/Off");
             
@@ -75,7 +77,7 @@ namespace Emt_Tinker
             //this.ComboAutoShivaRadius = menu.CreateSlider("Distance to Enemy for activating Auto Shiva", 900, 300, 2000);
 
             this.ComboTargetSelectorMode.ValueChanged += new MenuSelector.SelectorEventHandler(this.ComboTargetSelectorMode_ValueChanged);
-            this.ComboBlinkMode.ValueChanged += new MenuSelector.SelectorEventHandler(this.ComboBlinkMode_ValueChanged);
+            this.ComboBlinkMode.ValueChanged += new MenuSelector.SelectorEventHandler(this.ComboBlinkMode_ValueChanged);            
         }
 
         private void ComboTargetSelectorMode_ValueChanged(MenuSelector selector, SelectorEventArgs e)
