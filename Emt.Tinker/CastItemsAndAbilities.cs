@@ -141,9 +141,10 @@ namespace Emt_Tinker
         {
             Context.abilityManager.SetAbility(AbilityId.tinker_warp_grenade);
 
-            if (!Context.PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_warp_grenade)) return false;
-            if (!EntityManager.LocalHero.IsInRange(Context.TargetManager.currentTarget, Context.PluginMenu.ComboWarpGrenadeUseRadius)) return false;
+            if (!Context.abilityManager.CanBeCasted()) return false;
             if (!Context.abilityManager.CanBeCasted(Context.TargetManager.currentTarget)) return false;
+            if (!Context.PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_warp_grenade)) return false;
+            if (!EntityManager.LocalHero.IsInRange(Context.TargetManager.currentTarget, Context.PluginMenu.ComboWarpGrenadeUseRadius)) return false;            
 
             Context.abilityManager.Cast(Context.TargetManager.currentTarget, false, false);
             setSleeper();
