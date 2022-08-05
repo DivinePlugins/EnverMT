@@ -27,7 +27,7 @@ namespace Emt_Tinker
                 Combo = new Combo(this);                
                 CastItemsAndAbilities = new CastItemsAndAbilities(this);
                 draw = new Draw(this);
-                abilityManager = new Emt_Tinker.Managers.AbilityManager(this);
+                abilityManager = new AbilityManager(this);
             }
             else
             {   

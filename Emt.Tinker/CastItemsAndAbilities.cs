@@ -12,47 +12,42 @@ namespace Emt_Tinker
     class CastItemsAndAbilities
     {
         #region Variables
-        
         static public Sleeper sleeper = new Sleeper();
         static public Sleeper rearmSleeper = new Sleeper();
-        private Context Context;                        
-        private float sleepTime;        
+        private Context Context;
+        public HashSet<AbilityId> usedAbils = new HashSet<AbilityId>();
         #endregion
 
         public CastItemsAndAbilities(Context context)
         {
-            Context = context;            
-        }       
-        
+            Context = context;
+        }
 
-        private void setSleeper()
-        {   
+
+        private void setSleeper(float additionalTime = 0)
+        {
             if (Context.abilityManager.selectedAbilItem == Managers.AbilityManager.EnumAbilityOrItem.Ability)
             {
-                sleeper.Sleep(Context.abilityManager.ability.CastPoint * 1000f + 80f + GameManager.AvgPing);
-                sleepTime = Context.abilityManager.ability.CastPoint * 1000f + (float)80f + (float)GameManager.AvgPing;
-            } else
-            {
-                sleeper.Sleep(Context.abilityManager.item.CastPoint * 1000f + 80f + GameManager.AvgPing);
-                sleepTime = Context.abilityManager.item.CastPoint * 1000f + (float)80f + (float)GameManager.AvgPing;
+                sleeper.Sleep(Context.abilityManager.ability.CastPoint * 1000f + 100f + GameManager.AvgPing + additionalTime);                
             }
-            
+            else
+            {
+                sleeper.Sleep(Context.abilityManager.item.CastPoint * 1000f + 100f + GameManager.AvgPing + additionalTime);                
+            }
+
             //Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - sleeper Set: " + sleepTime);                                    
-        }
-        private void setRearmSleeper()
-        {
-            rearmSleeper.Sleep(Context.abilityManager.item.CastPoint * 1000f + 80f + GameManager.AvgPing + Context.abilityManager.item.ChannelTime*1000f);
-        }
-        
+        }       
+
         public bool castBlink()
-        {            
+        {
+            if (sleeper.Sleeping) return false;
+
             if (Context.abilityManager.abilityDictionary.ContainsKey(AbilityId.item_blink)) Context.abilityManager.SetItem(AbilityId.item_blink);
             if (Context.abilityManager.abilityDictionary.ContainsKey(AbilityId.item_swift_blink)) Context.abilityManager.SetItem(AbilityId.item_swift_blink);
             if (Context.abilityManager.abilityDictionary.ContainsKey(AbilityId.item_overwhelming_blink)) Context.abilityManager.SetItem(AbilityId.item_overwhelming_blink);
             if (Context.abilityManager.abilityDictionary.ContainsKey(AbilityId.item_arcane_blink)) Context.abilityManager.SetItem(AbilityId.item_arcane_blink);
-            
+
             if (!Context.abilityManager.CanBeCasted()) return false;
-            
 
             if (Context.PluginMenu.ComboBlinkMode == "To cursor")
                 Context.abilityManager.Cast(GameManager.MousePosition, false, false);
@@ -61,114 +56,116 @@ namespace Emt_Tinker
             {
                 if (Context.TargetManager.currentTarget != null) Context.abilityManager.Cast(Vector3Extensions.Extend(Context.TargetManager.currentTarget.Position, GameManager.MousePosition, Context.PluginMenu.ComboBlinkModeRadius), false, false);
                 if (Context.TargetManager.currentTarget == null) Context.abilityManager.Cast(GameManager.MousePosition, false, false);
-            }           
-
+            }
+            
             if (Context.TargetManager.currentTarget != null)
+            {                
+                setSleeper(100f);
+            }
+            else
             {
-                this.setSleeper();
-            } else
-            {
-                sleeper.Sleep(Context.abilityManager.ability.CastPoint * 1000f + 400f + GameManager.AvgPing);
-            }                        
+                setSleeper(400f);
+            }
+
             return true;
-        }       
-        
+        }
+
         #region Abilities
-        
+
         public bool castLaser()
         {
             if (sleeper.Sleeping) return false;
 
             Context.abilityManager.SetAbility(AbilityId.tinker_laser);
-            if (!Context.abilityManager.CanBeCasted()) return false;            
+            if (!Context.abilityManager.CanBeCasted()) return false;
 
-            
+
             if (!Context.PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_laser)) return false;
 
-            if (Context.PluginMenu.ComboSmartLaser) 
+            if (Context.PluginMenu.ComboSmartLaser)
             {
                 Unit unitNearestToTarget = Context.TargetManager.nearestEnemyUnitFromTarget;
-                if (unitNearestToTarget!=null)
+                if (unitNearestToTarget != null)
                 {
                     if (UnitExtensions.IsReflectingAbilities(Context.TargetManager.currentTarget)) if (smartLaser(unitNearestToTarget)) return true;
-                    
-                    if (Context.TargetManager.farestEnemyHeroFromTarget == Context.TargetManager.currentTarget && EntityManager.LocalHero.HasAghanimsScepter()) 
+
+                    if (Context.TargetManager.farestEnemyHeroFromTarget == Context.TargetManager.currentTarget && EntityManager.LocalHero.HasAghanimsScepter())
                         if (smartLaser(unitNearestToTarget)) return true;
                 }
-            }             
-            
+            }
+
             if (!Context.abilityManager.CanBeCasted(Context.TargetManager.currentTarget)) return false;
 
-            Context.abilityManager.Cast(Context.TargetManager.currentTarget, false, false);    
-            
-            setSleeper();
-            return true;                        
-        }
-        private bool smartLaser(Unit unitNearestToTarget)
-        {            
-            if (!Context.abilityManager.CanBeCasted(unitNearestToTarget)) return false;
-            
+            Context.abilityManager.Cast(Context.TargetManager.currentTarget, false, false);
 
-            Context.abilityManager.Cast(unitNearestToTarget, false, false);            
-            setSleeper();            
+            setSleeper();
             return true;
         }
-        
+        private bool smartLaser(Unit unitNearestToTarget)
+        {
+            if (!Context.abilityManager.CanBeCasted(unitNearestToTarget)) return false;
+
+
+            Context.abilityManager.Cast(unitNearestToTarget, false, false);
+            setSleeper();
+            return true;
+        }
+
         public bool castHeatSeekingMissile()
         {
             Context.abilityManager.SetAbility(AbilityId.tinker_heat_seeking_missile);
-            
+
             if (!Context.PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_heat_seeking_missile)) return false;
             if (!Context.abilityManager.CanBeCasted()) return false;
 
             Context.abilityManager.Cast(false, false);
-            setSleeper();            
+            setSleeper();
             return true;
         }
-        
+
         public bool castDefensiveMatrix()
         {
             Context.abilityManager.SetAbility(AbilityId.tinker_defense_matrix);
-            
-            if (!Context.PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_defense_matrix)) return false;            
-            if (UnitExtensions.HasModifier(EntityManager.LocalHero, "modifier_tinker_defense_matrix")) return false;            
+
+            if (!Context.PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_defense_matrix)) return false;
+            if (UnitExtensions.HasModifier(EntityManager.LocalHero, "modifier_tinker_defense_matrix")) return false;
             if (!Context.abilityManager.CanBeCasted()) return false;
 
 
-            Context.abilityManager.Cast(EntityManager.LocalHero, false, false);            
-            sleeper.Sleep(Context.abilityManager.ability.CastPoint * 1000f + 80f + GameManager.AvgPing);            
+            Context.abilityManager.Cast(EntityManager.LocalHero, false, false);
+            setSleeper();
 
             return true;
         }
-        public bool castWarpGrenade()
+        public bool castWarpGrenade() 
         {
             Context.abilityManager.SetAbility(AbilityId.tinker_warp_grenade);
-            
-            if (!Context.PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_warp_grenade)) return false;            
-            if (!EntityManager.LocalHero.IsInRange(Context.TargetManager.currentTarget, Context.PluginMenu.ComboWarpGrenadeUseRadius)) return false;            
+
+            if (!Context.PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_warp_grenade)) return false;
+            if (!EntityManager.LocalHero.IsInRange(Context.TargetManager.currentTarget, Context.PluginMenu.ComboWarpGrenadeUseRadius)) return false;
             if (!Context.abilityManager.CanBeCasted(Context.TargetManager.currentTarget)) return false;
 
             Context.abilityManager.Cast(Context.TargetManager.currentTarget, false, false);
             setSleeper();
             return true;
         }
-        
+
         public bool castRearm()
         {
-            if (CastItemsAndAbilities.sleeper.Sleeping) return false;            
-            
-            if (rearmSleeper.Sleeping) return false;
-            
+            if (sleeper.Sleeping) return false;            
+
             Context.abilityManager.SetAbility(AbilityId.tinker_rearm);
             if (!Context.abilityManager.CanBeCasted()) return false;
 
-            if (Context.abilityManager.Cast(false, false))
-            {
-                this.setRearmSleeper();                
-            }            
+            if (!Context.abilityManager.Cast(false, false)) return false;
+
+            this.setSleeper(Context.abilityManager.ability.ChannelTime * 1000f);
+            this.usedAbils.Clear();
+
+            
             return true;
         }
-      
+
         #endregion
 
 
@@ -178,8 +175,12 @@ namespace Emt_Tinker
             {
                 if (!item.Value) continue;
 
-                Context.abilityManager.SetItem(item.Key);                
-                if (Context.abilityManager.CanBeCasted()) if (Context.abilityManager.Cast()) return true;
+                Context.abilityManager.SetItem(item.Key);
+                if (Context.abilityManager.CanBeCasted()) if (Context.abilityManager.Cast())
+                    {
+                        setSleeper(); 
+                        return true;
+                    }
             }
             return false;
         }
@@ -191,7 +192,7 @@ namespace Emt_Tinker
                 if (!item.Value) continue;
 
                 Context.abilityManager.SetItem(item.Key);
-                if (Context.abilityManager.CanBeCasted()) if (Context.abilityManager.Cast(EntityManager.LocalHero)) return true;
+                if (Context.abilityManager.CanBeCasted()) if (Context.abilityManager.Cast(EntityManager.LocalHero)) { setSleeper(); return true; }
             }
             return false;
         }
@@ -203,7 +204,7 @@ namespace Emt_Tinker
                 if (!item.Value) continue;
 
                 Context.abilityManager.SetItem(item.Key);
-                if (Context.abilityManager.CanBeCasted()) if (Context.abilityManager.Cast(Context.TargetManager.currentTarget)) return true;
+                if (Context.abilityManager.CanBeCasted()) if (Context.abilityManager.Cast(Context.TargetManager.currentTarget)) { setSleeper(); return true; }
             }
             return false;
         }
@@ -215,7 +216,7 @@ namespace Emt_Tinker
                 if (!item.Value) continue;
 
                 Context.abilityManager.SetItem(item.Key);
-                if (Context.abilityManager.CanBeCasted()) if (Context.abilityManager.Cast(Context.TargetManager.currentTarget)) return true;
+                if (Context.abilityManager.CanBeCasted()) if (Context.abilityManager.Cast(Context.TargetManager.currentTarget)) { setSleeper(); return true; }
             }
             return false;
         }
