@@ -61,7 +61,7 @@ namespace Emt_Tinker.Managers
 
             //ComboAbilities
 
-            foreach (var item in Emt_Tinker.Data.Menu.ComboAbilities)
+            foreach (var item in Data.Menu.ComboAbilities)
             {
                 if (item.Value == true && !this.abilityDictionary.ContainsKey(item.Key))
                 {
@@ -126,8 +126,8 @@ namespace Emt_Tinker.Managers
         }
         public bool IsItemInInventory(AbilityId abilityId)
         {
-            IEnumerable<Divine.Entity.Entities.Abilities.Items.Item> itemsInInventory = EntityManager.LocalHero.Inventory.GetItems(ItemSlot.MainSlot1, ItemSlot.MainSlot6);
-            foreach (var i in itemsInInventory)
+            IEnumerable<Divine.Entity.Entities.Abilities.Items.Item> itemsInInventory = EntityManager.LocalHero.Inventory.MainItems;
+            foreach (Divine.Entity.Entities.Abilities.Items.Item i in itemsInInventory)
             {
                 if (abilityId == i.Id) return true;
             }
