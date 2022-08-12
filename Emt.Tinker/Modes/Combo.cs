@@ -79,7 +79,6 @@ namespace Emt.Tinker.Modes
             if (CastManager.castItem(AbilityId.item_bloodstone)) return true;
             if (CastManager.castItem(AbilityId.item_eternal_shroud)) return true;
             if (CastManager.castItem(AbilityId.item_ethereal_blade, TargetManager.currentTarget)) return true;
-            if (CastManager.castItem(AbilityId.item_veil_of_discord, TargetManager.currentTarget)) return true;
             if (CastManager.castItem(AbilityId.item_orchid, TargetManager.currentTarget)) return true;
             if (CastManager.castItem(AbilityId.item_bloodthorn, TargetManager.currentTarget)) return true;
             if (CastManager.castItem(AbilityId.item_rod_of_atos, TargetManager.currentTarget)) return true;
@@ -92,13 +91,13 @@ namespace Emt.Tinker.Modes
 
             if (CastManager.castItem(AbilityId.item_sheepstick, TargetManager.currentTarget)) return true;
 
-            if (PluginMenu.ComboItems.GetValue(AbilityId.item_dagon))
+            if (PluginMenu.ComboItems.GetValue(AbilityId.item_dagon)) 
             {
-                if (CastManager.castItem(AbilityId.item_dagon, TargetManager.currentTarget)) return true;
-                if (CastManager.castItem(AbilityId.item_dagon_2, TargetManager.currentTarget)) return true;
-                if (CastManager.castItem(AbilityId.item_dagon_3, TargetManager.currentTarget)) return true;
-                if (CastManager.castItem(AbilityId.item_dagon_4, TargetManager.currentTarget)) return true;
-                if (CastManager.castItem(AbilityId.item_dagon_5, TargetManager.currentTarget)) return true;
+                if (CastManager.castItem(AbilityId.item_dagon, TargetManager.currentTarget, false)) return true;
+                if (CastManager.castItem(AbilityId.item_dagon_2, TargetManager.currentTarget, false)) return true;
+                if (CastManager.castItem(AbilityId.item_dagon_3, TargetManager.currentTarget, false)) return true;
+                if (CastManager.castItem(AbilityId.item_dagon_4, TargetManager.currentTarget, false)) return true;
+                if (CastManager.castItem(AbilityId.item_dagon_5, TargetManager.currentTarget, false)) return true;
             }
 
             if (CastManager.castHeatSeekingRocket()) return true;

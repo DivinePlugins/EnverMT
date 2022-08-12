@@ -27,7 +27,7 @@ namespace Emt.Tinker.Managers
         {
             if (sleeper.Sleeping) return false;
 
-            if (!ItemCanBeCasted(abilityId)) return false;
+            if (!ItemCanBeCasted(abilityId)) return false;            
 
             if (PluginMenu.ComboBlinkMode == "To cursor") CastItem(GameManager.MousePosition, false, false);
 
@@ -79,7 +79,7 @@ namespace Emt.Tinker.Managers
             laserSleeper.Sleep(ability.CastPoint * 1000f + 80f + GameManager.AvgPing + ability.ChannelTime + 1000f);
 
             return true;
-        }
+        } 
 
         static public bool castHeatSeekingRocket()
         {
@@ -119,10 +119,12 @@ namespace Emt.Tinker.Managers
             return true;
         }
 
-        static public bool castItem(AbilityId abilityId, Unit unit = null)
+        static public bool castItem(AbilityId abilityId, Unit unit = null, bool searchInMenu = true)
         {
             if (sleeper.Sleeping) return false;
             if (!ItemCanBeCasted(abilityId, unit)) return false;
+            
+            if (searchInMenu) if (!PluginMenu.ComboItems.GetValue(abilityId)) return false;           
 
             if (unit != null) CastItem(unit, false, false);
             if (unit == null) CastItem(false, false);

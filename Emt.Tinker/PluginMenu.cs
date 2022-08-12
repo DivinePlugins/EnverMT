@@ -42,7 +42,7 @@ namespace Emt.Tinker
         {
             RootMenu = MenuManager.CreateRootMenu("Emt.Tinker")
                 .SetHeroImage(HeroId.npc_dota_hero_tinker)
-                .SetTooltip("V1.1.01");
+                .SetTooltip("V1.2");
 
             PluginStatus = RootMenu.CreateSwitcher("On/Off");
 
