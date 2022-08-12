@@ -17,7 +17,7 @@ namespace Emt.Tinker
         static public MenuItemToggler ComboItems;        
 
         static public MenuAbilityToggler ComboAbilitiesToggler;
-        static public MenuSlider ComboWarpGrenadeUseRadius;
+        static public MenuSlider ComboWarpGrenadeUseRadius; 
 
         static public MenuSelector ComboBlinkMode;
         static public MenuSlider ComboBlinkModeRadius;
