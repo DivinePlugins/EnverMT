@@ -5,121 +5,118 @@ using Divine.Menu.Items;
 using Divine.Entity.Entities.Abilities.Components;
 using Divine.Menu.EventArgs;
 
-
-namespace Emt_Tinker
+namespace Emt.Tinker
 {
-    internal class PluginMenu
+    static internal class PluginMenu
     {
-        public readonly MenuSwitcher PluginStatus;
-        public readonly MenuHoldKey ComboKey;
-        public readonly MenuSelector ComboTargetSelectorMode;
-        public readonly MenuSlider ComboTargetSelectorRadius;
-        
-        public readonly MenuItemToggler ComboBlinkCastItems;
-        public readonly MenuItemToggler ComboSelfCastItems;
-        public readonly MenuItemToggler ComboNoTargetCastItems;
-        public readonly MenuItemToggler ComboTargetCastItems;
-        public readonly MenuItemToggler ComboDagonCastItems;
+        static public MenuSwitcher PluginStatus;
+        static public MenuHoldKey ComboKey;
+        static public MenuSelector ComboTargetSelectorMode;
+        static public MenuSlider ComboTargetSelectorRadius;
+                
+        static public MenuItemToggler ComboItems;        
 
-        public readonly MenuAbilityToggler ComboAbilitiesToggler;
-        public readonly MenuSlider ComboWarpGrenadeUseRadius;
-        public readonly MenuSwitcher ComboSmartLaser;
+        static public MenuAbilityToggler ComboAbilitiesToggler;
+        static public MenuSlider ComboWarpGrenadeUseRadius;
+        static public MenuSwitcher ComboSmartLaser;
 
-        public readonly MenuSelector ComboBlinkMode;
-        public readonly MenuSlider ComboBlinkModeRadius;
+        static public MenuSelector ComboBlinkMode;
+        static public MenuSlider ComboBlinkModeRadius;
 
-        public readonly MenuSwitcher ComboAutoShiva;
-        public readonly MenuSlider ComboAutoShivaRadius;
+        static public MenuSelector ComboLinkenBreakerMode;
+        static public MenuSwitcher ComboDrawLineToTarget;
+        static public MenuSwitcher ComboLockTarget;
 
-        public readonly MenuSelector ComboLinkenBreakerMode;
-        public readonly MenuSwitcher ComboDrawLineToTarget;
-        public readonly MenuSwitcher ComboLockTarget;
+        static public MenuHoldKey SpamRocketKey;
 
-        public readonly MenuHoldKey BlinkSpamKey;
 
-        private readonly Menu RootMenu;
+        static private Menu RootMenu;
 
-        public PluginMenu()
+        static public void Activate()
+        {
+            CreatePluginMenu();
+            SubscribeToChangeEvents();
+        }
+
+        static public void CreatePluginMenu()
         {
             RootMenu = MenuManager.CreateRootMenu("Emt.Tinker")
                 .SetHeroImage(HeroId.npc_dota_hero_tinker)
-                .SetTooltip("V1.0.13 BETA");
+                .SetTooltip("V1.1.01");
 
             PluginStatus = RootMenu.CreateSwitcher("On/Off");
-            
-            Menu menu = RootMenu.CreateMenu("Combo").SetAbilityImage(AbilityId.tinker_rearm,MenuAbilityImageType.Default);
+
+            Menu menu = RootMenu.CreateMenu("Combo").SetAbilityImage(AbilityId.tinker_rearm, MenuAbilityImageType.Default);
             ComboKey = menu.CreateHoldKey("Combo Key", Key.None).SetTooltip("Hold this key to use Combo");
 
-            this.ComboTargetSelectorMode = menu.CreateSelector("Target Selector Mode", Data.Menu.TargetSelectorModes);
-            this.ComboTargetSelectorRadius = menu.CreateSlider("Radius", 600, 100, 1000).SetTooltip("Search enemy in radius of");
+            ComboTargetSelectorMode = menu.CreateSelector("Target Selector Mode", Data.Menu.TargetSelectorModes);
+            ComboTargetSelectorRadius = menu.CreateSlider("Radius", 600, 100, 1000).SetTooltip("Search enemy in radius of");
 
-            Menu menuItems = menu.CreateMenu("Items").SetAbilityImage(AbilityId.tinker_rearm, MenuAbilityImageType.Default);
+            ComboItems = menu.CreateItemToggler("Combo Items", Data.Menu.ComboItems, false, true);
             
-            this.ComboSelfCastItems = menuItems.CreateItemToggler("Cast on self items", Data.Menu.ComboSelfCastItems, false, true);
-            this.ComboNoTargetCastItems = menuItems.CreateItemToggler("No Target items", Data.Menu.ComboNoTargetItems, false, true);
-            this.ComboTargetCastItems = menuItems.CreateItemToggler("Target items", Data.Menu.ComboTargetItems, false, true);
-            this.ComboDagonCastItems = menuItems.CreateItemToggler("Dagon", Data.Menu.ComboTargetItemsDagons, false, true);
-            this.ComboBlinkCastItems = menuItems.CreateItemToggler("Blink types", Data.Menu.ComboVectorCastItems, false, true);
 
-            this.ComboAbilitiesToggler = menu.CreateAbilityToggler("Abilities", Data.Menu.ComboAbilities, false).SetTooltip("Warp grenade will be used, only if enemy very close to Hero");
-            this.ComboWarpGrenadeUseRadius = menu.CreateSlider("Warp Grenade use distanace", 200, 100, 600).SetAbilityImage(AbilityId.tinker_warp_grenade, MenuAbilityImageType.Default).SetTooltip("Warp grenade will be used, if Enemy closer than this distance");
-            this.ComboSmartLaser = menu.CreateSwitcher("Smart Laser On/Off").SetAbilityImage(AbilityId.tinker_laser, MenuAbilityImageType.Default).SetTooltip("If target has Lotus or Antimage with shied, Laser will try to use on possible nearest unit");
+            ComboAbilitiesToggler = menu.CreateAbilityToggler("Abilities", Data.Menu.ComboAbilities, false).SetTooltip("Warp grenade will be used, only if enemy very close to Hero");
+            ComboWarpGrenadeUseRadius = menu.CreateSlider("Warp Grenade use distanace", 200, 100, 600).SetAbilityImage(AbilityId.tinker_warp_grenade, MenuAbilityImageType.Default).SetTooltip("Warp grenade will be used, if Enemy closer than this distance");
+            ComboSmartLaser = menu.CreateSwitcher("Smart Laser On/Off").SetAbilityImage(AbilityId.tinker_laser, MenuAbilityImageType.Default).SetTooltip("If target has Lotus or Antimage with shied, Laser will try to use on possible nearest unit");
 
-            this.ComboBlinkMode = menu.CreateSelector("Blink Mode", Data.Menu.ComboBlinkModes).SetAbilityImage(AbilityId.item_blink, MenuAbilityImageType.Default).SetTooltip("Recommended to use {to Cursor}");
-            this.ComboBlinkModeRadius = menu.CreateSlider("Safe Blink radius", 600, 100, 1000).SetTooltip("Radius of safe zone");
-            
-            this.ComboLinkenBreakerMode = menu.CreateSelector("Linken`s Breaker Mode", Data.Menu.LinkenBreakerModes).SetAbilityImage(AbilityId.item_sphere, MenuAbilityImageType.Default);
+            ComboBlinkMode = menu.CreateSelector("Blink Mode", Data.Menu.ComboBlinkModes).SetAbilityImage(AbilityId.item_blink, MenuAbilityImageType.Default).SetTooltip("Recommended to use {to Cursor}");
+            ComboBlinkModeRadius = menu.CreateSlider("Safe Blink radius", 600, 100, 1000).SetTooltip("Radius of safe zone");
 
-            this.ComboDrawLineToTarget = menu.CreateSwitcher("Draw line to Target");
-            this.ComboLockTarget = menu.CreateSwitcher("Lock Target during Combo").SetTooltip("Target locked while Combo key holds");
+            ComboLinkenBreakerMode = menu.CreateSelector("Linken`s Breaker Mode", Data.Menu.LinkenBreakerModes).SetAbilityImage(AbilityId.item_sphere, MenuAbilityImageType.Default);
 
-            //this.ComboAutoShiva = menu.CreateSwitcher("Auto Shiva").SetAbilityImage(AbilityId.item_shivas_guard, MenuAbilityImageType.Default);
-            //this.ComboAutoShivaRadius = menu.CreateSlider("Distance to Enemy for activating Auto Shiva", 900, 300, 2000);
+            ComboDrawLineToTarget = menu.CreateSwitcher("Draw line to Target");
+            ComboLockTarget = menu.CreateSwitcher("Lock Target during Combo").SetTooltip("Target locked while Combo key holds");
 
-            this.ComboTargetSelectorMode.ValueChanged += new MenuSelector.SelectorEventHandler(this.ComboTargetSelectorMode_ValueChanged);
-            this.ComboBlinkMode.ValueChanged += new MenuSelector.SelectorEventHandler(this.ComboBlinkMode_ValueChanged);            
+            Menu spamRocket = RootMenu.CreateMenu("Spam Rocket").SetAbilityImage(AbilityId.tinker_heat_seeking_missile, MenuAbilityImageType.Default);
+            SpamRocketKey = spamRocket.CreateHoldKey("Spam Rocket Key", Key.None).SetTooltip("Hold this key to spam Rocket");
         }
+        static private void SubscribeToChangeEvents()
+        {
+            ComboTargetSelectorMode.ValueChanged += new MenuSelector.SelectorEventHandler(ComboTargetSelectorMode_ValueChanged);
+            ComboBlinkMode.ValueChanged += new MenuSelector.SelectorEventHandler(ComboBlinkMode_ValueChanged);
 
-        private void ComboTargetSelectorMode_ValueChanged(MenuSelector selector, SelectorEventArgs e)
+        }
+        static private void ComboTargetSelectorMode_ValueChanged(MenuSelector selector, SelectorEventArgs e)
         {
             if (e.NewValue == "In radius of Cursor")
-            {                                
-                this.ComboTargetSelectorMode.SetTooltip("Enemy will be searched in range of cursor");
-                this.ComboTargetSelectorRadius.IsHidden = false;
+            {
+                ComboTargetSelectorMode.SetTooltip("Enemy will be searched in range of cursor");
+                ComboTargetSelectorRadius.IsHidden = false;
                 return;
             }
             if (e.NewValue == "Nearest to Hero")
             {
-                this.ComboTargetSelectorMode.SetTooltip("Enemy will be searched in range is 600 {+200 if has Lens} {+200 if has Scepter} from Hero position");
-                this.ComboTargetSelectorRadius.IsHidden = true;
+                ComboTargetSelectorMode.SetTooltip("Enemy will be searched in range is 600 {+200 if has Lens} {+200 if has Scepter} from Hero position");
+                ComboTargetSelectorRadius.IsHidden = true;
                 return;
             }
             if (e.NewValue == "First In radius of Cursor, then nearest to Hero")
             {
-                this.ComboTargetSelectorMode.SetTooltip("");
-                this.ComboTargetSelectorRadius.IsHidden = false;
+                ComboTargetSelectorMode.SetTooltip("");
+                ComboTargetSelectorRadius.IsHidden = false;
                 return;
             }
-        }        
-        private void ComboBlinkMode_ValueChanged(MenuSelector selector, SelectorEventArgs e)
-        {            
+        }
+        static private void ComboBlinkMode_ValueChanged(MenuSelector selector, SelectorEventArgs e)
+        {
             if (e.NewValue == "In radius")
             {
-                this.ComboBlinkModeRadius.IsHidden = false;                
-                this.ComboBlinkMode.SetTooltip("use Blink to safe position");
+                ComboBlinkModeRadius.IsHidden = false;
+                ComboBlinkMode.SetTooltip("use Blink to safe position");
                 return;
             }
             if (e.NewValue == "To cursor")
             {
-                this.ComboBlinkModeRadius.IsHidden = true;
-                this.ComboBlinkMode.SetTooltip("use Blink to Cursor position");
+                ComboBlinkModeRadius.IsHidden = true;
+                ComboBlinkMode.SetTooltip("use Blink to Cursor position");
                 return;
             }
         }
 
-        internal void Dispose()
+        static internal void Dispose()
         {
-            this.ComboTargetSelectorMode.ValueChanged -= new MenuSelector.SelectorEventHandler(this.ComboTargetSelectorMode_ValueChanged);
+            ComboTargetSelectorMode.ValueChanged -= new MenuSelector.SelectorEventHandler(ComboTargetSelectorMode_ValueChanged);
+            ComboBlinkMode.ValueChanged -= new MenuSelector.SelectorEventHandler(ComboBlinkMode_ValueChanged);
         }
     }
 }

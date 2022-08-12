@@ -1,36 +1,35 @@
-﻿using Divine.Entity;
-using Divine.Extensions;
-using Divine.Update;
-using Divine.Entity.Entities.Units.Heroes;
-using System;
+﻿using System;
 using System.Linq;
+
+using Divine.Extensions;
 using Divine.Game;
 using Divine.Numerics;
+using Divine.Update;
+using Divine.Entity;
 using Divine.Entity.Entities.Units;
+using Divine.Entity.Entities.Units.Heroes;
 
-namespace Emt_Tinker.Managers
+
+namespace Emt.Tinker.Managers
 {
-    class TargetManager : IDisposable
+    static class TargetManager
     {
-        public Hero currentTarget { get; private set; }
-        public Unit nearestEnemyUnitFromTarget { get; private set; }
-        public Hero farestEnemyHeroFromTarget { get; private set; }
-        public Hero targetForRocket { get; private set; }
-        public int targetSearchDistance { get; private set; }
+        static public Hero currentTarget { get; private set; }
+        static public Unit nearestEnemyUnitFromTarget { get; private set; }
+        static public Hero farestEnemyHeroFromUnit { get; private set; }
+        static public Hero targetForRocket { get; private set; }
+        static public int targetSearchDistance { get; private set; }
 
+        static private int targerSearchBaseRadius = 650;
+        static private int targerSearchAdditionalRadius = 0;
+        static private int rocketFlyDistance = 2500;
 
-        private Context Context;
-        private int targerSearchBaseRadius = 650;
-        private int targerSearchAdditionalRadius = 0;
-        private int rocketFlyDistance = 2500;
-
-        public TargetManager(Context context)
+        static public void Activate()
         {
-            Context = context;
-            Context.PluginMenu.PluginStatus.ValueChanged += PluginStatus_ValueChanged;
-
+            PluginMenu.PluginStatus.ValueChanged += PluginStatus_ValueChanged;
         }
-        private void PluginStatus_ValueChanged(Divine.Menu.Items.MenuSwitcher switcher, Divine.Menu.EventArgs.SwitcherEventArgs e)
+
+        static private void PluginStatus_ValueChanged(Divine.Menu.Items.MenuSwitcher switcher, Divine.Menu.EventArgs.SwitcherEventArgs e)
         {
             if (e.Value)
             {
@@ -41,21 +40,24 @@ namespace Emt_Tinker.Managers
                 UpdateManager.DestroyIngameUpdate(Update);
             }
         }
-        public void Dispose()
+
+        static public void Dispose()
         {
+            PluginMenu.PluginStatus.ValueChanged -= PluginStatus_ValueChanged;
             UpdateManager.DestroyIngameUpdate(Update);
         }
-        private void log()
+
+        static private void log()
         {
-            Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " target found: " + Context.TargetManager.currentTarget);
+            Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " target found: " + TargetManager.currentTarget);
         }
-        private void Update()
+        static private void Update()
         {
             targetSearchDistance = targerSearchBaseRadius + calculateAdditionalTargerSearchRadius();
             targetForRocket = GetNearestEnemyHero(EntityManager.LocalHero.Position, rocketFlyDistance);
 
-            if (Context.PluginMenu.ComboLockTarget
-                && Context.Combo.comboKeyHolding
+            if (PluginMenu.ComboLockTarget
+                && Context.combo.comboKeyHolding
                 && currentTarget != null
                 && currentTarget.IsAlive
                 && !currentTarget.IsInvulnerable()
@@ -64,58 +66,56 @@ namespace Emt_Tinker.Managers
                 && currentTarget.Distance2D(EntityManager.LocalHero) < targetSearchDistance) return;
 
             if (currentTarget == null && getTarget(targetSearchDistance) != null)
-            {
-                CastItemsAndAbilities.sleeper.Reset();
+            {                
+                CastManager.sleeper.Reset();
             }
             currentTarget = getTarget(targetSearchDistance);
-
-
 
             if (currentTarget == null)
             {
                 nearestEnemyUnitFromTarget = null;
-                farestEnemyHeroFromTarget = null;
+                farestEnemyHeroFromUnit = null;
                 return;
             }
             nearestEnemyUnitFromTarget = GetNearestEnemyUnitToEnemyTarget(currentTarget.Position, 250);
             if (nearestEnemyUnitFromTarget == null)
             {
-                farestEnemyHeroFromTarget = null;
+                farestEnemyHeroFromUnit = null;
                 return;
             }
-            farestEnemyHeroFromTarget = GetFarestEnemyHeroInRadius(nearestEnemyUnitFromTarget.Position, 700);
+            farestEnemyHeroFromUnit = GetFarestEnemyHeroInRadius(nearestEnemyUnitFromTarget.Position, 700);
         }
 
 
-        private int calculateAdditionalTargerSearchRadius()
+        static private int calculateAdditionalTargerSearchRadius()
         {
             targerSearchAdditionalRadius = (int)EntityManager.LocalHero.BonusCastRange;
             if (EntityManager.LocalHero.HasAghanimsScepter()) targerSearchAdditionalRadius += 200;
             return targerSearchAdditionalRadius;
         }
 
-        public Hero getTarget(int radius)
+        static public Hero getTarget(int radius)
         {
-            if (Context.PluginMenu.ComboTargetSelectorMode == "Nearest to Hero")
+            if (PluginMenu.ComboTargetSelectorMode == "Nearest to Hero")
             {
                 return currentTarget = GetNearestEnemyHero(EntityManager.LocalHero.Position, radius);
             }
 
-            if (Context.PluginMenu.ComboTargetSelectorMode == "In radius of Cursor")
+            if (PluginMenu.ComboTargetSelectorMode == "In radius of Cursor")
             {
-                return currentTarget = GetNearestEnemyHero(GameManager.MousePosition, Context.PluginMenu.ComboTargetSelectorRadius);
+                return currentTarget = GetNearestEnemyHero(GameManager.MousePosition, PluginMenu.ComboTargetSelectorRadius);
             }
 
-            if (Context.PluginMenu.ComboTargetSelectorMode == "First In radius of Cursor, then nearest to Hero")
+            if (PluginMenu.ComboTargetSelectorMode == "First In radius of Cursor, then nearest to Hero")
             {
                 Hero h;
-                h = currentTarget = GetNearestEnemyHero(GameManager.MousePosition, Context.PluginMenu.ComboTargetSelectorRadius);
+                h = currentTarget = GetNearestEnemyHero(GameManager.MousePosition, PluginMenu.ComboTargetSelectorRadius);
                 if (h != null) return h;
                 return h = currentTarget = GetNearestEnemyHero(EntityManager.LocalHero.Position, radius);
             }
             return null;
         }
-        private Hero GetNearestEnemyHero(Vector3 startPosition, int targerSearchRadius)
+        static private Hero GetNearestEnemyHero(Vector3 startPosition, int targerSearchRadius)
         {
             Hero hero;
             hero = EntityManager.GetEntities<Hero>().Where(x => x.IsEnemy(EntityManager.LocalHero) &&
@@ -130,7 +130,7 @@ namespace Emt_Tinker.Managers
             if (hero != null) return hero;
             return null;
         }
-        private Unit GetNearestEnemyUnitToEnemyTarget(Vector3 startPosition, int targerSearchRadius)
+        static private Unit GetNearestEnemyUnitToEnemyTarget(Vector3 startPosition, int targerSearchRadius)
         {
             Unit unit = EntityManager.GetEntities<Unit>().Where(x => x.IsEnemy(EntityManager.LocalHero) &&
                                                                 x.Distance2D(startPosition) < targerSearchRadius &&
@@ -145,7 +145,7 @@ namespace Emt_Tinker.Managers
             return null;
         }
 
-        private Hero GetFarestEnemyHeroInRadius(Vector3 startPosition, int targerSearchRadius)
+        static private Hero GetFarestEnemyHeroInRadius(Vector3 startPosition, int targerSearchRadius)
         {
             Hero hero;
             hero = EntityManager.GetEntities<Hero>().Where(x => x.IsEnemy(EntityManager.LocalHero) &&

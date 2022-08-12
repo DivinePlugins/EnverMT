@@ -1,42 +1,42 @@
-﻿using Emt_Tinker.Managers;
-
-namespace Emt_Tinker
+﻿namespace Emt.Tinker
 {
     class Context
-    {   
-        public PluginMenu PluginMenu { get; set; }
-        public TargetManager TargetManager { get; set; }           
-        public Combo Combo { get; set; }        
-        public Draw draw { get; set; }
-        public CastItemsAndAbilities CastItemsAndAbilities;
-        public Emt_Tinker.Managers.AbilityManager abilityManager;
-        public Context()
+    {
+        public static Modes.Combo combo;
+        public static Modes.SpamRocket spamRocket;
+        static public void Init()
         {
-            PluginMenu = new PluginMenu();
-
+            PluginMenu.Activate();
             PluginMenu.PluginStatus.ValueChanged += PluginStatus_ValueChanged;
-        } 
+        }
 
-        public void Dispose() { }
-
-        private void PluginStatus_ValueChanged(Divine.Menu.Items.MenuSwitcher switcher, Divine.Menu.EventArgs.SwitcherEventArgs e)
+        static private void PluginStatus_ValueChanged(Divine.Menu.Items.MenuSwitcher switcher, Divine.Menu.EventArgs.SwitcherEventArgs e)
         {
             if (e.Value)
-            {                        
-                TargetManager = new TargetManager(this);                             
-                Combo = new Combo(this);                
-                CastItemsAndAbilities = new CastItemsAndAbilities(this);
-                draw = new Draw(this);
-                abilityManager = new AbilityManager(this);
+            {
+                Managers.TargetManager.Activate();
+                Render.Draw.Activate();
+                combo = new Modes.Combo();
+                spamRocket = new Modes.SpamRocket();
             }
             else
-            {   
-                TargetManager.Dispose();                
-                Combo.Dispose();                
-                CastItemsAndAbilities = null;
-                draw.Dispose();
-                abilityManager.Dispose();
+            {
+                DisposeInstances();
             }
+        }
+
+        static public void Dispose()
+        {
+            DisposeInstances();
+            PluginMenu.PluginStatus.ValueChanged -= PluginStatus_ValueChanged;
+        }
+
+        static private void DisposeInstances()
+        {
+            Managers.TargetManager.Dispose();
+            Render.Draw.Dispose();
+            combo.Dispose();
+            spamRocket.Dispose();
         }
     }
 }
