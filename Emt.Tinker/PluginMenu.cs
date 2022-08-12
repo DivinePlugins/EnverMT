@@ -18,7 +18,6 @@ namespace Emt.Tinker
 
         static public MenuAbilityToggler ComboAbilitiesToggler;
         static public MenuSlider ComboWarpGrenadeUseRadius;
-        static public MenuSwitcher ComboSmartLaser;
 
         static public MenuSelector ComboBlinkMode;
         static public MenuSlider ComboBlinkModeRadius;
@@ -57,7 +56,7 @@ namespace Emt.Tinker
 
             ComboAbilitiesToggler = menu.CreateAbilityToggler("Abilities", Data.Menu.ComboAbilities, false).SetTooltip("Warp grenade will be used, only if enemy very close to Hero");
             ComboWarpGrenadeUseRadius = menu.CreateSlider("Warp Grenade use distanace", 200, 100, 600).SetAbilityImage(AbilityId.tinker_warp_grenade, MenuAbilityImageType.Default).SetTooltip("Warp grenade will be used, if Enemy closer than this distance");
-            ComboSmartLaser = menu.CreateSwitcher("Smart Laser On/Off").SetAbilityImage(AbilityId.tinker_laser, MenuAbilityImageType.Default).SetTooltip("If target has Lotus or Antimage with shied, Laser will try to use on possible nearest unit");
+            
 
             ComboBlinkMode = menu.CreateSelector("Blink Mode", Data.Menu.ComboBlinkModes).SetAbilityImage(AbilityId.item_blink, MenuAbilityImageType.Default).SetTooltip("Recommended to use {to Cursor}");
             ComboBlinkModeRadius = menu.CreateSlider("Safe Blink radius", 600, 100, 1000).SetTooltip("Radius of safe zone");
