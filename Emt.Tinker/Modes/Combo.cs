@@ -94,7 +94,10 @@ namespace Emt.Tinker.Modes
                 if (CastManager.castLaser()) return true;
             }
 
-            if (CastManager.castItem(AbilityId.item_sheepstick, TargetManager.currentTarget)) return true;
+            if (!TargetManager.currentTarget.IsReflectingAbilities())
+            {
+                if (CastManager.castItem(AbilityId.item_sheepstick, TargetManager.currentTarget)) return true;
+            }            
 
             if (PluginMenu.ComboItems.GetValue(AbilityId.item_dagon)) 
             {
