@@ -5,17 +5,23 @@ using Divine.Entity.Entities.Units.Heroes.Components;
 namespace Emt.Tinker
 {
     public class Bootstrap : Bootstrapper
-    {   
+    {
+        private bool context;
+
         protected override void OnActivate()
         {
             if (EntityManager.LocalHero.HeroId == HeroId.npc_dota_hero_tinker)
             {
-                Context.Init();
-            }            
+                context = Context.Init();
+            }
         }
         protected override void OnDeactivate()
-        {               
-            Context.Dispose();
-        }        
+        {
+            if (context)
+            {
+                Context.Dispose();
+                context = false;
+            }
+        }
     }
 }
