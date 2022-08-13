@@ -121,9 +121,9 @@ namespace Emt.Tinker.Managers
             return true;
         }
 
-        static public bool castItem(AbilityId abilityId, Unit unit = null, bool searchInMenu = true)
+        static public bool castItem(AbilityId abilityId, Unit unit = null, bool searchInMenu = true, bool checkSleeper = true)
         {
-            if (sleeper.Sleeping) return false;
+            if (checkSleeper) if (sleeper.Sleeping) return false;
             if (searchInMenu) if (!PluginMenu.ComboItems.GetValue(abilityId)) return false;
 
             if (!ItemCanBeCasted(abilityId, unit)) return false;

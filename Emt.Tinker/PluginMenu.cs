@@ -13,12 +13,12 @@ namespace Emt.Tinker
         static public MenuHoldKey ComboKey;
         static public MenuSelector ComboTargetSelectorMode;
         static public MenuSlider ComboTargetSelectorRadius;
-                
+
         static public MenuItemToggler ComboItems;
         static public MenuItemToggler ComboNeutralItems;
 
         static public MenuAbilityToggler ComboAbilitiesToggler;
-        static public MenuSlider ComboWarpGrenadeUseRadius; 
+        static public MenuSlider ComboWarpGrenadeUseRadius;
 
         static public MenuSelector ComboBlinkMode;
         static public MenuSlider ComboBlinkModeRadius;
@@ -35,6 +35,9 @@ namespace Emt.Tinker
 
         static public MenuSwitcher AutoShivaSwitcher;
         static public MenuSlider AutoShivaRadius;
+
+        static public MenuItemToggler PreCastItems;
+        static public MenuAbilityToggler PreCastAbilities;
 
         static private Menu RootMenu;
 
@@ -66,7 +69,7 @@ namespace Emt.Tinker
 
             ComboAbilitiesToggler = menu.CreateAbilityToggler("Abilities", Data.Menu.ComboAbilities, false).SetTooltip("Warp grenade will be used, only if enemy very close to Hero");
             ComboWarpGrenadeUseRadius = menu.CreateSlider("Warp Grenade use distanace", 200, 100, 600).SetAbilityImage(AbilityId.tinker_warp_grenade, MenuAbilityImageType.Default).SetTooltip("Warp grenade will be used, if Enemy closer than this distance");
-            
+
 
             ComboBlinkMode = menu.CreateSelector("Blink Mode", Data.Menu.ComboBlinkModes).SetAbilityImage(AbilityId.item_blink, MenuAbilityImageType.Default).SetTooltip("Recommended to use {to Cursor}");
             ComboBlinkModeRadius = menu.CreateSlider("Safe Blink radius", 600, 100, 1000).SetTooltip("Radius of safe zone");
@@ -80,13 +83,17 @@ namespace Emt.Tinker
             SpamRocketKey = spamRocket.CreateHoldKey("Spam Rocket Key", Key.None).SetTooltip("Hold this key to spam Rocket");
 
             Menu FailSafe = RootMenu.CreateMenu("Failsafe").SetAbilityImage(AbilityId.tinker_defense_matrix, MenuAbilityImageType.Default);
-            FailSafeSwitcher_Rocket = FailSafe.CreateSwitcher("Safe Rocket").SetTooltip("Rocket will be used, if there are enemy in 2500 radius").SetAbilityImage(AbilityId.tinker_heat_seeking_missile, MenuAbilityImageType.Default); 
+            FailSafeSwitcher_Rocket = FailSafe.CreateSwitcher("Safe Rocket").SetTooltip("Rocket will be used, if there are enemy in 2500 radius").SetAbilityImage(AbilityId.tinker_heat_seeking_missile, MenuAbilityImageType.Default);
             FailSafeSwitcher_Rearm = FailSafe.CreateSwitcher("Safe Rearm").SetTooltip("Rearm will not be used, if nothing to rearm").SetAbilityImage(AbilityId.tinker_rearm, MenuAbilityImageType.Default);
             FailSafeSwitcher_Rearm_ignoreWithShiva = FailSafe.CreateSwitcher("Ignore Safe Rearm if Tinker has Shiva").SetAbilityImage(AbilityId.item_shivas_guard, MenuAbilityImageType.Default);
 
             Menu AutoShiva = RootMenu.CreateMenu("AutoShiva").SetAbilityImage(AbilityId.item_shivas_guard, MenuAbilityImageType.Default);
             AutoShivaSwitcher = AutoShiva.CreateSwitcher("Use shiva if enemy around");
-            AutoShivaRadius = AutoShiva.CreateSlider("Use shiva if enemy closer than", 1300, 300, 3000);             
+            AutoShivaRadius = AutoShiva.CreateSlider("Use shiva if enemy closer than", 1300, 300, 3000);
+
+            Menu PreCast = RootMenu.CreateMenu("Use Items before Skills").SetAbilityImage(AbilityId.item_soul_ring, MenuAbilityImageType.Default);
+            PreCastItems = PreCast.CreateItemToggler("PreCast Items", Data.Menu.PreCastItems, false, true);
+            PreCastAbilities = PreCast.CreateAbilityToggler("Abilities", Data.Menu.PreCastAbilities, false);
         }
         static private void SubscribeToChangeEvents()
         {

@@ -19,6 +19,7 @@
                 Managers.TargetManager.Activate();
                 Render.Draw.Activate();
                 Managers.FailSafeManager.Activate();
+                Managers.PreCastManager.Activate();
                 combo = new Modes.Combo();
                 spamRocket = new Modes.SpamRocket();
                 autoShiva = new Modes.AutoShiva();
@@ -28,6 +29,7 @@
                 Managers.TargetManager.Dispose();
                 Render.Draw.Dispose();
                 Managers.FailSafeManager.Dispose();
+                Managers.PreCastManager.Dispose();
                 combo.Dispose();
                 spamRocket.Dispose();
                 autoShiva.Dispose();

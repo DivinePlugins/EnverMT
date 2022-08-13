@@ -12,11 +12,6 @@ namespace Emt.Tinker.Modes
 {
     class AutoShiva : IDisposable
     {
-        #region Variables               
-        private Hero _localHero = EntityManager.LocalHero;
-        #endregion
-
-
         public AutoShiva()
         {
             PluginMenu.AutoShivaSwitcher.ValueChanged += AutoShiva_ValueChanged;
@@ -30,11 +25,11 @@ namespace Emt.Tinker.Modes
         {
             if (e.Value)
             {
-                UpdateManager.IngameUpdate += UpdateManager_IngameUpdate;                
+                UpdateManager.IngameUpdate += UpdateManager_IngameUpdate;
             }
             else
             {
-                UpdateManager.IngameUpdate -= UpdateManager_IngameUpdate;                
+                UpdateManager.IngameUpdate -= UpdateManager_IngameUpdate;
             }
         }
         private void UpdateManager_IngameUpdate()
@@ -44,11 +39,11 @@ namespace Emt.Tinker.Modes
 
             Vector3 startPosition = EntityManager.LocalHero.Position;
             int targerSearchRadius = PluginMenu.AutoShivaRadius;
-            
+
             Hero hero = EntityManager.GetEntities<Hero>().Where(x => x.IsEnemy(EntityManager.LocalHero) &&
                                                                 x.Distance2D(startPosition) < targerSearchRadius &&
-                                                                x.IsAlive &&  
-                                                                !x.IsInvulnerable()                                                                
+                                                                x.IsAlive &&
+                                                                !x.IsInvulnerable()
                                                             )
                                            .OrderBy(x => x.Distance2D(startPosition)).FirstOrDefault();
             if (hero != null) CastManager.castItem(AbilityId.item_shivas_guard);

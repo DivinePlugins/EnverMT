@@ -26,22 +26,39 @@ namespace Emt.Tinker
                 {AbilityId.item_blink, true},
             };
 
+            public static readonly Dictionary<AbilityId, bool> PreCastItems = new Dictionary<AbilityId, bool> {
+                {AbilityId.item_soul_ring,true},
+                {AbilityId.item_guardian_greaves,true},
+            };
+
             public static readonly Dictionary<AbilityId, bool> ComboNeutralItems = new Dictionary<AbilityId, bool> {
                 {AbilityId.item_arcane_ring,true},
                 {AbilityId.item_bullwhip,true},
                 {AbilityId.item_psychic_headband,true},
                 {AbilityId.item_ninja_gear,true},
-                {AbilityId.item_trickster_cloak,true},                
-                {AbilityId.item_seer_stone,true},                
-                {AbilityId.item_ex_machina,true},                
+                {AbilityId.item_trickster_cloak,true},
+                {AbilityId.item_seer_stone,true},
+                {AbilityId.item_ex_machina,true},
+            };
+
+            public static readonly Dictionary<AbilityId, bool> PreCastAbilities = new Dictionary<AbilityId, bool>
+            {
+                {AbilityId.tinker_laser,true},
+                {AbilityId.tinker_heat_seeking_missile,true},
+                {AbilityId.tinker_defense_matrix,false},
+                {AbilityId.tinker_warp_grenade,false},
+                {AbilityId.tinker_keen_teleport,false},
+				//{AbilityId.tinker_march_of_the_machines,true},
+                {AbilityId.tinker_rearm,true}
             };
 
             public static readonly Dictionary<AbilityId, bool> ComboAbilities = new Dictionary<AbilityId, bool>
             {
-                {AbilityId.tinker_warp_grenade,true},
-                {AbilityId.tinker_defense_matrix,true},
-                {AbilityId.tinker_heat_seeking_missile,true},
                 {AbilityId.tinker_laser,true},
+                {AbilityId.tinker_heat_seeking_missile,true},
+                {AbilityId.tinker_defense_matrix,false},
+                {AbilityId.tinker_warp_grenade,false},
+                {AbilityId.tinker_keen_teleport,false},
 				//{AbilityId.tinker_march_of_the_machines,true},
                 {AbilityId.tinker_rearm,true}
             };
