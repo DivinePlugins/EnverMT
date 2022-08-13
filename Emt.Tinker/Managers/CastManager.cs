@@ -134,6 +134,15 @@ namespace Emt.Tinker.Managers
             return true;
         }
 
+        static bool IsInMainInventory(Item item)
+        {
+            IEnumerable<Divine.Entity.Entities.Abilities.Items.Item> itemsInInventory = EntityManager.LocalHero.Inventory.MainItems;
+            foreach (Divine.Entity.Entities.Abilities.Items.Item i in itemsInInventory)
+            {
+                if (item.Id == i.Id) return true;
+            }
+            return false;
+        }
 
         #region CanBeCasted
         static bool ItemCanBeCasted(AbilityId abilityId, Unit unit = null)
@@ -141,7 +150,8 @@ namespace Emt.Tinker.Managers
             item = UnitExtensions.GetItemById(EntityManager.LocalHero, abilityId);
             if (item == null) return false;
             if (item.Cooldown > 0f) return false;
-            if (item.Level == 0) return false;
+            if (item.Level == 0) return false;            
+            if (!IsInMainInventory(item)) return false;
             if (EntityManager.LocalHero.Mana < item.ManaCost) return false;
             return CanBeCasted(unit);
         }
