@@ -42,6 +42,14 @@ namespace Emt.Tinker.Modes
         private void UpdateManager_IngameUpdate()
         {
             if (CastManager.sleeper.Sleeping) return;
+
+            
+            if (TargetManager.currentTarget == null || !EntityManager.LocalHero.IsInRange(TargetManager.currentTarget, 1025))
+            {
+                if (CastManager.castNeutralItem(AbilityId.item_ninja_gear)) return;
+            }               
+            
+
             if (TargetManager.currentTarget != null
                 && _localHero.IsAlive
                 && TargetManager.currentTarget.IsAlive
@@ -61,17 +69,39 @@ namespace Emt.Tinker.Modes
         private bool executeCombo()
         {
             //Console.WriteLine("============");
-            //Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - exec combo: ");
+            //Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - exec combo - Mana: " + EntityManager.LocalHero.Mana);            
+            
+            if (CastManager.castNeutralItem(AbilityId.item_seer_stone, TargetManager.currentTarget.Position)) return true;
+
             if (PluginMenu.ComboLinkenBreakerMode == "Laser" && TargetManager.currentTarget.IsLinkensProtected())
-            {
+            { 
                 if (CastManager.castLaser()) return true;
+            }            
+
+            if (EntityManager.LocalHero.MaximumMana - EntityManager.LocalHero.Mana >= 200)
+            {
+                if (CastManager.castItem(AbilityId.item_guardian_greaves)) return true;
             }
 
+            if (EntityManager.LocalHero.MaximumMana - EntityManager.LocalHero.Mana >= 75)
+            {
+                if (CastManager.castNeutralItem(AbilityId.item_arcane_ring)) return true;
+            }            
+
             if (CastManager.castWarpGrenade()) return true;
+            
+            if (EntityManager.LocalHero.IsInRange(TargetManager.currentTarget, PluginMenu.ComboWarpGrenadeUseRadius))
+            {
+                if (CastManager.castNeutralItem(AbilityId.item_psychic_headband, TargetManager.currentTarget)) return true;
+            }
+
             if (CastManager.castDefenseMatrix()) return true;
 
             if (CastManager.castItem(AbilityId.item_soul_ring)) return true;
-            if (CastManager.castItem(AbilityId.item_guardian_greaves)) return true;
+
+            if (CastManager.castNeutralItem(AbilityId.item_bullwhip, TargetManager.currentTarget)) return true;
+            
+
             if (CastManager.castItem(AbilityId.item_lotus_orb, EntityManager.LocalHero)) return true;
             if (CastManager.castItem(AbilityId.item_glimmer_cape, EntityManager.LocalHero)) return true;
             if (CastManager.castItem(AbilityId.item_ghost)) return true;
@@ -94,7 +124,7 @@ namespace Emt.Tinker.Modes
                 if (CastManager.castLaser()) return true;
             }
 
-            if (!TargetManager.currentTarget.IsReflectingAbilities())
+            if (!TargetManager.currentTarget.IsReflectingAbilities() && !TargetManager.currentTarget.HasModifier("modifier_antimage_counterspell"))
             {
                 if (CastManager.castItem(AbilityId.item_sheepstick, TargetManager.currentTarget)) return true;
             }            
@@ -111,6 +141,8 @@ namespace Emt.Tinker.Modes
             if (CastManager.castHeatSeekingRocket()) return true;
             if (CastManager.castLaser()) return true;
 
+            if (CastManager.castNeutralItem(AbilityId.item_ex_machina)) return true;            
+
             if (PluginMenu.ComboItems.GetValue(AbilityId.item_blink))
             {
                 if (CastManager.castBlink(AbilityId.item_blink)) return true;
@@ -119,7 +151,9 @@ namespace Emt.Tinker.Modes
                 if (CastManager.castBlink(AbilityId.item_swift_blink)) return true;
             }
 
-            if (CastManager.castRearm()) return true;
+            
+
+            if (CastManager.castRearm()) return true;            
 
             return false;
         }

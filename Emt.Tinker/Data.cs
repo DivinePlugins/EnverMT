@@ -12,25 +12,6 @@ namespace Emt.Tinker
                 {AbilityId.item_guardian_greaves,true},
                 {AbilityId.item_lotus_orb,true},
                 {AbilityId.item_glimmer_cape,true},
-                {AbilityId.item_ghost,true},                                
-                {AbilityId.item_shivas_guard,true},
-                {AbilityId.item_bloodstone,true},
-                {AbilityId.item_eternal_shroud,true},
-                {AbilityId.item_ethereal_blade,true},                
-                {AbilityId.item_orchid,true},
-                {AbilityId.item_bloodthorn,true},
-                {AbilityId.item_rod_of_atos,true},
-                {AbilityId.item_nullifier,true},                
-                {AbilityId.item_dagon,true},
-                {AbilityId.item_sheepstick,true},
-                {AbilityId.item_blink, true},
-            };
-            
-            public static readonly Dictionary<AbilityId, bool> ComboNeutralItems = new Dictionary<AbilityId, bool> {
-                {AbilityId.item_soul_ring,true},
-                {AbilityId.item_guardian_greaves,true},
-                {AbilityId.item_lotus_orb,true},
-                {AbilityId.item_glimmer_cape,true},
                 {AbilityId.item_ghost,true},
                 {AbilityId.item_shivas_guard,true},
                 {AbilityId.item_bloodstone,true},
@@ -43,6 +24,16 @@ namespace Emt.Tinker
                 {AbilityId.item_dagon,true},
                 {AbilityId.item_sheepstick,true},
                 {AbilityId.item_blink, true},
+            };
+
+            public static readonly Dictionary<AbilityId, bool> ComboNeutralItems = new Dictionary<AbilityId, bool> {
+                {AbilityId.item_arcane_ring,true},
+                {AbilityId.item_bullwhip,true},
+                {AbilityId.item_psychic_headband,true},
+                {AbilityId.item_ninja_gear,true},
+                {AbilityId.item_trickster_cloak,true},                
+                {AbilityId.item_seer_stone,true},                
+                {AbilityId.item_ex_machina,true},                
             };
 
             public static readonly Dictionary<AbilityId, bool> ComboAbilities = new Dictionary<AbilityId, bool>

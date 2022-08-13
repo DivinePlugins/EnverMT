@@ -14,7 +14,8 @@ namespace Emt.Tinker
         static public MenuSelector ComboTargetSelectorMode;
         static public MenuSlider ComboTargetSelectorRadius;
                 
-        static public MenuItemToggler ComboItems;        
+        static public MenuItemToggler ComboItems;
+        static public MenuItemToggler ComboNeutralItems;
 
         static public MenuAbilityToggler ComboAbilitiesToggler;
         static public MenuSlider ComboWarpGrenadeUseRadius; 
@@ -49,7 +50,7 @@ namespace Emt.Tinker
         {
             RootMenu = MenuManager.CreateRootMenu("Emt.Tinker")
                 .SetHeroImage(HeroId.npc_dota_hero_tinker)
-                .SetTooltip("V1.3");
+                .SetTooltip("V1.4");
 
             PluginStatus = RootMenu.CreateSwitcher("On/Off");
 
@@ -60,7 +61,8 @@ namespace Emt.Tinker
             ComboTargetSelectorRadius = menu.CreateSlider("Radius", 600, 100, 1000).SetTooltip("Search enemy in radius of");
 
             ComboItems = menu.CreateItemToggler("Combo Items", Data.Menu.ComboItems, false, true);
-            
+            ComboNeutralItems = menu.CreateItemToggler("Combo Neutral Items", Data.Menu.ComboNeutralItems, false, true);
+
 
             ComboAbilitiesToggler = menu.CreateAbilityToggler("Abilities", Data.Menu.ComboAbilities, false).SetTooltip("Warp grenade will be used, only if enemy very close to Hero");
             ComboWarpGrenadeUseRadius = menu.CreateSlider("Warp Grenade use distanace", 200, 100, 600).SetAbilityImage(AbilityId.tinker_warp_grenade, MenuAbilityImageType.Default).SetTooltip("Warp grenade will be used, if Enemy closer than this distance");

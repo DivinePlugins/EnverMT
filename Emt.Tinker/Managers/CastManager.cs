@@ -10,6 +10,7 @@ using Divine.Entity.Entities.Units;
 using Divine.Entity.Entities.Abilities;
 using Divine.Numerics;
 using Divine.Entity.Entities.Abilities.Items;
+using Divine.Entity.Entities.Abilities.Items.Components;
 
 
 namespace Emt.Tinker.Managers
@@ -20,6 +21,7 @@ namespace Emt.Tinker.Managers
         static private Ability ability;
         static private Item item;
         static public Sleeper sleeper = new Sleeper();
+        static public Sleeper rearmSleeper = new Sleeper();
         static public Sleeper laserSleeper = new Sleeper();
         #endregion
 
@@ -27,7 +29,7 @@ namespace Emt.Tinker.Managers
         {
             if (sleeper.Sleeping) return false;
 
-            if (!ItemCanBeCasted(abilityId)) return false;            
+            if (!ItemCanBeCasted(abilityId)) return false;
 
             if (PluginMenu.ComboBlinkMode == "To cursor") CastItem(GameManager.MousePosition, false, false);
 
@@ -35,23 +37,23 @@ namespace Emt.Tinker.Managers
             {
                 if (TargetManager.currentTarget != null) CastItem(TargetManager.currentTarget.Position.Extend(GameManager.MousePosition, PluginMenu.ComboBlinkModeRadius), false, false);
                 if (TargetManager.currentTarget == null) CastItem(GameManager.MousePosition, false, false);
-            }            
-            
-            sleeper.Sleep(item.CastPoint * 1000f + 80f + GameManager.AvgPing + additionalSleepTime);                        
+            }
+
+            sleeper.Sleep(item.CastPoint * 1000f + 80f + GameManager.AvgPing + additionalSleepTime);
 
             return true;
         }
 
         static public bool castRearm()
         {
-            if (sleeper.Sleeping) return false;            
-            if (!AbilityCanBeCasted(AbilityId.tinker_rearm)) return false;           
+            if (rearmSleeper.Sleeping) return false;
+            if (!AbilityCanBeCasted(AbilityId.tinker_rearm)) return false;
 
-            if (!CastAbility(false, false)) return false;
-
-            sleeper.Sleep(ability.CastPoint * 1000f + 80f + GameManager.AvgPing + ability.ChannelTime * 1000f);            
+            if (!CastAbility(false, false)) return false;            
+            rearmSleeper.Sleep(ability.CastPoint * 1000f + 80f + GameManager.AvgPing + ability.ChannelTime * 1000f +1000f);
+            if (CastManager.castNeutralItem(AbilityId.item_trickster_cloak)) return true;
             return true;
-        }        
+        }
 
         static public bool castLaser()
         {
@@ -79,7 +81,7 @@ namespace Emt.Tinker.Managers
             laserSleeper.Sleep(ability.CastPoint * 1000f + 80f + GameManager.AvgPing + ability.ChannelTime + 1000f);
 
             return true;
-        } 
+        }
 
         static public bool castHeatSeekingRocket()
         {
@@ -98,7 +100,7 @@ namespace Emt.Tinker.Managers
             if (sleeper.Sleeping) return false;
             if (!AbilityCanBeCasted(AbilityId.tinker_defense_matrix)) return false;
             if (!PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_defense_matrix)) return false;
-            if (EntityManager.LocalHero.HasModifier("modifier_tinker_defense_matrix")) return false;                
+            if (EntityManager.LocalHero.HasModifier("modifier_tinker_defense_matrix")) return false;
 
             CastAbility(EntityManager.LocalHero, false, false);
             sleeper.Sleep(ability.CastPoint * 1000f + 80f + GameManager.AvgPing);
@@ -122,9 +124,10 @@ namespace Emt.Tinker.Managers
         static public bool castItem(AbilityId abilityId, Unit unit = null, bool searchInMenu = true)
         {
             if (sleeper.Sleeping) return false;
+            if (searchInMenu) if (!PluginMenu.ComboItems.GetValue(abilityId)) return false;
+
             if (!ItemCanBeCasted(abilityId, unit)) return false;
-            
-            if (searchInMenu) if (!PluginMenu.ComboItems.GetValue(abilityId)) return false;           
+            if (!IsInMainInventory(item)) return false;
 
             if (unit != null) CastItem(unit, false, false);
             if (unit == null) CastItem(false, false);
@@ -134,13 +137,53 @@ namespace Emt.Tinker.Managers
             return true;
         }
 
+        static public bool castNeutralItem(AbilityId abilityId, Unit unit = null, bool searchInMenu = true)
+        {
+            if (sleeper.Sleeping) return false;
+
+            if (searchInMenu) if (!PluginMenu.ComboNeutralItems.GetValue(abilityId)) return false;
+
+            if (!ItemCanBeCasted(abilityId, unit)) return false;
+
+            var neutralItem = EntityManager.LocalHero.Inventory.GetItem(ItemSlot.NeutralItemSlot);
+
+            if (neutralItem?.Id != abilityId) return false;
+             
+            if (unit != null) CastItem(unit, false, false);
+            if (unit == null) CastItem(false, false); 
+
+            sleeper.Sleep(item.CastPoint * 1000f + 80f + GameManager.AvgPing);
+
+            return true;
+        }
+
+        static public bool castNeutralItem(AbilityId abilityId, Vector3 position, bool searchInMenu = true)
+        {
+            if (sleeper.Sleeping) return false;
+
+            if (searchInMenu) if (!PluginMenu.ComboNeutralItems.GetValue(abilityId)) return false;
+
+            if (!ItemCanBeCasted(abilityId)) return false;
+
+            var neutralItem = EntityManager.LocalHero.Inventory.GetItem(ItemSlot.NeutralItemSlot);
+
+            if (neutralItem?.Id != abilityId) return false;
+
+            CastItem(position,false, false);
+
+            sleeper.Sleep(item.CastPoint * 1000f + 80f + GameManager.AvgPing);
+
+            return true;
+        }
+
         static bool IsInMainInventory(Item item)
         {
-            IEnumerable<Divine.Entity.Entities.Abilities.Items.Item> itemsInInventory = EntityManager.LocalHero.Inventory.MainItems;
-            foreach (Divine.Entity.Entities.Abilities.Items.Item i in itemsInInventory)
+            IEnumerable<Item> itemsInInventory = EntityManager.LocalHero.Inventory.MainItems;
+            foreach (Item i in itemsInInventory)
             {
                 if (item.Id == i.Id) return true;
             }
+
             return false;
         }
 
@@ -149,9 +192,9 @@ namespace Emt.Tinker.Managers
         {
             item = UnitExtensions.GetItemById(EntityManager.LocalHero, abilityId);
             if (item == null) return false;
+            if (item.AbilityState != AbilityState.Ready) return false;
             if (item.Cooldown > 0f) return false;
-            if (item.Level == 0) return false;            
-            if (!IsInMainInventory(item)) return false;
+            if (item.Level == 0) return false;
             if (EntityManager.LocalHero.Mana < item.ManaCost) return false;
             return CanBeCasted(unit);
         }
@@ -160,7 +203,7 @@ namespace Emt.Tinker.Managers
             ability = UnitExtensions.GetAbilityById(EntityManager.LocalHero, abilityId);
             if (ability == null) return false;
             if (ability.Cooldown > 0f) return false;
-            if (ability.Level == 0) return false;            
+            if (ability.Level == 0) return false;
             if (EntityManager.LocalHero.Mana < ability.ManaCost) return false;
             return CanBeCasted(unit);
         }
@@ -192,7 +235,7 @@ namespace Emt.Tinker.Managers
             return ability.Cast(position, queue, bypass);
         }
         static bool CastAbility(Unit unit, bool queue = false, bool bypass = false)
-        {            
+        {
             return ability.Cast(unit, queue, bypass);
         }
         static bool CastAbility(bool queue = false, bool bypass = false)
