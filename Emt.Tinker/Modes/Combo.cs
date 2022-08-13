@@ -76,7 +76,12 @@ namespace Emt.Tinker.Modes
             if (CastManager.castItem(AbilityId.item_glimmer_cape, EntityManager.LocalHero)) return true;
             if (CastManager.castItem(AbilityId.item_ghost)) return true;
             if (CastManager.castItem(AbilityId.item_shivas_guard)) return true;
-            if (CastManager.castItem(AbilityId.item_bloodstone)) return true;
+            
+            if (!EntityManager.LocalHero.HasModifier("modifier_item_bloodstone_drained"))
+            {
+                if (CastManager.castItem(AbilityId.item_bloodstone)) return true;
+            }            
+            
             if (CastManager.castItem(AbilityId.item_eternal_shroud)) return true;
             if (CastManager.castItem(AbilityId.item_ethereal_blade, TargetManager.currentTarget)) return true;
             if (CastManager.castItem(AbilityId.item_orchid, TargetManager.currentTarget)) return true;
