@@ -4,6 +4,7 @@
     {
         public static Modes.Combo combo;
         public static Modes.SpamRocket spamRocket;
+        public static Modes.AutoShiva autoShiva;
         static public void Init()
         {
             PluginMenu.Activate();
@@ -16,8 +17,10 @@
             {
                 Managers.TargetManager.Activate();
                 Render.Draw.Activate();
+                Managers.FailSafeManager.Activate();
                 combo = new Modes.Combo();
                 spamRocket = new Modes.SpamRocket();
+                autoShiva = new Modes.AutoShiva();
             }
             else
             {
@@ -35,8 +38,10 @@
         {
             Managers.TargetManager.Dispose();
             Render.Draw.Dispose();
+            Managers.FailSafeManager.Dispose();
             combo.Dispose();
             spamRocket.Dispose();
+            autoShiva.Dispose();
         }
     }
 }

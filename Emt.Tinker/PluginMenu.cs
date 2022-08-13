@@ -28,8 +28,16 @@ namespace Emt.Tinker
 
         static public MenuHoldKey SpamRocketKey;
 
+        static public MenuSwitcher FailSafeSwitcher_Rocket;
+        static public MenuSwitcher FailSafeSwitcher_Rearm;
+        static public MenuSwitcher FailSafeSwitcher_Rearm_ignoreWithShiva;
+
+        static public MenuSwitcher AutoShivaSwitcher;
+        static public MenuSlider AutoShivaRadius;
 
         static private Menu RootMenu;
+
+
 
         static public void Activate()
         {
@@ -41,7 +49,7 @@ namespace Emt.Tinker
         {
             RootMenu = MenuManager.CreateRootMenu("Emt.Tinker")
                 .SetHeroImage(HeroId.npc_dota_hero_tinker)
-                .SetTooltip("V1.2");
+                .SetTooltip("V1.3");
 
             PluginStatus = RootMenu.CreateSwitcher("On/Off");
 
@@ -68,6 +76,15 @@ namespace Emt.Tinker
 
             Menu spamRocket = RootMenu.CreateMenu("Spam Rocket").SetAbilityImage(AbilityId.tinker_heat_seeking_missile, MenuAbilityImageType.Default);
             SpamRocketKey = spamRocket.CreateHoldKey("Spam Rocket Key", Key.None).SetTooltip("Hold this key to spam Rocket");
+
+            Menu FailSafe = RootMenu.CreateMenu("Failsafe").SetAbilityImage(AbilityId.tinker_defense_matrix, MenuAbilityImageType.Default);
+            FailSafeSwitcher_Rocket = FailSafe.CreateSwitcher("Safe Rocket").SetTooltip("Rocket will be used, if there are enemy in 2500 radius").SetAbilityImage(AbilityId.tinker_heat_seeking_missile, MenuAbilityImageType.Default); 
+            FailSafeSwitcher_Rearm = FailSafe.CreateSwitcher("Safe Rearm").SetTooltip("Rearm will not be used, if nothing to rearm").SetAbilityImage(AbilityId.tinker_rearm, MenuAbilityImageType.Default);
+            FailSafeSwitcher_Rearm_ignoreWithShiva = FailSafe.CreateSwitcher("Ignore Safe Rearm if Tinker has Shiva").SetAbilityImage(AbilityId.item_shivas_guard, MenuAbilityImageType.Default);
+
+            Menu AutoShiva = RootMenu.CreateMenu("AutoShiva").SetAbilityImage(AbilityId.item_shivas_guard, MenuAbilityImageType.Default);
+            AutoShivaSwitcher = AutoShiva.CreateSwitcher("Use shiva if enemy around");
+            AutoShivaRadius = AutoShiva.CreateSlider("Use shiva if enemy closer than", 1300, 300, 3000);             
         }
         static private void SubscribeToChangeEvents()
         {
