@@ -50,16 +50,15 @@ namespace Emt.Tinker
                 {AbilityId.tinker_warp_grenade,false},
                 {AbilityId.tinker_keen_teleport,false},
 				//{AbilityId.tinker_march_of_the_machines,true},
-                {AbilityId.tinker_rearm,true}
+                {AbilityId.tinker_rearm,false}
             };
 
             public static readonly Dictionary<AbilityId, bool> ComboAbilities = new Dictionary<AbilityId, bool>
             {
                 {AbilityId.tinker_laser,true},
                 {AbilityId.tinker_heat_seeking_missile,true},
-                {AbilityId.tinker_defense_matrix,false},
-                {AbilityId.tinker_warp_grenade,false},
-                {AbilityId.tinker_keen_teleport,false},
+                {AbilityId.tinker_defense_matrix,true},
+                {AbilityId.tinker_warp_grenade,true},                
 				//{AbilityId.tinker_march_of_the_machines,true},
                 {AbilityId.tinker_rearm,true}
             };
