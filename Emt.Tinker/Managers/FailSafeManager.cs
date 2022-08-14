@@ -1,4 +1,5 @@
-﻿using Divine.Entity;
+﻿using System;
+using Divine.Entity;
 using Divine.Order;
 using Divine.Order.EventArgs;
 using Divine.Order.Orders.Components;
@@ -23,10 +24,12 @@ namespace Emt.Tinker.Managers
 
         private static void OrderManager_OrderAdding(OrderAddingEventArgs e)
         {
-            if (e.Order?.Type != OrderType.Cast && e.Order?.Type != OrderType.CastTarget) return;
+            if (e.Order?.Type != OrderType.Cast && e.Order?.Type != OrderType.CastTarget && e.Order?.Type != OrderType.CastPosition) return;
 
             SafeRearm(e);
             SafeRocket(e);
+            SafeBloodstone(e);
+            SafeBottle(e);            
         }
 
         private static float GetAbilitiesCooldownSum()
@@ -61,7 +64,30 @@ namespace Emt.Tinker.Managers
             if (!PluginMenu.FailSafeSwitcher_Rocket) return;
             if (e.Order?.Ability?.Id != AbilityId.tinker_heat_seeking_missile) return;
             if (TargetManager.targetForRocket != null) return;
-            
+
+            e.Process = false;
+        }
+
+        private static void SafeBloodstone(OrderAddingEventArgs e)
+        {
+            if (e.Order?.Ability?.Id != AbilityId.item_bloodstone) return;
+
+            if (!EntityManager.LocalHero.HasModifier("modifier_item_bloodstone_drained")) return;
+
+            e.Process = false;
+        }
+
+        private static void SafeBottle(OrderAddingEventArgs e)
+        {
+            if (e.Order?.Ability?.Id != AbilityId.item_bottle) return;
+
+            if (EntityManager.LocalHero.HasModifier("modifier_fountain_aura_buff")) return;
+
+            if ((EntityManager.LocalHero.MaximumHealth - EntityManager.LocalHero.Health > 110f ||
+                EntityManager.LocalHero.MaximumMana - EntityManager.LocalHero.Mana > 60f) &&
+                !EntityManager.LocalHero.HasModifier("modifier_bottle_regeneration") &&
+                e.Order?.Ability?.CurrentCharges > 0) return;
+
             e.Process = false;
         }
     }

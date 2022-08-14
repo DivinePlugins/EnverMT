@@ -43,12 +43,12 @@ namespace Emt.Tinker.Modes
         {
             if (CastManager.sleeper.Sleeping) return;
 
-            
+
             if (TargetManager.currentTarget == null || !EntityManager.LocalHero.IsInRange(TargetManager.currentTarget, 1025))
             {
                 if (CastManager.castNeutralItem(AbilityId.item_ninja_gear)) return;
-            }               
-            
+            }
+
 
             if (TargetManager.currentTarget != null
                 && _localHero.IsAlive
@@ -70,13 +70,13 @@ namespace Emt.Tinker.Modes
         {
             //Console.WriteLine("============");
             //Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - exec combo - Mana: " + EntityManager.LocalHero.Mana);            
-            
+
             if (CastManager.castNeutralItem(AbilityId.item_seer_stone, TargetManager.currentTarget.Position)) return true;
 
             if (PluginMenu.ComboLinkenBreakerMode == "Laser" && TargetManager.currentTarget.IsLinkensProtected())
-            { 
+            {
                 if (CastManager.castLaser()) return true;
-            }            
+            }
 
             if (EntityManager.LocalHero.MaximumMana - EntityManager.LocalHero.Mana >= 200)
             {
@@ -86,10 +86,10 @@ namespace Emt.Tinker.Modes
             if (EntityManager.LocalHero.MaximumMana - EntityManager.LocalHero.Mana >= 75)
             {
                 if (CastManager.castNeutralItem(AbilityId.item_arcane_ring)) return true;
-            }            
+            }
 
             if (CastManager.castWarpGrenade()) return true;
-            
+
             if (EntityManager.LocalHero.IsInRange(TargetManager.currentTarget, PluginMenu.ComboWarpGrenadeUseRadius))
             {
                 if (CastManager.castNeutralItem(AbilityId.item_psychic_headband, TargetManager.currentTarget)) return true;
@@ -100,18 +100,13 @@ namespace Emt.Tinker.Modes
             if (CastManager.castItem(AbilityId.item_soul_ring)) return true;
 
             if (CastManager.castNeutralItem(AbilityId.item_bullwhip, TargetManager.currentTarget)) return true;
-            
+
 
             if (CastManager.castItem(AbilityId.item_lotus_orb, EntityManager.LocalHero)) return true;
             if (CastManager.castItem(AbilityId.item_glimmer_cape, EntityManager.LocalHero)) return true;
             if (CastManager.castItem(AbilityId.item_ghost)) return true;
             if (CastManager.castItem(AbilityId.item_shivas_guard)) return true;
-            
-            if (!EntityManager.LocalHero.HasModifier("modifier_item_bloodstone_drained"))
-            {
-                if (CastManager.castItem(AbilityId.item_bloodstone)) return true;
-            }            
-            
+            if (CastManager.castItem(AbilityId.item_bloodstone)) return true;
             if (CastManager.castItem(AbilityId.item_eternal_shroud)) return true;
             if (CastManager.castItem(AbilityId.item_ethereal_blade, TargetManager.currentTarget)) return true;
             if (CastManager.castItem(AbilityId.item_orchid, TargetManager.currentTarget)) return true;
@@ -127,9 +122,9 @@ namespace Emt.Tinker.Modes
             if (!TargetManager.currentTarget.IsReflectingAbilities() && !TargetManager.currentTarget.HasModifier("modifier_antimage_counterspell"))
             {
                 if (CastManager.castItem(AbilityId.item_sheepstick, TargetManager.currentTarget)) return true;
-            }            
+            }
 
-            if (PluginMenu.ComboItems.GetValue(AbilityId.item_dagon)) 
+            if (PluginMenu.ComboItems.GetValue(AbilityId.item_dagon))
             {
                 if (CastManager.castItem(AbilityId.item_dagon, TargetManager.currentTarget, false)) return true;
                 if (CastManager.castItem(AbilityId.item_dagon_2, TargetManager.currentTarget, false)) return true;
@@ -141,7 +136,7 @@ namespace Emt.Tinker.Modes
             if (CastManager.castHeatSeekingRocket()) return true;
             if (CastManager.castLaser()) return true;
 
-            if (CastManager.castNeutralItem(AbilityId.item_ex_machina)) return true;            
+            if (CastManager.castNeutralItem(AbilityId.item_ex_machina)) return true;
 
             if (PluginMenu.ComboItems.GetValue(AbilityId.item_blink))
             {
@@ -151,9 +146,9 @@ namespace Emt.Tinker.Modes
                 if (CastManager.castBlink(AbilityId.item_swift_blink)) return true;
             }
 
-            
 
-            if (CastManager.castRearm()) return true;            
+
+            if (CastManager.castRearm()) return true;
 
             return false;
         }

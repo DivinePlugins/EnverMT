@@ -95,9 +95,9 @@ namespace Emt.Tinker.Managers
             return true;
         }
 
-        static public bool castDefenseMatrix()
+        static public bool castDefenseMatrix(bool checkSleeper = true)
         {
-            if (sleeper.Sleeping) return false;
+            if (checkSleeper) if (sleeper.Sleeping) return false;
             if (!AbilityCanBeCasted(AbilityId.tinker_defense_matrix)) return false;
             if (!PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_defense_matrix)) return false;
             if (EntityManager.LocalHero.HasModifier("modifier_tinker_defense_matrix")) return false;

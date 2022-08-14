@@ -29,6 +29,7 @@ namespace Emt.Tinker
             public static readonly Dictionary<AbilityId, bool> PreCastItems = new Dictionary<AbilityId, bool> {
                 {AbilityId.item_soul_ring,true},
                 {AbilityId.item_guardian_greaves,true},
+                {AbilityId.item_bottle,true},
             };
 
             public static readonly Dictionary<AbilityId, bool> ComboNeutralItems = new Dictionary<AbilityId, bool> {

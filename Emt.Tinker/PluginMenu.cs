@@ -38,6 +38,7 @@ namespace Emt.Tinker
 
         static public MenuItemToggler PreCastItems;
         static public MenuAbilityToggler PreCastAbilities;
+        static public MenuSwitcher PreCastDefenceBeforeKeen;
 
         static private Menu RootMenu;
 
@@ -94,6 +95,7 @@ namespace Emt.Tinker
             Menu PreCast = RootMenu.CreateMenu("Use Items before Skills").SetAbilityImage(AbilityId.item_soul_ring, MenuAbilityImageType.Default);
             PreCastItems = PreCast.CreateItemToggler("PreCast Items", Data.Menu.PreCastItems, false, true);
             PreCastAbilities = PreCast.CreateAbilityToggler("Abilities", Data.Menu.PreCastAbilities, false);
+            PreCastDefenceBeforeKeen = PreCast.CreateSwitcher("Use Defence Matrix on Fountain before Keen Teleport");
         }
         static private void SubscribeToChangeEvents()
         {
