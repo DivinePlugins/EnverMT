@@ -157,8 +157,6 @@ namespace Emt.Tinker.Modes
         {
             float additionalSleepTime = 320f;
 
-            if (CastManager.castItem(AbilityId.item_soul_ring)) return true;
-            if (CastManager.castItem(AbilityId.item_guardian_greaves)) return true;
             if (TargetManager.targetForRocket != null) if (CastManager.castHeatSeekingRocket()) return true;
             if (PluginMenu.ComboItems.GetValue(AbilityId.item_blink))
             {
@@ -167,6 +165,9 @@ namespace Emt.Tinker.Modes
                 if (CastManager.castBlink(AbilityId.item_overwhelming_blink, additionalSleepTime)) return true;
                 if (CastManager.castBlink(AbilityId.item_swift_blink, additionalSleepTime)) return true;
             }
+
+            if (CastManager.castItem(AbilityId.item_soul_ring)) return true;
+            if (CastManager.castItem(AbilityId.item_guardian_greaves)) return true;
 
             if (CastManager.castRearm()) return true;
             return false;
