@@ -28,8 +28,7 @@ namespace Emt.Tinker.Managers
 
             SafeRearm(e);
             SafeRocket(e);
-            SafeBloodstone(e);
-            SafeBottle(e);            
+            SafeBottle(e);
         }
 
         private static float GetAbilitiesCooldownSum()
@@ -64,15 +63,6 @@ namespace Emt.Tinker.Managers
             if (!PluginMenu.FailSafeSwitcher_Rocket) return;
             if (e.Order?.Ability?.Id != AbilityId.tinker_heat_seeking_missile) return;
             if (TargetManager.targetForRocket != null) return;
-
-            e.Process = false;
-        }
-
-        private static void SafeBloodstone(OrderAddingEventArgs e)
-        {
-            if (e.Order?.Ability?.Id != AbilityId.item_bloodstone) return;
-
-            if (!EntityManager.LocalHero.HasModifier("modifier_item_bloodstone_drained")) return;
 
             e.Process = false;
         }
