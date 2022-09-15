@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Reference Include="Divine">
+        <HintPath>C:\Program Files\Divine\References\Divine.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+  <Target Name="Compiler" AfterTargets="PostBuildEvent">
+    <Exec Command="if exist &quot;C:\Program Files\Divine\Divine.Client.exe&quot; call &quot;C:\Program Files\Divine\Divine.Client.exe&quot; -PostBuildEvent -TargetPath=&quot;$(TargetPath)&quot;" />
+  </Target>
+
+</Project>
