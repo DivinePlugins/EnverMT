@@ -14,7 +14,7 @@ namespace EMT.Farm
         private readonly Dictionary<Unit, float> attackers; // Attacked unit, last attacked GameTime
         private readonly SortedDictionary<float, float> forecastHealth; // Forecast Health <Gametime, health>
         private const float forecastDuration = 3f;
-        private const float forecastQuant = 0.1f;
+        private const float forecastQuant = 0.02f;
 
         public EmtUnit(Unit unit)
         {

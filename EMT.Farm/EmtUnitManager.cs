@@ -9,7 +9,7 @@ namespace EMT.Farm
     internal class EmtUnitManager : IDisposable
     {
         private readonly Context context;
-        private SortedDictionary<uint, EmtUnit> unitsTracker; // Unit.Handle , EmtUnit(unit)
+        public readonly SortedDictionary<uint, EmtUnit> unitsTracker; // Unit.Handle , EmtUnit(unit)
         private float trackRange;
 
         public EmtUnitManager(Context context)
@@ -44,12 +44,6 @@ namespace EMT.Farm
 
             this.AddUnitsToTracker();
             this.RemoveNotAliveUnitsFromTracker();
-
-            SortedDictionary<float, float> a;
-            foreach (KeyValuePair<uint, EmtUnit> item in this.unitsTracker)
-            {
-                a = item.Value.GetForecastHealth;
-            }
         }
 
         private void AddUnitsToTracker()
@@ -59,7 +53,7 @@ namespace EMT.Farm
                 u.Type == Divine.Entity.Entities.Components.EntityType.Creep ||
                 u.Type == Divine.Entity.Entities.Components.EntityType.Courier
                 )
-            .Where(u => !unitsTracker.ContainsKey(u.Handle) && u.IsValid).ToList();
+            .Where(u => !unitsTracker.ContainsKey(u.Handle) && u.IsValid && u.IsEnemy(EntityManager.LocalHero)).ToList();
 
             foreach (Unit u in units)
             {
