@@ -9,7 +9,7 @@ namespace EMT.Farm
     internal class EmtUnitManager : IDisposable
     {
         private readonly Context context;
-        private SortedDictionary<uint, EmtUnit> unitsTracker;
+        private SortedDictionary<uint, EmtUnit> unitsTracker; // Unit.Handle , EmtUnit(unit)
         private float trackRange;
 
         public EmtUnitManager(Context context)
@@ -64,13 +64,13 @@ namespace EMT.Farm
         private void RemoveNotAliveUnitsFromTracker()
         {
             float additionalRange = 500f; // Additional range to remove Unit from Tracklist            
-            var dict = this.unitsTracker.Where(u =>
+            Dictionary<uint, EmtUnit> dict = this.unitsTracker.Where(u =>
                 !u.Value.unit.IsAlive ||
                 u.Value.unit.Distance2D(EntityManager.LocalHero!) > (this.trackRange + additionalRange) ||
                 !u.Value.unit.IsVisible ||
                 !u.Value.unit.IsValid).ToDictionary(t => t.Key, t => t.Value);
 
-            foreach (var u in dict)
+            foreach (KeyValuePair<uint, EmtUnit> u in dict)
             {
                 u.Value.Dispose();
                 this.unitsTracker.Remove(u.Value.unit.Handle);
