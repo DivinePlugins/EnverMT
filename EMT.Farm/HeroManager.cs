@@ -9,12 +9,16 @@ namespace EMT.Farm
 {
     internal class HeroManager : IDisposable
     {
+        enum SleeperType
+        {
+            Movement = 0,
+            Attack = 1
+        }
+
         private Context context;
-        private Sleeper sleeper;
         public HeroManager(Context context)
         {
             this.context = context;
-            this.sleeper = new();
             this.context.pluginMenu.modeFarm.ValueChanged += ModeFarm_ValueChanged;
         }
         public void Dispose()
@@ -41,14 +45,16 @@ namespace EMT.Farm
             if (this.context?.EmtUnitManager?.unitsTracker.Count == 0) return;
 
             this.SimpleAttack();
+            this.MoveToMousePosition();
         }
 
         private void SimpleAttack()
         {
-            if (this.sleeper.Sleeping) return;
+            if (MultiSleeper<SleeperType>.Sleeping(SleeperType.Attack)) return;
 
             float requiredTime;
             float aaaTime;
+            float sleepTime;
             foreach (KeyValuePair<uint, EmtUnit> u in this.context.EmtUnitManager.unitsTracker!)
             {
                 if (!u.Value.unit.IsAlive) continue;
@@ -56,13 +62,17 @@ namespace EMT.Farm
                 requiredTime = this.GetMinRequiredTimeToKill(EntityManager.LocalHero, u.Value);
                 aaaTime = EntityManager.LocalHero.GetAutoAttackArrivalTime(u.Value.unit, true);
 
-                if (requiredTime < aaaTime + GameManager.AvgPing)
+                if (requiredTime < aaaTime + GameManager.AvgPing + EntityManager.LocalHero.AttackPoint())
                 {
                     EntityManager.LocalHero.Attack(u.Value.unit);
-                    this.sleeper.Sleep(300);
+                    sleepTime = GameManager.AvgPing + EntityManager.LocalHero.AttackPoint();
+
+                    MultiSleeper<SleeperType>.Sleep(SleeperType.Attack, sleepTime);
+                    MultiSleeper<SleeperType>.Sleep(SleeperType.Movement, sleepTime);
                     return;
                 }
             }
+
         }
 
         private float GetMinRequiredTimeToKill(Unit hero, EmtUnit creep)
@@ -81,6 +91,16 @@ namespace EMT.Farm
             }
 
             return time;
+        }
+
+        private void MoveToMousePosition()
+        {
+            if (MultiSleeper<SleeperType>.Sleeping(SleeperType.Movement)) return;
+            if (EntityManager.LocalHero.Distance2D(GameManager.MousePosition) < 100f) return;
+
+            EntityManager.LocalHero.Move(GameManager.MousePosition);
+            MultiSleeper<SleeperType>.Sleep(SleeperType.Movement, 100);
+
         }
     }
 }
