@@ -1,11 +1,9 @@
-﻿using Divine.Entity.Entities.Abilities.Components;
+﻿using Divine.Entity;
+using Divine.Entity.Entities.Abilities.Components;
 using Divine.Entity.Entities.Abilities.Items;
-using Divine.Entity.Entities.Units;
-using Divine.Entity;
 using Divine.Extensions;
-using System;
-using Divine.Update;
 using Divine.Modifier.Modifiers;
+using Divine.Update;
 
 namespace AmuletAutoUse
 {
@@ -23,7 +21,7 @@ namespace AmuletAutoUse
 
             Modifier modifier = EntityManager.LocalHero.ModifierStatus.GetBuffsByName("modifier_item_shadow_amulet_fade").FirstOrDefault();
             float remainingTime = modifier == null ? 0 : modifier.RemainingTime;
-            
+
             if (remainingTime <= PluginMenu.Cooldown.Value)
             {
                 item.Cast(EntityManager.LocalHero, false, false);

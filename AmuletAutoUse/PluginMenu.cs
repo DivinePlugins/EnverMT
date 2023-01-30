@@ -1,6 +1,6 @@
-﻿using Divine.Menu;
+﻿using Divine.Entity.Entities.Abilities.Components;
+using Divine.Menu;
 using Divine.Menu.Items;
-using Divine.Entity.Entities.Abilities.Components;
 
 namespace AmuletAutoUse
 {
@@ -8,7 +8,7 @@ namespace AmuletAutoUse
     {
         public readonly Menu RootMenu;
         public readonly MenuSwitcher PluginStatus;
-        public static MenuSlider Cooldown;        
+        public static MenuSlider Cooldown;
 
         public PluginMenu()
         {
