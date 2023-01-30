@@ -44,6 +44,12 @@ namespace EMT.Farm
 
             this.AddUnitsToTracker();
             this.RemoveNotAliveUnitsFromTracker();
+
+            SortedDictionary<float, float> a;
+            foreach (KeyValuePair<uint, EmtUnit> item in this.unitsTracker)
+            {
+                a = item.Value.GetForecastHealth;
+            }
         }
 
         private void AddUnitsToTracker()

@@ -1,5 +1,6 @@
 ﻿using Divine.Entity.Entities;
 using Divine.Entity.Entities.Units;
+using Divine.Entity.Entities.Units.Creeps;
 using Divine.Extensions;
 using Divine.Game;
 using Divine.Projectile;
@@ -22,15 +23,15 @@ namespace EMT.Farm
             this.forecastHealth = new();
 
             Entity.AnimationChanged += Entity_AnimationChanged;
-            ProjectileManager.TrackingProjectileAdded += ProjectileManager_TrackingProjectileAdded;
-            UpdateManager.CreateIngameUpdate(this.CalculateForecastHealth);
+            ProjectileManager.TrackingProjectileAdded += ProjectileManager_TrackingProjectileAdded;            
+            UpdateManager.CreateGameUpdate(100, this.RemoveIdleAttackersFromList);
         }
 
         public void Dispose()
         {
             Entity.AnimationChanged -= Entity_AnimationChanged;
-            ProjectileManager.TrackingProjectileAdded -= ProjectileManager_TrackingProjectileAdded;
-            UpdateManager.DestroyIngameUpdate(this.CalculateForecastHealth);
+            ProjectileManager.TrackingProjectileAdded -= ProjectileManager_TrackingProjectileAdded;            
+            UpdateManager.DestroyGameUpdate(this.RemoveIdleAttackersFromList);
         }
 
         private void Entity_AnimationChanged(Entity sender, Divine.Entity.Entities.EventArgs.AnimationChangedEventArgs e)
@@ -61,6 +62,21 @@ namespace EMT.Farm
             if (unit == null) return;
 
             this.attackers[unit] = GameManager.GameTime;
+        }
+
+        private void RemoveIdleAttackersFromList()
+        {
+            foreach (KeyValuePair<Unit, float> attacker in this.attackers)
+            {
+                if (attacker.Key is not Creep) return;
+                float idleTime = 1.5f;
+                if (attacker.Key.AttackDamageType == Divine.Entity.Entities.Units.Components.AttackDamageType.Siege) idleTime = 3f;
+
+                if ((GameManager.GameTime - attacker.Value) > idleTime)
+                {
+                    this.attackers.Remove(attacker.Key);
+                }
+            }
         }
 
         private void CalculateForecastHealth()
@@ -96,14 +112,21 @@ namespace EMT.Farm
                 timeDiff = GameManager.GameTime - this.attackers[unit];
             }
 
-            // TO DO: Delay before attack to be clarified
-            float delayBeforeAttack = 0;
+            // TO DO: Delay before attack to be clarified            
 
-            var damage = (float)Math.Floor(
-                (timeDiff + timeDuration - UnitExtensions.GetProjectileArrivalTime(unit, this.unit, delayBeforeAttack, unit.ProjectileSpeed()))
-                * unit.AttacksPerSecond) * unit.GetAttackDamage(this.unit, true);
+            float projecttileTime = UnitExtensions.GetAutoAttackArrivalTime(unit, this.unit, true);
+            float damage = (float)Math.Floor((timeDiff + timeDuration - projecttileTime) * unit.AttacksPerSecond) * unit.GetAttackDamage(this.unit, true);
+            float regenedHealth = unit.HealthRegeneration * timeDuration;
+            return damage - regenedHealth;
+        }
 
-            return damage;
+        public SortedDictionary<float, float> GetForecastHealth
+        {
+            get
+            {
+                this.CalculateForecastHealth();
+                return this.forecastHealth;
+            }
         }
     }
 }
