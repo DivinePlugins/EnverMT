@@ -4,7 +4,6 @@ using Divine.Extensions;
 using Divine.Game;
 using Divine.Projectile;
 using Divine.Update;
-using System;
 
 namespace EMT.Farm
 {
@@ -44,7 +43,6 @@ namespace EMT.Farm
             if (e.Name.Contains("idle_anim")) return;
             if (!senderUnit.IsMelee) return;
 
-            if (this.unit == null) return;
             if (!senderUnit.IsDirectlyFacing(this.unit.Position)) return;
 
             this.AddAttackerToList(senderUnit);
@@ -84,7 +82,7 @@ namespace EMT.Farm
                 foreach (KeyValuePair<Unit, float> attackerUnit in this.attackers)
                 {
                     damage += this.GetForecastDamage(attackerUnit.Key, fTime - GameManager.GameTime);
-                }                
+                }
                 this.forecastHealth.Add(fTime, (float)this.unit.Health - damage);
                 fTime += forecastQuant;
             }
@@ -98,7 +96,12 @@ namespace EMT.Farm
                 timeDiff = GameManager.GameTime - this.attackers[unit];
             }
 
-            var damage = (float)Math.Floor((timeDiff + timeDuration) * unit.AttacksPerSecond) * unit.GetAttackDamage(this.unit, true);
+            // TO DO: Delay before attack to be clarified
+            float delayBeforeAttack = 0;
+
+            var damage = (float)Math.Floor(
+                (timeDiff + timeDuration - UnitExtensions.GetProjectileArrivalTime(unit, this.unit, delayBeforeAttack, unit.ProjectileSpeed()))
+                * unit.AttacksPerSecond) * unit.GetAttackDamage(this.unit, true);
 
             return damage;
         }

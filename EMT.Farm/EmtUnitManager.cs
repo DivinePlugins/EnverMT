@@ -22,7 +22,7 @@ namespace EMT.Farm
         {
             this.context.pluginMenu.pluginStatus.ValueChanged -= PluginStatus_ValueChanged;
             UpdateManager.DestroyIngameUpdate(Update);
-            this.unitsTracker.ForEach(u=>u.Value.Dispose());
+            this.unitsTracker.ForEach(u => u.Value.Dispose());
         }
         private void PluginStatus_ValueChanged(Divine.Menu.Items.MenuSwitcher switcher, Divine.Menu.EventArgs.SwitcherEventArgs e)
         {

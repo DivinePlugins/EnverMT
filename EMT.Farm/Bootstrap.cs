@@ -8,7 +8,7 @@ namespace EMT.Farm
 
         protected override void OnActivate()
         {
-            this.context = new Context();         
+            this.context = new Context();
         }
         protected override void OnDeactivate()
         {
