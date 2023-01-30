@@ -23,14 +23,14 @@ namespace EMT.Farm
             this.forecastHealth = new();
 
             Entity.AnimationChanged += Entity_AnimationChanged;
-            ProjectileManager.TrackingProjectileAdded += ProjectileManager_TrackingProjectileAdded;            
+            ProjectileManager.TrackingProjectileAdded += ProjectileManager_TrackingProjectileAdded;
             UpdateManager.CreateGameUpdate(100, this.RemoveIdleAttackersFromList);
         }
 
         public void Dispose()
         {
             Entity.AnimationChanged -= Entity_AnimationChanged;
-            ProjectileManager.TrackingProjectileAdded -= ProjectileManager_TrackingProjectileAdded;            
+            ProjectileManager.TrackingProjectileAdded -= ProjectileManager_TrackingProjectileAdded;
             UpdateManager.DestroyGameUpdate(this.RemoveIdleAttackersFromList);
         }
 

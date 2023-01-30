@@ -2,6 +2,7 @@
 using Divine.Entity.Entities.Units;
 using Divine.Extensions;
 using Divine.Game;
+using Divine.Helpers;
 using Divine.Update;
 
 namespace EMT.Farm
@@ -9,18 +10,20 @@ namespace EMT.Farm
     internal class HeroManager : IDisposable
     {
         private Context context;
+        private Sleeper sleeper;
         public HeroManager(Context context)
         {
             this.context = context;
-            this.context.pluginMenu.pluginStatus.ValueChanged += PluginStatus_ValueChanged;
+            this.sleeper = new();
+            this.context.pluginMenu.modeFarm.ValueChanged += ModeFarm_ValueChanged;
         }
         public void Dispose()
         {
-            this.context.pluginMenu.pluginStatus.ValueChanged -= PluginStatus_ValueChanged;
+            this.context.pluginMenu.modeFarm.ValueChanged -= ModeFarm_ValueChanged;
             UpdateManager.DestroyIngameUpdate(Update);
         }
 
-        private void PluginStatus_ValueChanged(Divine.Menu.Items.MenuSwitcher switcher, Divine.Menu.EventArgs.SwitcherEventArgs e)
+        private void ModeFarm_ValueChanged(Divine.Menu.Items.MenuHoldKey holdKey, Divine.Menu.EventArgs.HoldKeyEventArgs e)
         {
             if (e.Value)
             {
@@ -32,22 +35,31 @@ namespace EMT.Farm
             }
         }
         private void Update()
-        {            
+        {
             if (EntityManager.LocalHero == null) return;
             if (this.context.EmtUnitManager == null) return;
             if (this.context?.EmtUnitManager?.unitsTracker.Count == 0) return;
+
+            this.SimpleAttack();
+        }
+
+        private void SimpleAttack()
+        {
+            if (this.sleeper.Sleeping) return;
 
             float requiredTime;
             float aaaTime;
             foreach (KeyValuePair<uint, EmtUnit> u in this.context.EmtUnitManager.unitsTracker!)
             {
+                if (!u.Value.unit.IsAlive) continue;
+
                 requiredTime = this.GetMinRequiredTimeToKill(EntityManager.LocalHero, u.Value);
-                aaaTime =  EntityManager.LocalHero.GetAutoAttackArrivalTime(u.Value.unit, true);
+                aaaTime = EntityManager.LocalHero.GetAutoAttackArrivalTime(u.Value.unit, true);
 
                 if (requiredTime < aaaTime + GameManager.AvgPing)
                 {
                     EntityManager.LocalHero.Attack(u.Value.unit);
-                    Console.WriteLine($"Attack to: {u.Value.unit}  . Time= {requiredTime}");
+                    this.sleeper.Sleep(300);
                     return;
                 }
             }
