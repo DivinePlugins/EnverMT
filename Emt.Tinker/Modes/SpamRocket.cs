@@ -1,10 +1,10 @@
-﻿using System;
-using Divine.Entity.Entities.Units.Heroes;
-using Divine.Update;
-using Divine.Extensions;
-using Divine.Entity;
+﻿using Divine.Entity;
 using Divine.Entity.Entities.Abilities.Components;
+using Divine.Entity.Entities.Units.Heroes;
+using Divine.Extensions;
+using Divine.Update;
 using Emt.Tinker.Managers;
+using System;
 
 namespace Emt.Tinker.Modes
 {
@@ -28,11 +28,11 @@ namespace Emt.Tinker.Modes
         {
             if (e.Value)
             {
-                UpdateManager.IngameUpdate += UpdateManager_IngameUpdate;                
+                UpdateManager.IngameUpdate += UpdateManager_IngameUpdate;
             }
             else
             {
-                UpdateManager.IngameUpdate -= UpdateManager_IngameUpdate;                
+                UpdateManager.IngameUpdate -= UpdateManager_IngameUpdate;
             }
         }
         private void UpdateManager_IngameUpdate()
@@ -43,7 +43,7 @@ namespace Emt.Tinker.Modes
                 && TargetManager.targetForRocket.IsAlive
                 && !TargetManager.targetForRocket.IsInvulnerable()
                 && TargetManager.targetForRocket.IsVisible
-                && !TargetManager.targetForRocket.IsMagicImmune()                
+                && !TargetManager.targetForRocket.IsMagicImmune()
                 )
             {
                 if (executeSpamRocket()) return;
@@ -58,8 +58,8 @@ namespace Emt.Tinker.Modes
             if (CastManager.castItem(AbilityId.item_ghost)) return true;
             if (CastManager.castItem(AbilityId.item_bloodstone)) return true;
             if (CastManager.castItem(AbilityId.item_eternal_shroud)) return true;
-                       
-            if (CastManager.castHeatSeekingRocket()) return true;            
+
+            if (CastManager.castHeatSeekingRocket()) return true;
 
             if (PluginMenu.ComboItems.GetValue(AbilityId.item_blink))
             {

@@ -1,13 +1,12 @@
-﻿using System;
-using System.Linq;
-
+﻿using Divine.Entity;
+using Divine.Entity.Entities.Units;
+using Divine.Entity.Entities.Units.Heroes;
 using Divine.Extensions;
 using Divine.Game;
 using Divine.Numerics;
 using Divine.Update;
-using Divine.Entity;
-using Divine.Entity.Entities.Units;
-using Divine.Entity.Entities.Units.Heroes;
+using System;
+using System.Linq;
 
 
 namespace Emt.Tinker.Managers
@@ -66,7 +65,7 @@ namespace Emt.Tinker.Managers
                 && currentTarget.Distance2D(EntityManager.LocalHero) < targetSearchDistance) return;
 
             if (currentTarget == null && getTarget(targetSearchDistance) != null)
-            {                
+            {
                 CastManager.sleeper.Reset();
             }
             currentTarget = getTarget(targetSearchDistance);

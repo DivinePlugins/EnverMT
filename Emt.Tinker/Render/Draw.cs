@@ -1,8 +1,8 @@
-﻿using Divine.Renderer;
-using Divine.Entity;
+﻿using Divine.Entity;
+using Divine.Entity.Entities.Units;
 using Divine.Numerics;
 using Divine.Particle;
-using Divine.Entity.Entities.Units;
+using Divine.Renderer;
 
 namespace Emt.Tinker.Render
 {

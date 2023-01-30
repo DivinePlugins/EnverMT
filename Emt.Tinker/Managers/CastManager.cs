@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Divine.Helpers;
-using Divine.Extensions;
-using Divine.Game;
-using Divine.Entity;
-using Divine.Entity.Entities.Abilities.Components;
-using Divine.Entity.Entities.Units;
+﻿using Divine.Entity;
 using Divine.Entity.Entities.Abilities;
-using Divine.Numerics;
+using Divine.Entity.Entities.Abilities.Components;
 using Divine.Entity.Entities.Abilities.Items;
 using Divine.Entity.Entities.Abilities.Items.Components;
+using Divine.Entity.Entities.Units;
+using Divine.Extensions;
+using Divine.Game;
+using Divine.Helpers;
+using Divine.Numerics;
+using System.Collections.Generic;
 
 
 namespace Emt.Tinker.Managers
@@ -49,8 +47,8 @@ namespace Emt.Tinker.Managers
             if (rearmSleeper.Sleeping) return false;
             if (!AbilityCanBeCasted(AbilityId.tinker_rearm)) return false;
 
-            if (!CastAbility(false, false)) return false;            
-            rearmSleeper.Sleep(ability.CastPoint * 1000f + 80f + GameManager.AvgPing + ability.ChannelTime * 1000f +1000f);
+            if (!CastAbility(false, false)) return false;
+            rearmSleeper.Sleep(ability.CastPoint * 1000f + 80f + GameManager.AvgPing + ability.ChannelTime * 1000f + 1000f);
             if (CastManager.castNeutralItem(AbilityId.item_trickster_cloak)) return true;
             return true;
         }
@@ -148,9 +146,9 @@ namespace Emt.Tinker.Managers
             var neutralItem = EntityManager.LocalHero.Inventory.GetItem(ItemSlot.NeutralItemSlot);
 
             if (neutralItem?.Id != abilityId) return false;
-             
+
             if (unit != null) CastItem(unit, false, false);
-            if (unit == null) CastItem(false, false); 
+            if (unit == null) CastItem(false, false);
 
             sleeper.Sleep(item.CastPoint * 1000f + 80f + GameManager.AvgPing);
 
@@ -169,7 +167,7 @@ namespace Emt.Tinker.Managers
 
             if (neutralItem?.Id != abilityId) return false;
 
-            CastItem(position,false, false);
+            CastItem(position, false, false);
 
             sleeper.Sleep(item.CastPoint * 1000f + 80f + GameManager.AvgPing);
 

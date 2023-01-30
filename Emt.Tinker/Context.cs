@@ -37,7 +37,7 @@
         }
 
         static public void Dispose()
-        {            
+        {
             PluginMenu.PluginStatus.ValueChanged -= PluginStatus_ValueChanged;
         }
     }

@@ -1,6 +1,6 @@
 ﻿using Divine.Entity;
-using Divine.Service;
 using Divine.Entity.Entities.Units.Heroes.Components;
+using Divine.Service;
 
 namespace Emt.Tinker
 {

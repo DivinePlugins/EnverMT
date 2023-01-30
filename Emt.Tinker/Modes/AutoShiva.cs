@@ -1,12 +1,12 @@
-﻿using System;
-using System.Linq;
-using Divine.Entity.Entities.Units.Heroes;
-using Divine.Update;
-using Divine.Extensions;
-using Divine.Entity;
-using Divine.Numerics;
+﻿using Divine.Entity;
 using Divine.Entity.Entities.Abilities.Components;
+using Divine.Entity.Entities.Units.Heroes;
+using Divine.Extensions;
+using Divine.Numerics;
+using Divine.Update;
 using Emt.Tinker.Managers;
+using System;
+using System.Linq;
 
 namespace Emt.Tinker.Modes
 {

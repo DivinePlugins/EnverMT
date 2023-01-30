@@ -1,10 +1,8 @@
-﻿using System;
+﻿using Divine.Entity;
 using Divine.Entity.Entities.Abilities.Components;
+using Divine.Extensions;
 using Divine.Order;
 using Divine.Order.EventArgs;
-using Divine.Order.Orders.Components;
-using Divine.Entity;
-using Divine.Extensions;
 
 namespace Emt.Tinker.Managers
 {

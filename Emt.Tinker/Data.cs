@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Divine.Entity.Entities.Abilities.Components;
+﻿using Divine.Entity.Entities.Abilities.Components;
+using System.Collections.Generic;
 
 namespace Emt.Tinker
 {
