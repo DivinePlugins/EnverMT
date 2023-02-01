@@ -62,13 +62,24 @@ namespace EMT.Farm
                 requiredTime = this.GetMinRequiredTimeToKill(EntityManager.LocalHero, u.Value);
                 aaaTime = EntityManager.LocalHero.GetAutoAttackArrivalTime(u.Value.unit, true);
 
-                if (requiredTime < aaaTime + GameManager.AvgPing + EntityManager.LocalHero.AttackPoint())
+                if (requiredTime - GameManager.GameTime < aaaTime + GameManager.AvgPing + EntityManager.LocalHero.AttackPoint())
                 {
                     EntityManager.LocalHero.Attack(u.Value.unit);
-                    sleepTime = GameManager.AvgPing + EntityManager.LocalHero.AttackPoint();
+                    sleepTime = (GameManager.AvgPing + EntityManager.LocalHero.AttackPoint() + aaaTime) * 1000;
 
                     MultiSleeper<SleeperType>.Sleep(SleeperType.Attack, sleepTime);
                     MultiSleeper<SleeperType>.Sleep(SleeperType.Movement, sleepTime);
+
+                    Console.WriteLine("--------------------");
+                    Console.WriteLine($"GameTime={GameManager.GameTime:F4}   SelectedTime= {requiredTime}");
+                    Console.WriteLine($"AAtime={aaaTime:F4}     AP={EntityManager.LocalHero.AttackPoint()}");
+                    Console.WriteLine($"unit HP={u.Value.unit.Health}");
+                    /*
+                    foreach (var item in u.Value.GetForecastHealth)
+                    {
+                        Console.WriteLine($"time: {item.Key}   HP: {item.Value}");
+                    }
+                    */
                     return;
                 }
             }
@@ -81,12 +92,13 @@ namespace EMT.Farm
             float damage = EntityManager.LocalHero.GetAttackDamage(creep.unit, true);
 
             var unitForecastHealth = creep.GetForecastHealth;
+            if (unitForecastHealth.Count == 0) return time;
 
             foreach (var item in unitForecastHealth)
             {
                 if (item.Value < damage)
                 {
-                    return item.Key - GameManager.GameTime;
+                    return item.Key;
                 }
             }
 
@@ -99,7 +111,7 @@ namespace EMT.Farm
             if (EntityManager.LocalHero.Distance2D(GameManager.MousePosition) < 100f) return;
 
             EntityManager.LocalHero.Move(GameManager.MousePosition);
-            MultiSleeper<SleeperType>.Sleep(SleeperType.Movement, 100);
+            MultiSleeper<SleeperType>.Sleep(SleeperType.Movement, 100f);
 
         }
     }

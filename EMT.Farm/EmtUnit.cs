@@ -1,9 +1,10 @@
 ﻿using Divine.Entity.Entities;
 using Divine.Entity.Entities.Units;
-using Divine.Entity.Entities.Units.Creeps;
 using Divine.Extensions;
 using Divine.Game;
 using Divine.Projectile;
+using Divine.Projectile.EventArgs;
+using Divine.Projectile.Projectiles;
 using Divine.Update;
 
 namespace EMT.Farm
@@ -11,15 +12,17 @@ namespace EMT.Farm
     public class EmtUnit : IDisposable
     {
         public readonly Unit unit;
-        private readonly Dictionary<Unit, float> attackers; // Attacked unit, last attacked GameTime
-        private readonly SortedDictionary<float, float> forecastHealth; // Forecast Health <Gametime, health>
+        private readonly Dictionary<Unit, float> lastAttackedTime; // Attacked unit, last attacked GameTime
+        private readonly Dictionary<Unit, SortedDictionary<float, float>> attackersForecastDamage; // Unit, <GameTime, Damage>        
+        private readonly SortedDictionary<float, float> forecastHealth; // Forecast Health <Gametime, health>        
         private const float forecastDuration = 3f;
         private const float forecastQuant = 0.02f;
 
         public EmtUnit(Unit unit)
         {
             this.unit = unit;
-            this.attackers = new();
+            this.lastAttackedTime = new();
+            this.attackersForecastDamage = new();
             this.forecastHealth = new();
 
             Entity.AnimationChanged += Entity_AnimationChanged;
@@ -54,72 +57,85 @@ namespace EMT.Farm
             if (e.Projectile.Target != this.unit) return;
             if (e.Projectile.Source is not Unit unit) return;
 
-            this.AddAttackerToList(unit);
+            this.AddAttackerToList(unit, e);
         }
 
-        private void AddAttackerToList(Unit unit)
+        private void AddAttackerToList(Unit attacker, TrackingProjectileAddedEventArgs? e = null)
         {
-            if (unit == null) return;
+            if (attacker == null) return;
 
-            this.attackers[unit] = GameManager.GameTime;
+            this.lastAttackedTime[attacker] = GameManager.GameTime;
+            this.ForecastAttackerDamage(attacker, e);
+        }
+
+        private void ForecastAttackerDamage(Unit attacker, TrackingProjectileAddedEventArgs? e = null)
+        {
+            float autoAttackProjectileArriveTime = 0f;
+            float attackPoint = attacker.AttackPoint();
+            if (e != null && e.Projectile.IsValid)
+            {
+                autoAttackProjectileArriveTime = UnitExtensions.GetProjectileArrivalTime(attacker, this.unit, 0, attacker.ProjectileSpeed());
+                attackPoint = 0f;
+            }
+            this.attackersForecastDamage.Clear();
+            this.attackersForecastDamage.Add(attacker, new SortedDictionary<float, float>());
+
+            float firstHitTime = autoAttackProjectileArriveTime + attackPoint;
+            this.attackersForecastDamage[attacker].Add(GameManager.GameTime + firstHitTime, attacker.GetAttackDamage(this.unit));
+
+            float time = firstHitTime;
+            while (time <= forecastDuration)
+            {
+                time += 1 / attacker.AttacksPerSecond;
+                this.attackersForecastDamage[attacker].Add(time + GameManager.GameTime, attacker.GetAttackDamage(this.unit));
+            }
         }
 
         private void RemoveIdleAttackersFromList()
         {
-            foreach (KeyValuePair<Unit, float> attacker in this.attackers)
+            foreach (KeyValuePair<Unit, float> attacker in this.lastAttackedTime)
             {
-                if (attacker.Key is not Creep) return;
-                float idleTime = 1.5f;
-                if (attacker.Key.AttackDamageType == Divine.Entity.Entities.Units.Components.AttackDamageType.Siege) idleTime = 3f;
+                float idleTime = 1 / attacker.Key.AttacksPerSecond + 0.5f;
 
                 if ((GameManager.GameTime - attacker.Value) > idleTime)
                 {
-                    this.attackers.Remove(attacker.Key);
+                    this.lastAttackedTime.Remove(attacker.Key);
+                    this.attackersForecastDamage.Remove(attacker.Key);
+                    this.CalculateForecastHealth();
                 }
             }
         }
 
         private void CalculateForecastHealth()
         {
-            this.forecastHealth.Clear();
-            var notValidAttackers = this.attackers.Where(u => !u.Key.IsValid);
-            foreach (var attacker in notValidAttackers)
+            SortedDictionary<float, float> forecastCumulativeDamage = new(); // <GameTime, cumulativeDamage>
+            foreach (KeyValuePair<Unit, SortedDictionary<float, float>> attacker in this.attackersForecastDamage)
             {
-                this.attackers.Remove(attacker.Key);
-            }
+                if (!attacker.Key.IsAlive) continue;
 
-
-            float fTime = GameManager.GameTime;
-            float damage;
-
-            while (fTime <= GameManager.GameTime + forecastDuration)
-            {
-                damage = 0;
-                foreach (KeyValuePair<Unit, float> attackerUnit in this.attackers)
+                foreach (KeyValuePair<float, float> timeDamage in this.attackersForecastDamage[attacker.Key])
                 {
-                    damage += this.GetForecastDamage(attackerUnit.Key, fTime - GameManager.GameTime);
+                    if (forecastCumulativeDamage.ContainsKey(timeDamage.Key))
+                    {
+                        forecastCumulativeDamage[timeDamage.Key] += timeDamage.Value;
+                    }
+                    else
+                    {
+                        forecastCumulativeDamage.Add(timeDamage.Key, timeDamage.Value);
+                    }
                 }
-                this.forecastHealth.Add(fTime, (float)this.unit.Health - damage);
-                fTime += forecastQuant;
             }
-        }
 
-        private float GetForecastDamage(Unit unit, float timeDuration)
-        {
-            float timeDiff = 0;
-            if (this.attackers.ContainsKey(unit))
+            if (forecastCumulativeDamage.Count == 0) return;
+            this.forecastHealth.Clear();
+            this.forecastHealth.Add(GameManager.GameTime, this.unit.Health);
+            float regeneratedHealth = 0;
+            foreach (var timeDamage in forecastCumulativeDamage)
             {
-                timeDiff = GameManager.GameTime - this.attackers[unit];
-            }
-
-            // TO DO: Delay before attack to be clarified            
-
-            float projecttileTime = UnitExtensions.GetAutoAttackArrivalTime(unit, this.unit, true);
-            float damage = (float)Math.Floor((timeDiff + timeDuration - projecttileTime) * unit.AttacksPerSecond) * unit.GetAttackDamage(this.unit, true);
-            float regenedHealth = unit.HealthRegeneration * timeDuration;
-            return damage - regenedHealth;
+                regeneratedHealth = (timeDamage.Key - GameManager.GameTime) * this.unit.HealthRegeneration;
+                this.forecastHealth.Add(timeDamage.Key, this.unit.Health - timeDamage.Value + regeneratedHealth);
+            }            
         }
-
         public SortedDictionary<float, float> GetForecastHealth
         {
             get
