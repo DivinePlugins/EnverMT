@@ -1,6 +1,8 @@
 ﻿using Divine.Entity;
+using Divine.Entity.Entities;
 using Divine.Entity.Entities.Units;
 using Divine.Extensions;
+using Divine.Game;
 using Divine.Update;
 
 
@@ -17,7 +19,8 @@ namespace EMT.Farm
             this.context = context;
             this.unitsTracker = new();
             this.context.pluginMenu.pluginStatus.ValueChanged += PluginStatus_ValueChanged;
-        }
+        }       
+
         public void Dispose()
         {
             this.context.pluginMenu.pluginStatus.ValueChanged -= PluginStatus_ValueChanged;
@@ -28,11 +31,11 @@ namespace EMT.Farm
         {
             if (e.Value)
             {
-                UpdateManager.CreateIngameUpdate(Update);
+                UpdateManager.CreateIngameUpdate(Update);         
             }
             else
             {
-                UpdateManager.DestroyIngameUpdate(Update);
+                UpdateManager.DestroyIngameUpdate(Update);         
                 this.unitsTracker.ForEach(u => u.Value.Dispose());
             }
         }
@@ -53,7 +56,7 @@ namespace EMT.Farm
                 u.Type == Divine.Entity.Entities.Components.EntityType.Creep ||
                 u.Type == Divine.Entity.Entities.Components.EntityType.Courier
                 )
-            .Where(u => !unitsTracker.ContainsKey(u.Handle) && u.IsValid && u.IsEnemy(EntityManager.LocalHero)).ToList();
+            .Where(u => !unitsTracker.ContainsKey(u.Handle) && u.IsValid && u.IsEnemy(EntityManager.LocalHero!)).ToList();
 
             foreach (Unit u in units)
             {
