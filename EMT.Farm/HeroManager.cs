@@ -49,14 +49,14 @@ namespace EMT.Farm
 
             this.SimpleAttack();
             this.MoveToMousePosition();
-            this.LogCreepHP();
+            //this.LogCreepHP();
         }
 
         private void LogCreepHP()
         {
             if (this.logEndTime <= GameManager.GameTime) return;
             if (!this.logCreep.IsValid) return;
-            if (this.logCreep.Health == this?.logCreepLastHP) return;
+            if (this.logCreep.Health >= this?.logCreepLastHP) return;
 
             Console.WriteLine($"Time: {GameManager.GameTime:F3}    Log Creep HP={this.logCreep.Health}");
             this.logCreepLastHP = this.logCreep.Health;
@@ -64,7 +64,7 @@ namespace EMT.Farm
 
         private void SimpleAttack()
         {
-            if (MultiSleeper<SleeperType>.Sleeping(SleeperType.Attack)) return;
+            if (MultiSleeper<SleeperType>.Sleeping(SleeperType.Attack)) return;            
 
             float requiredTime;
             float aaaTime;
@@ -74,9 +74,9 @@ namespace EMT.Farm
                 if (!u.Value.unit.IsAlive) continue;
 
                 requiredTime = this.GetMinRequiredTimeToKill(EntityManager.LocalHero!, u.Value);
-                aaaTime = EntityManager.LocalHero!.GetAutoAttackArrivalTime(u.Value.unit, true);
+                aaaTime = EntityManager.LocalHero!.GetAutoAttackArrivalTime(u.Value.unit, true);                
 
-                if (GameManager.GameTime > requiredTime + aaaTime + GameManager.AvgPing + EntityManager.LocalHero!.AttackPoint())
+                if (requiredTime <= GameManager.GameTime + aaaTime + GameManager.AvgPing)
                 {
                     EntityManager.LocalHero!.Attack(u.Value.unit);
                     sleepTime = (GameManager.AvgPing + EntityManager.LocalHero.AttackPoint() + aaaTime) * 1000;
@@ -85,7 +85,7 @@ namespace EMT.Farm
                     MultiSleeper<SleeperType>.Sleep(SleeperType.Movement, sleepTime);
 
                     Console.WriteLine("=============================");
-                    Console.WriteLine($"GameTime={GameManager.GameTime:F3}   SelectedTime= {requiredTime}");
+                    Console.WriteLine($"GameTime={GameManager.GameTime:F3}   SelectedTime= {requiredTime:F3}");
                     Console.WriteLine($"AAtime={aaaTime:F3}     AP={EntityManager.LocalHero.AttackPoint()}");
                     Console.WriteLine($"unit HP={u.Value.unit.Health}");
                     Console.WriteLine($"Min required time={requiredTime - GameManager.GameTime}");
