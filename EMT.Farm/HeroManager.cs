@@ -83,19 +83,20 @@ namespace EMT.Farm
 
                     MultiSleeper<SleeperType>.Sleep(SleeperType.Attack, sleepTime);
                     MultiSleeper<SleeperType>.Sleep(SleeperType.Movement, sleepTime);
-
+                    /*
                     Console.WriteLine("=============================");
                     Console.WriteLine($"GameTime={GameManager.GameTime:F3}   SelectedTime= {requiredTime:F3}");
                     Console.WriteLine($"AAtime={aaaTime:F3}     AP={EntityManager.LocalHero.AttackPoint()}");
                     Console.WriteLine($"unit HP={u.Value.unit.Health}");
                     Console.WriteLine($"Min required time={requiredTime - GameManager.GameTime}");
-
+                    
                     Console.WriteLine("-----------------------------");
                     foreach (var item in u.Value.GetForecastHealth)
                     {
                         Console.WriteLine($"time: {item.Key:F3}   Forecast HP: {item.Value}");
                     }
                     Console.WriteLine("-----------------------------");
+                    */
                     this.logCreep = u.Value.unit;
                     this.logEndTime = GameManager.GameTime + sleepTime + 1000f;
 
