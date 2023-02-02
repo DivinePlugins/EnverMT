@@ -4,6 +4,8 @@ using Divine.Extensions;
 using Divine.Game;
 using Divine.Helpers;
 using Divine.Update;
+using System;
+using System.Collections.Generic;
 
 namespace EMT.Farm
 {
@@ -64,7 +66,7 @@ namespace EMT.Farm
 
         private void SimpleAttack()
         {
-            if (MultiSleeper<SleeperType>.Sleeping(SleeperType.Attack)) return;            
+            if (MultiSleeper<SleeperType>.Sleeping(SleeperType.Attack)) return;
 
             float requiredTime;
             float aaaTime;
@@ -74,7 +76,7 @@ namespace EMT.Farm
                 if (!u.Value.unit.IsAlive) continue;
 
                 requiredTime = this.GetMinRequiredTimeToKill(EntityManager.LocalHero!, u.Value);
-                aaaTime = EntityManager.LocalHero!.GetAutoAttackArrivalTime(u.Value.unit, true);                
+                aaaTime = EntityManager.LocalHero!.GetAutoAttackArrivalTime(u.Value.unit, true);
 
                 if (requiredTime <= GameManager.GameTime + aaaTime + GameManager.AvgPing)
                 {

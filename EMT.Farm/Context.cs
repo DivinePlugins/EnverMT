@@ -1,4 +1,6 @@
-﻿namespace EMT.Farm
+﻿using System;
+
+namespace EMT.Farm
 {
     internal class Context : IDisposable
     {

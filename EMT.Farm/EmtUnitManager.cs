@@ -1,10 +1,10 @@
 ﻿using Divine.Entity;
-using Divine.Entity.Entities;
 using Divine.Entity.Entities.Units;
 using Divine.Extensions;
-using Divine.Game;
 using Divine.Update;
-
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace EMT.Farm
 {
@@ -19,7 +19,7 @@ namespace EMT.Farm
             this.context = context;
             this.unitsTracker = new();
             this.context.pluginMenu.pluginStatus.ValueChanged += PluginStatus_ValueChanged;
-        }       
+        }
 
         public void Dispose()
         {
@@ -31,11 +31,11 @@ namespace EMT.Farm
         {
             if (e.Value)
             {
-                UpdateManager.CreateIngameUpdate(Update);         
+                UpdateManager.CreateIngameUpdate(Update);
             }
             else
             {
-                UpdateManager.DestroyIngameUpdate(Update);         
+                UpdateManager.DestroyIngameUpdate(Update);
                 this.unitsTracker.ForEach(u => u.Value.Dispose());
             }
         }

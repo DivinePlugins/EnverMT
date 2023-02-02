@@ -6,6 +6,8 @@ using Divine.Game;
 using Divine.Projectile;
 using Divine.Projectile.EventArgs;
 using Divine.Update;
+using System;
+using System.Collections.Generic;
 
 namespace EMT.Farm
 {
@@ -53,7 +55,7 @@ namespace EMT.Farm
             if (!e.Projectile.IsAttack) return;
             if (e.Projectile.Target != this.unit) return;
             if (e.Projectile.Source is not Unit unit) return;
-            
+
             this.AddAttackerToList(unit, e);
         }
         private void AddAttackerToList(Unit attacker, TrackingProjectileAddedEventArgs? e = null)
@@ -61,7 +63,7 @@ namespace EMT.Farm
             if (attacker == null) return;
 
             this.lastAttackedTime[attacker.Handle] = GameManager.GameTime;
-            this.ForecastAttackerDamage(attacker, e);            
+            this.ForecastAttackerDamage(attacker, e);
         }
         private void RemoveIdleAttackersFromList()
         {
@@ -74,7 +76,7 @@ namespace EMT.Farm
                 if ((GameManager.GameTime - attacker.Value) > idleTime)
                 {
                     this.lastAttackedTime.Remove(unit.Handle);
-                    this.attackersForecastDamage.Remove(unit.Handle);                    
+                    this.attackersForecastDamage.Remove(unit.Handle);
                 }
             }
         }
@@ -82,7 +84,7 @@ namespace EMT.Farm
         private void ForecastAttackerDamage(Unit attacker, TrackingProjectileAddedEventArgs? e = null)
         {
             if (!this.attackersForecastDamage.ContainsKey(attacker.Handle)) this.attackersForecastDamage.Add(attacker.Handle, new());
-            this.attackersForecastDamage[attacker.Handle].Clear();            
+            this.attackersForecastDamage[attacker.Handle].Clear();
 
             float firstHitTime = GameManager.GameTime + UnitExtensions.GetAutoAttackArrivalTime(attacker, this.unit, true);
 
@@ -133,7 +135,7 @@ namespace EMT.Farm
             foreach (var timeDamage in forecastCumulativeDamage)
             {
                 if (timeDamage.Key < GameManager.GameTime) continue;
-                totalDamage += timeDamage.Value;                
+                totalDamage += timeDamage.Value;
                 this.forecastHealth.Add(timeDamage.Key, this.unit.Health - totalDamage + (timeDamage.Key - GameManager.GameTime) * this.unit.HealthRegeneration);
                 if (totalDamage > this.unit.Health) return;
             }
