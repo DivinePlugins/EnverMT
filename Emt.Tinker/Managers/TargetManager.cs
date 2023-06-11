@@ -21,7 +21,7 @@ namespace Emt.Tinker.Managers
 
         static private int targerSearchBaseRadius = 650;
         static private int targerSearchAdditionalRadius = 0;
-        static private int rocketFlyDistance = 2500;
+        static private int rocketFlyDistance = 2000;
 
         static public void Activate()
         {
