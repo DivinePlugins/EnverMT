@@ -29,7 +29,7 @@ namespace Emt.Tinker.Managers
                     {
                         if (item.Value == true)
                         {
-                            CastManager.castItem(item.Key, null, false, false);
+                            CastManager.castItem((AbilityId)item.Key, null, false, false);
                         }
                     }
                 }

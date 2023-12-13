@@ -1,5 +1,6 @@
 ﻿using Divine.Entity;
 using Divine.Entity.Entities.Abilities.Components;
+using Divine.Entity.Entities.Abilities.Items.Components;
 using Divine.Entity.Entities.Units.Heroes;
 using Divine.Extensions;
 using Divine.Update;
@@ -10,7 +11,7 @@ namespace Emt.Tinker.Modes
 {
     class SpamRocket : IDisposable
     {
-        #region Variables               
+        #region Variables
         private Hero _localHero = EntityManager.LocalHero;
         #endregion
 
@@ -24,7 +25,7 @@ namespace Emt.Tinker.Modes
             PluginMenu.SpamRocketKey.ValueChanged -= ComboKey_ValueChanged;
             UpdateManager.IngameUpdate -= UpdateManager_IngameUpdate;
         }
-        private void ComboKey_ValueChanged(Divine.Menu.Items.MenuHoldKey holdKey, Divine.Menu.EventArgs.HoldKeyEventArgs e)
+        private void ComboKey_ValueChanged(Divine.Menu.Items.MenuHoldKey holdKey, Divine.Menu.EventArgs.HoldKeyChangedEventArgs e)
         {
             if (e.Value)
             {
@@ -61,7 +62,7 @@ namespace Emt.Tinker.Modes
 
             if (CastManager.castHeatSeekingRocket()) return true;
 
-            if (PluginMenu.ComboItems.GetValue(AbilityId.item_blink))
+            if (PluginMenu.ComboItems.GetValue(ItemId.item_blink))
             {
                 if (CastManager.castBlink(AbilityId.item_blink)) return true;
                 if (CastManager.castBlink(AbilityId.item_arcane_blink)) return true;

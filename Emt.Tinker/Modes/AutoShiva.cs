@@ -21,7 +21,7 @@ namespace Emt.Tinker.Modes
             PluginMenu.AutoShivaSwitcher.ValueChanged -= AutoShiva_ValueChanged;
             UpdateManager.IngameUpdate -= UpdateManager_IngameUpdate;
         }
-        private void AutoShiva_ValueChanged(Divine.Menu.Items.MenuSwitcher switcher, Divine.Menu.EventArgs.SwitcherEventArgs e)
+        private void AutoShiva_ValueChanged(Divine.Menu.Items.MenuSwitcher switcher, Divine.Menu.EventArgs.SwitcherChangedEventArgs e)
         {
             if (e.Value)
             {
@@ -38,7 +38,7 @@ namespace Emt.Tinker.Modes
             if (UnitExtensions.GetItemById(EntityManager.LocalHero, AbilityId.item_shivas_guard) == null) return;
 
             Vector3 startPosition = EntityManager.LocalHero.Position;
-            int targerSearchRadius = PluginMenu.AutoShivaRadius;
+            var targerSearchRadius = PluginMenu.AutoShivaRadius;
 
             Hero hero = EntityManager.GetEntities<Hero>().Where(x => x.IsEnemy(EntityManager.LocalHero) &&
                                                                 x.Distance2D(startPosition) < targerSearchRadius &&

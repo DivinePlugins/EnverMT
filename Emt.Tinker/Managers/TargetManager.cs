@@ -28,7 +28,7 @@ namespace Emt.Tinker.Managers
             PluginMenu.PluginStatus.ValueChanged += PluginStatus_ValueChanged;
         }
 
-        static private void PluginStatus_ValueChanged(Divine.Menu.Items.MenuSwitcher switcher, Divine.Menu.EventArgs.SwitcherEventArgs e)
+        static private void PluginStatus_ValueChanged(Divine.Menu.Items.MenuSwitcher switcher, Divine.Menu.EventArgs.SwitcherChangedEventArgs e)
         {
             if (e.Value)
             {
@@ -102,13 +102,13 @@ namespace Emt.Tinker.Managers
 
             if (PluginMenu.ComboTargetSelectorMode == "In radius of Cursor")
             {
-                return currentTarget = GetNearestEnemyHero(GameManager.MousePosition, PluginMenu.ComboTargetSelectorRadius);
+                return currentTarget = GetNearestEnemyHero(GameManager.MousePosition, (int)PluginMenu.ComboTargetSelectorRadius);
             }
 
             if (PluginMenu.ComboTargetSelectorMode == "First In radius of Cursor, then nearest to Hero")
             {
                 Hero h;
-                h = currentTarget = GetNearestEnemyHero(GameManager.MousePosition, PluginMenu.ComboTargetSelectorRadius);
+                h = currentTarget = GetNearestEnemyHero(GameManager.MousePosition, (int)PluginMenu.ComboTargetSelectorRadius);
                 if (h != null) return h;
                 return h = currentTarget = GetNearestEnemyHero(EntityManager.LocalHero.Position, radius);
             }

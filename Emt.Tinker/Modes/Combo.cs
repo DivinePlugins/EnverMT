@@ -1,5 +1,6 @@
 ﻿using Divine.Entity;
 using Divine.Entity.Entities.Abilities.Components;
+using Divine.Entity.Entities.Abilities.Items.Components;
 using Divine.Entity.Entities.Units.Heroes;
 using Divine.Extensions;
 using Divine.Update;
@@ -10,7 +11,7 @@ namespace Emt.Tinker.Modes
 {
     class Combo : IDisposable
     {
-        #region Variables       
+        #region Variables
         public bool comboKeyHolding;
 
         private Hero _localHero = EntityManager.LocalHero;
@@ -26,7 +27,7 @@ namespace Emt.Tinker.Modes
             PluginMenu.ComboKey.ValueChanged -= ComboKey_ValueChanged;
             UpdateManager.IngameUpdate -= UpdateManager_IngameUpdate;
         }
-        private void ComboKey_ValueChanged(Divine.Menu.Items.MenuHoldKey holdKey, Divine.Menu.EventArgs.HoldKeyEventArgs e)
+        private void ComboKey_ValueChanged(Divine.Menu.Items.MenuHoldKey holdKey, Divine.Menu.EventArgs.HoldKeyChangedEventArgs e)
         {
             if (e.Value)
             {
@@ -41,7 +42,7 @@ namespace Emt.Tinker.Modes
         }
         private void UpdateManager_IngameUpdate()
         {
-            if (CastManager.sleeper.Sleeping) return;
+            if (CastManager.sleeper.IsSleeping) return;
 
 
             if (TargetManager.currentTarget == null || !EntityManager.LocalHero.IsInRange(TargetManager.currentTarget, 1025))
@@ -69,7 +70,7 @@ namespace Emt.Tinker.Modes
         private bool executeCombo()
         {
             //Console.WriteLine("============");
-            //Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - exec combo - Mana: " + EntityManager.LocalHero.Mana);            
+            //Console.WriteLine(DateTime.UtcNow.ToString("HH:mm:ss.fff") + " - exec combo - Mana: " + EntityManager.LocalHero.Mana);
 
             if (CastManager.castNeutralItem(AbilityId.item_seer_stone, TargetManager.currentTarget.Position)) return true;
 
@@ -129,7 +130,7 @@ namespace Emt.Tinker.Modes
                 if (CastManager.castItem(AbilityId.item_sheepstick, TargetManager.currentTarget)) return true;
             }
 
-            if (PluginMenu.ComboItems.GetValue(AbilityId.item_dagon))
+            if (PluginMenu.ComboItems.GetValue(ItemId.item_dagon))
             {
                 if (CastManager.castItem(AbilityId.item_dagon, TargetManager.currentTarget, false)) return true;
                 if (CastManager.castItem(AbilityId.item_dagon_2, TargetManager.currentTarget, false)) return true;
@@ -143,7 +144,7 @@ namespace Emt.Tinker.Modes
 
             if (CastManager.castNeutralItem(AbilityId.item_ex_machina)) return true;
 
-            if (PluginMenu.ComboItems.GetValue(AbilityId.item_blink))
+            if (PluginMenu.ComboItems.GetValue(ItemId.item_blink))
             {
                 if (CastManager.castBlink(AbilityId.item_blink)) return true;
                 if (CastManager.castBlink(AbilityId.item_arcane_blink)) return true;
@@ -163,7 +164,7 @@ namespace Emt.Tinker.Modes
             float additionalSleepTime = 320f;
 
             if (TargetManager.targetForRocket != null) if (CastManager.castHeatSeekingRocket()) return true;
-            if (PluginMenu.ComboItems.GetValue(AbilityId.item_blink))
+            if (PluginMenu.ComboItems.GetValue(ItemId.item_blink))
             {
                 if (CastManager.castBlink(AbilityId.item_blink, additionalSleepTime)) return true;
                 if (CastManager.castBlink(AbilityId.item_arcane_blink, additionalSleepTime)) return true;

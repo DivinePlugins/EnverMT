@@ -19,7 +19,7 @@ namespace EMT.Farm
             this.pluginMenu.Dispose();
         }
 
-        private void PluginStatus_ValueChanged(Divine.Menu.Items.MenuSwitcher switcher, Divine.Menu.EventArgs.SwitcherEventArgs e)
+        private void PluginStatus_ValueChanged(Divine.Menu.Items.MenuSwitcher switcher, Divine.Menu.EventArgs.SwitcherChangedEventArgs e)
         {
             if (e.Value)
             {

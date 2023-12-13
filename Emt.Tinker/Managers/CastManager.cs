@@ -25,7 +25,7 @@ namespace Emt.Tinker.Managers
 
         static public bool castBlink(AbilityId abilityId, float additionalSleepTime = 0f)
         {
-            if (sleeper.Sleeping) return false;
+            if (sleeper.IsSleeping) return false;
 
             if (!ItemCanBeCasted(abilityId)) return false;
 
@@ -44,7 +44,7 @@ namespace Emt.Tinker.Managers
 
         static public bool castRearm()
         {
-            if (rearmSleeper.Sleeping) return false;
+            if (rearmSleeper.IsSleeping) return false;
             if (!AbilityCanBeCasted(AbilityId.tinker_rearm)) return false;
 
             if (!CastAbility(false, false)) return false;
@@ -55,8 +55,8 @@ namespace Emt.Tinker.Managers
 
         static public bool castLaser()
         {
-            if (sleeper.Sleeping) return false;
-            if (laserSleeper.Sleeping) return false;
+            if (sleeper.IsSleeping) return false;
+            if (laserSleeper.IsSleeping) return false;
             if (!AbilityCanBeCasted(AbilityId.tinker_laser)) return false;
             if (!PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_laser)) return false;
 
@@ -83,7 +83,7 @@ namespace Emt.Tinker.Managers
 
         static public bool castHeatSeekingRocket()
         {
-            if (sleeper.Sleeping) return false;
+            if (sleeper.IsSleeping) return false;
             if (!AbilityCanBeCasted(AbilityId.tinker_heat_seeking_missile)) return false;
             if (!PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_heat_seeking_missile)) return false;
 
@@ -95,7 +95,7 @@ namespace Emt.Tinker.Managers
 
         static public bool castDefenseMatrix(bool checkSleeper = true)
         {
-            if (checkSleeper) if (sleeper.Sleeping) return false;
+            if (checkSleeper) if (sleeper.IsSleeping) return false;
             if (!AbilityCanBeCasted(AbilityId.tinker_defense_matrix)) return false;
             if (!PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_defense_matrix)) return false;
             if (EntityManager.LocalHero.HasModifier("modifier_tinker_defense_matrix")) return false;
@@ -108,7 +108,7 @@ namespace Emt.Tinker.Managers
 
         static public bool castWarpGrenade()
         {
-            if (sleeper.Sleeping) return false;
+            if (sleeper.IsSleeping) return false;
             if (!AbilityCanBeCasted(AbilityId.tinker_warp_grenade, EntityManager.LocalHero)) return false;
             if (!PluginMenu.ComboAbilitiesToggler.GetValue(AbilityId.tinker_warp_grenade)) return false;
             if (!EntityManager.LocalHero.IsInRange(TargetManager.currentTarget, PluginMenu.ComboWarpGrenadeUseRadius)) return false;
@@ -121,8 +121,8 @@ namespace Emt.Tinker.Managers
 
         static public bool castItem(AbilityId abilityId, Unit unit = null, bool searchInMenu = true, bool checkSleeper = true)
         {
-            if (checkSleeper) if (sleeper.Sleeping) return false;
-            if (searchInMenu) if (!PluginMenu.ComboItems.GetValue(abilityId)) return false;
+            if (checkSleeper) if (sleeper.IsSleeping) return false;
+            if (searchInMenu) if (!PluginMenu.ComboItems.GetValue((ItemId)abilityId)) return false;
 
             if (!ItemCanBeCasted(abilityId, unit)) return false;
             if (!IsInMainInventory(item)) return false;
@@ -137,9 +137,9 @@ namespace Emt.Tinker.Managers
 
         static public bool castNeutralItem(AbilityId abilityId, Unit unit = null, bool searchInMenu = true)
         {
-            if (sleeper.Sleeping) return false;
+            if (sleeper.IsSleeping) return false;
 
-            if (searchInMenu) if (!PluginMenu.ComboNeutralItems.GetValue(abilityId)) return false;
+            if (searchInMenu) if (!PluginMenu.ComboNeutralItems.GetValue((ItemId)abilityId)) return false;
 
             if (!ItemCanBeCasted(abilityId, unit)) return false;
 
@@ -157,9 +157,9 @@ namespace Emt.Tinker.Managers
 
         static public bool castNeutralItem(AbilityId abilityId, Vector3 position, bool searchInMenu = true)
         {
-            if (sleeper.Sleeping) return false;
+            if (sleeper.IsSleeping) return false;
 
-            if (searchInMenu) if (!PluginMenu.ComboNeutralItems.GetValue(abilityId)) return false;
+            if (searchInMenu) if (!PluginMenu.ComboNeutralItems.GetValue((ItemId)abilityId)) return false;
 
             if (!ItemCanBeCasted(abilityId)) return false;
 

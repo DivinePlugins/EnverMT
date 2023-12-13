@@ -1,4 +1,6 @@
 ﻿using Divine.Entity.Entities.Abilities.Components;
+using Divine.Entity.Entities.Abilities.Items.Components;
+
 using System.Collections.Generic;
 
 namespace Emt.Tinker
@@ -7,39 +9,39 @@ namespace Emt.Tinker
     {
         internal static class Menu
         {
-            public static readonly Dictionary<AbilityId, bool> ComboItems = new Dictionary<AbilityId, bool> {
-                {AbilityId.item_soul_ring,true},
-                {AbilityId.item_guardian_greaves,true},
-                {AbilityId.item_lotus_orb,true},
-                {AbilityId.item_glimmer_cape,true},
-                {AbilityId.item_ghost,true},
-                {AbilityId.item_shivas_guard,true},
-                {AbilityId.item_bloodstone,true},
-                {AbilityId.item_eternal_shroud,true},
-                {AbilityId.item_ethereal_blade,true},
-                {AbilityId.item_orchid,true},
-                {AbilityId.item_bloodthorn,true},
-                {AbilityId.item_rod_of_atos,true},
-                {AbilityId.item_nullifier,true},
-                {AbilityId.item_dagon,true},
-                {AbilityId.item_sheepstick,true},
-                {AbilityId.item_blink, true},
+            public static readonly Dictionary<ItemId, bool> ComboItems = new Dictionary<ItemId, bool> {
+                {ItemId.item_soul_ring,true},
+                {ItemId.item_guardian_greaves,true},
+                {ItemId.item_lotus_orb,true},
+                {ItemId.item_glimmer_cape,true},
+                {ItemId.item_ghost,true},
+                {ItemId.item_shivas_guard,true},
+                {ItemId.item_bloodstone,true},
+                {ItemId.item_eternal_shroud,true},
+                {ItemId.item_ethereal_blade,true},
+                {ItemId.item_orchid,true},
+                {ItemId.item_bloodthorn,true},
+                {ItemId.item_rod_of_atos,true},
+                {ItemId.item_nullifier,true},
+                {ItemId.item_dagon,true},
+                {ItemId.item_sheepstick,true},
+                {ItemId.item_blink, true},
             };
 
-            public static readonly Dictionary<AbilityId, bool> PreCastItems = new Dictionary<AbilityId, bool> {
-                {AbilityId.item_soul_ring,true},
-                {AbilityId.item_guardian_greaves,true},
-                {AbilityId.item_bottle,true},
+            public static readonly Dictionary<ItemId, bool> PreCastItems = new Dictionary<ItemId, bool> {
+                {ItemId.item_soul_ring,true},
+                {ItemId.item_guardian_greaves,true},
+                {ItemId.item_bottle,true},
             };
 
-            public static readonly Dictionary<AbilityId, bool> ComboNeutralItems = new Dictionary<AbilityId, bool> {
-                {AbilityId.item_arcane_ring,true},
-                {AbilityId.item_bullwhip,true},
-                {AbilityId.item_psychic_headband,true},
-                {AbilityId.item_ninja_gear,true},
-                {AbilityId.item_trickster_cloak,true},
-                {AbilityId.item_seer_stone,true},
-                {AbilityId.item_ex_machina,true},
+            public static readonly Dictionary<ItemId, bool> ComboNeutralItems = new Dictionary<ItemId, bool> {
+                {ItemId.item_arcane_ring,true},
+                {ItemId.item_bullwhip,true},
+                {ItemId.item_psychic_headband,true},
+                {ItemId.item_ninja_gear,true},
+                {ItemId.item_trickster_cloak,true},
+                {ItemId.item_seer_stone,true},
+                {ItemId.item_ex_machina,true},
             };
 
             public static readonly Dictionary<AbilityId, bool> PreCastAbilities = new Dictionary<AbilityId, bool>
@@ -58,7 +60,7 @@ namespace Emt.Tinker
                 {AbilityId.tinker_laser,true},
                 {AbilityId.tinker_heat_seeking_missile,true},
                 {AbilityId.tinker_defense_matrix,true},
-                {AbilityId.tinker_warp_grenade,true},                
+                {AbilityId.tinker_warp_grenade,true},
 				//{AbilityId.tinker_march_of_the_machines,true},
                 {AbilityId.tinker_rearm,true}
             };
