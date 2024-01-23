@@ -1,13 +1,20 @@
 ﻿namespace Emt.Tinker
 {
+    using System;
+
     class Context
     {
         public static Modes.Combo combo;
         public static Modes.SpamRocket spamRocket;
         public static Modes.AutoShiva autoShiva;
-        static public bool Init()
+
+        public static void InitMenu()
         {
             PluginMenu.Activate();
+        }
+
+        static public bool Init()
+        {
             PluginMenu.PluginStatus.ValueChanged += PluginStatus_ValueChanged;
             return true;
         }

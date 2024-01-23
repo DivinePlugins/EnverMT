@@ -8,13 +8,19 @@ namespace Emt.Tinker
     {
         private bool context;
 
+        protected override void OnMainActivate()
+        {
+            Context.InitMenu();
+        }
+
         protected override void OnActivate()
         {
-            if (EntityManager.LocalHero.HeroId == HeroId.npc_dota_hero_tinker)
+            if (EntityManager.LocalHero.Id == HeroId.npc_dota_hero_tinker)
             {
                 context = Context.Init();
             }
         }
+
         protected override void OnDeactivate()
         {
             if (context)
